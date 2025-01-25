@@ -7,7 +7,9 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include "subsystems/CommandSwerveDrivetrain.h"
+#include "subsystems/CameraSubsystem.h"
 #include "Telemetry.h"
+#include <frc2/command/RunCommand.h>
 
 class RobotContainer {
 private:
@@ -27,12 +29,16 @@ private:
 
     frc2::CommandXboxController joystick{0};
 
+    CameraSubsystem cameraSubsystem;
+
 public:
     subsystems::CommandSwerveDrivetrain drivetrain{TunerConstants::CreateDrivetrain()};
 
     RobotContainer();
 
     frc2::CommandPtr GetAutonomousCommand();
+
+    frc2::CommandPtr SetVibrate(double strength);
 
 private:
     void ConfigureBindings();
