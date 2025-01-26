@@ -35,7 +35,7 @@ class TunerConstants {
 
     // The type of motor used for the drive motor
     static constexpr swerve::DriveMotorArrangement kDriveMotorType = swerve::DriveMotorArrangement::TalonFX_Integrated;
-    // The type of motor used for the drive motor
+    // The type of motor used for the steer motor
     static constexpr swerve::SteerMotorArrangement kSteerMotorType = swerve::SteerMotorArrangement::TalonFX_Integrated;
 
     // The remote sensor feedback type to use for the steer motors;
@@ -124,11 +124,25 @@ private:
             .WithDriveFrictionVoltage(kDriveFrictionVoltage);
 
 
+    // The encoder offsets for all the Swerve Modules
+    static constexpr units::turn_t kEncoderOffsets[] = {                      
+        0_tr,           
+        0_tr,           
+        0_tr,        
+        -0.1611328125_tr,     
+        0.366455078125_tr,     
+        -0.355224609375_tr,    
+        0_tr,
+        0.07763671875_tr
+    };
+
     // Front Left
-    static constexpr int kFrontLeftDriveMotorId = 10;
-    static constexpr int kFrontLeftSteerMotorId = 9;
-    static constexpr int kFrontLeftEncoderId = 21;
-    static constexpr units::turn_t kFrontLeftEncoderOffset = 0.366455078125_tr;
+    static constexpr int kFrontLeftDriveMotorModuleId = 5;
+    // TODO: Drive motor and Steer motor Ids are swapped
+    static constexpr int kFrontLeftDriveMotorId = 2 * kFrontLeftDriveMotorModuleId;
+    static constexpr int kFrontLeftSteerMotorId = 2 * kFrontLeftDriveMotorModuleId - 1;
+    static constexpr int kFrontLeftEncoderId = 16 + kFrontLeftDriveMotorModuleId;
+    static constexpr units::turn_t kFrontLeftEncoderOffset = kEncoderOffsets[kFrontLeftDriveMotorModuleId - 1];
     static constexpr bool kFrontLeftSteerMotorInverted = true;
     static constexpr bool kFrontLeftEncoderInverted = false;
 
@@ -136,10 +150,11 @@ private:
     static constexpr units::inch_t kFrontLeftYPos = 14.65_in;
 
     // Front Right
-    static constexpr int kFrontRightDriveMotorId = 11;
-    static constexpr int kFrontRightSteerMotorId = 12;
-    static constexpr int kFrontRightEncoderId = 22;
-    static constexpr units::turn_t kFrontRightEncoderOffset = -0.355224609375_tr;
+    static constexpr int kFrontRightDriveMotorModuleId = 6;
+    static constexpr int kFrontRightDriveMotorId = 2 * kFrontRightDriveMotorModuleId - 1;
+    static constexpr int kFrontRightSteerMotorId = 2 * kFrontRightDriveMotorModuleId;
+    static constexpr int kFrontRightEncoderId = 16 + kFrontRightDriveMotorModuleId;
+    static constexpr units::turn_t kFrontRightEncoderOffset = kEncoderOffsets[kFrontRightDriveMotorModuleId - 1];
     static constexpr bool kFrontRightSteerMotorInverted = true;
     static constexpr bool kFrontRightEncoderInverted = false;
 
@@ -147,10 +162,11 @@ private:
     static constexpr units::inch_t kFrontRightYPos = -14.65_in;
 
     // Back Left
-    static constexpr int kBackLeftDriveMotorId = 15;
-    static constexpr int kBackLeftSteerMotorId = 16;
-    static constexpr int kBackLeftEncoderId = 24;
-    static constexpr units::turn_t kBackLeftEncoderOffset = 0.07763671875_tr;
+    static constexpr int kBackLeftDriveMotorModuleId = 8;
+    static constexpr int kBackLeftDriveMotorId = 2 * kBackLeftDriveMotorModuleId - 1;
+    static constexpr int kBackLeftSteerMotorId = 2 * kBackLeftDriveMotorModuleId;
+    static constexpr int kBackLeftEncoderId = 16 + kBackLeftDriveMotorModuleId;
+    static constexpr units::turn_t kBackLeftEncoderOffset = kEncoderOffsets[kBackLeftDriveMotorModuleId - 1];
     static constexpr bool kBackLeftSteerMotorInverted = true;
     static constexpr bool kBackLeftEncoderInverted = false;
 
@@ -158,10 +174,11 @@ private:
     static constexpr units::inch_t kBackLeftYPos = 14.65_in;
 
     // Back Right
-    static constexpr int kBackRightDriveMotorId = 7;
-    static constexpr int kBackRightSteerMotorId = 8;
-    static constexpr int kBackRightEncoderId = 20;
-    static constexpr units::turn_t kBackRightEncoderOffset = -0.1611328125_tr;
+    static constexpr int kBackRightDriveMotorModuleId = 4;
+    static constexpr int kBackRightDriveMotorId = 2 * kBackRightDriveMotorModuleId - 1;
+    static constexpr int kBackRightSteerMotorId = 2 * kBackRightDriveMotorModuleId;
+    static constexpr int kBackRightEncoderId = 16 * kBackRightDriveMotorModuleId;
+    static constexpr units::turn_t kBackRightEncoderOffset = kEncoderOffsets[kBackRightDriveMotorModuleId - 1];
     static constexpr bool kBackRightSteerMotorInverted = true;
     static constexpr bool kBackRightEncoderInverted = false;
 
