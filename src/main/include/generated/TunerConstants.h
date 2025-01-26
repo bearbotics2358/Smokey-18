@@ -127,11 +127,11 @@ private:
 
     // The encoder offsets for all the Swerve Modules
     static constexpr units::turn_t kEncoderOffsets[] = {                      
-        0_tr,           
-        0_tr,           
-        0_tr,        
-        -0.1611328125_tr,     
-        0.366455078125_tr,     
+        0_tr,
+        0_tr,
+        0_tr,
+        -0.1611328125_tr,
+        0.366455078125_tr,
         -0.355224609375_tr,    
         0_tr,
         0.07763671875_tr
