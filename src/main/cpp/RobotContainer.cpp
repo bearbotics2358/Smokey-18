@@ -38,15 +38,6 @@ void RobotContainer::ConfigureBindings()
 
     // reset the field-centric heading on left bumper press
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
-    //joystick.RightBumper().OnTrue(cameraSubsystem.updateData());
-
-    frc2::Trigger([this] {
-        return cameraSubsystem.visibleTargets();
-    }).OnTrue(RobotContainer::SetVibrate(0.7));
-
-    frc2::Trigger([this] {
-        return cameraSubsystem.visibleTargets();
-    }).OnFalse(RobotContainer::SetVibrate(0));
 
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 }
@@ -54,10 +45,4 @@ void RobotContainer::ConfigureBindings()
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
     return frc2::cmd::Print("No autonomous command configured");
-}
-
-frc2::CommandPtr RobotContainer::SetVibrate(double strength) {
-  return frc2::RunCommand([this, strength] {
-    joystick.SetRumble(frc::GenericHID::RumbleType::kBothRumble, strength);
-  }).ToPtr();
 }
