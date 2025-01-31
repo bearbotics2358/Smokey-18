@@ -5,11 +5,13 @@
 #include "RobotContainer.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 RobotContainer::RobotContainer()
-{ 
+{
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
 
@@ -49,5 +51,6 @@ void RobotContainer::ConfigureBindings()
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
+    return autoChooser.GetSelected();
     return autoChooser.GetSelected();
 }
