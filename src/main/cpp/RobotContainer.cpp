@@ -4,10 +4,15 @@
 
 #include "RobotContainer.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
 
 RobotContainer::RobotContainer()
 {
+    autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
+    frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
+
     ConfigureBindings();
 }
 
@@ -42,7 +47,7 @@ void RobotContainer::ConfigureBindings()
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand()
+frc2::Command *RobotContainer::GetAutonomousCommand()
 {
-    return frc2::cmd::Print("No autonomous command configured");
+    return autoChooser.GetSelected();
 }
