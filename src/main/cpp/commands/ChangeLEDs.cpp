@@ -8,7 +8,3 @@ ChangeLEDs::ChangeLEDs(LED* ledSubsystem, ArduinoConstants::RIO_MESSAGES ledStat
 void ChangeLEDs::Initialize() {
     (m_LED->m_LEDArray[static_cast<int>(m_ledState)])();
 }
-
-void ChangeLEDs::ChangeLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
-    (m_LED->m_LEDArray[static_cast<int>(ledState)])();
-}

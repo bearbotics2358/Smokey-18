@@ -9,7 +9,6 @@ public:
     explicit ChangeLEDs(LED* ledSubsystem, ArduinoConstants::RIO_MESSAGES ledState);
 
     void Initialize() override;
-    void ChangeLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 private:
     LED* m_LED;
 
