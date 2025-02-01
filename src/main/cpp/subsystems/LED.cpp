@@ -4,11 +4,10 @@
 
 #include <stdio.h> // printf
 #include <stdlib.h> // atoi
-#include <generated/TunerConstants.h>
+#include <Constants.h>
 #include <string.h>
 
 #include "subsystems/LED.h"
-
 
 
 LED::LED() {
@@ -31,11 +30,11 @@ void LED::Init() {
     LED_prevCommand = RIO_msgs_enum::WHITE;
 
     m_pserial = new frc::SerialPort(
-        ARDUINO_CONSTANTS::BAUD_RATE_ARDUINO,
-        ARDUINO_CONSTANTS::USB_PORT_ARDUINO,
-        ARDUINO_CONSTANTS::DATA_BITS_ARDUINO,
-        ARDUINO_CONSTANTS::PARITY_ARDUINO,
-        ARDUINO_CONSTANTS::STOP_BITS_ARDUINO
+        ArduinoConstants::BAUD_RATE_ARDUINO,
+        ArduinoConstants::USB_PORT_ARDUINO,
+        ArduinoConstants::DATA_BITS_ARDUINO,
+        ArduinoConstants::PARITY_ARDUINO,
+        ArduinoConstants::STOP_BITS_ARDUINO
     );
     m_pserial->DisableTermination();
     m_pserial->frc::SerialPort::kFlushOnAccess;
