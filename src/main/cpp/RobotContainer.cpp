@@ -9,7 +9,7 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 RobotContainer::RobotContainer()
-{
+{ 
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
 
