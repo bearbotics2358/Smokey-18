@@ -11,4 +11,16 @@ namespace ArduinoConstants {
 
     static constexpr int ARDUINO_DIO_PIN = 1;
     static constexpr int NUMBER_OF_LED_STATES = 9;
+
+    constexpr enum RIO_MESSAGES {
+        WHITE = 0,
+        MSG_IDLE = 1,
+        NO_COMMS = 2,
+        ELEVATOR_L1 = 3,
+        ALGAE_HELD = 4,
+        ELEVATOR_L2 = 5,
+        ELEVATOR_L3 = 6,
+        IDK = 7,
+        GOTOMCDONALDS = 8,
+    };
 }

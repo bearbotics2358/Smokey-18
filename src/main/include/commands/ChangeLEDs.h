@@ -2,16 +2,16 @@
 #include <frc2/command/CommandHelper.h>
 
 #include <subsystems/LED.h>
-#include <Protocol2025.h>
+#include <Constants.h>
 
 class ChangeLEDs : public frc2::CommandHelper<frc2::Command, ChangeLEDs> {
 public:
-    explicit ChangeLEDs(LED* ledSubsystem, RIO_msgs_enum ledState);
+    explicit ChangeLEDs(LED* ledSubsystem, ArduinoConstants::RIO_MESSAGES ledState);
 
     void Initialize() override;
-    void ChangeLEDState(RIO_msgs_enum ledState);
+    void ChangeLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 private:
     LED* m_LED;
 
-    RIO_msgs_enum m_ledState;
+    RIO_MESSAGES m_ledState;
 };
