@@ -49,6 +49,9 @@ void LED::Init() {
     //SetTargetType(LED_STAGE_enum::WHITE);
 }
 
+void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
+    (m_LEDArray[static_cast<int>(ledState)])();
+}
 
 void LED::Update() {
     // Not available on the practice bot

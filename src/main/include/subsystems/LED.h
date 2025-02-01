@@ -45,9 +45,11 @@ public:
     //void SetTargetType(LED_STAGE_enum target_type_param);
     //LED_STAGE_enum GetTargetType();
 
-    std::array<std::function<void()>, ArduinoConstants::NUMBER_OF_LED_STATES> m_LEDArray;
+    void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
 private:
+    std::array<std::function<void()>, ArduinoConstants::NUMBER_OF_LED_STATES> m_LEDArray;
+
     frc::SerialPort* m_pserial;
     char rx_buff[BUFF_SIZE];
     int rx_index = 0;
