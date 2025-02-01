@@ -11,6 +11,10 @@
 #define BUFF_SIZE 256
 
 #include <frc2/command/SubsystemBase.h>
+#include <generated/TunerConstants.h>
+
+#include <functional>
+#include <array>
 
 // enum LED_STAGE_enum {
 //   WHITE = 0,
@@ -40,6 +44,8 @@ public:
     //enum LED_STAGE_enum GetTargetRangeIndicator();
     //void SetTargetType(LED_STAGE_enum target_type_param);
     //LED_STAGE_enum GetTargetType();
+
+    std::array<std::function<void()>, ARDUINO_CONSTANTS::NUMBER_OF_LED_STATES> m_LEDArray;
 
 private:
     frc::SerialPort* m_pserial;

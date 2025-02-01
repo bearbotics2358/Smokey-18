@@ -6,10 +6,24 @@
 #include <stdlib.h> // atoi
 #include <generated/TunerConstants.h>
 #include <string.h>
+
 #include "subsystems/LED.h"
+
+
 
 LED::LED() {
     Init();
+    m_LEDArray = {
+        std::bind(&LED::SetWhite, this),
+        std::bind(&LED::SetMSGIdle, this),
+        std::bind(&LED::SetNoComms, this),
+        std::bind(&LED::SetElevatorL1, this),
+        std::bind(&LED::SetAlgaeHeld, this),
+        std::bind(&LED::SetElevatorL2, this),
+        std::bind(&LED::SetElevatorL3, this),
+        std::bind(&LED::SetIDK, this),
+        std::bind(&LED::SetGoToMcDonalds, this),
+    };
 }
 
 void LED::Init() {
