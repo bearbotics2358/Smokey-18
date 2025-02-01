@@ -26,8 +26,8 @@ LED::LED() {
 }
 
 void LED::Init() {
-    LED_currentCommand = RIO_msgs_enum::MSG_IDLE;
-    LED_prevCommand = RIO_msgs_enum::WHITE;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+    LED_prevCommand = ArduinoConstants::RIO_MESSAGES::WHITE;
 
     m_pserial = new frc::SerialPort(
         ArduinoConstants::BAUD_RATE_ARDUINO,
@@ -97,39 +97,39 @@ void LED::Update() {
     if(LED_currentCommand != LED_prevCommand){
         LED_prevCommand = LED_currentCommand;
         switch (LED_currentCommand) {
-            case RIO_msgs_enum::WHITE:
+            case ArduinoConstants::RIO_MESSAGES::WHITE:
                 SendWhiteMSG();
                 break;
 
-            case RIO_msgs_enum::MSG_IDLE:
+            case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:
                 SendIdleMSG();
                 break;
 
-            case RIO_msgs_enum::NO_COMMS:
+            case ArduinoConstants::RIO_MESSAGES::NO_COMMS:
                 SendNoCommsMSG();
                 break;
 
-            case RIO_msgs_enum::ELEVATOR_L1:
+            case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:
                 SendElevatorL1MSG();
                 break;  
 
-            case RIO_msgs_enum::ALGAE_HELD:
+            case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:
                 SendAlgaeHeldMSG();
                 break;  
 
-            case RIO_msgs_enum::ELEVATOR_L2:
+            case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:
                 SendElevatorL2MSG();
                 break;  
 
-            case RIO_msgs_enum::ELEVATOR_L3:
+            case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:
                 SendElevatorL3MSG();
                 break;  
 
-            case RIO_msgs_enum::IDK:
+            case ArduinoConstants::RIO_MESSAGES::IDK:
                 SendIDKMSG();
                 break;  
 
-            case RIO_msgs_enum::GOTOMCDONALDS:
+            case ArduinoConstants::RIO_MESSAGES::GOTOMCDONALDS:
                 SendGoToMcDonaldsMSG();
                 break;  
 
@@ -167,7 +167,7 @@ void LED::ProcessReport() {
 // }
 
 void LED::SetWhite() {
-    LED_currentCommand = RIO_msgs_enum::WHITE;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::WHITE;
 }
 
 void LED::SendWhiteMSG() {
@@ -178,7 +178,7 @@ void LED::SendWhiteMSG() {
 }
 
 void LED::SetMSGIdle() {
-    LED_currentCommand = RIO_msgs_enum::MSG_IDLE;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
 }
 
 void LED::SendIdleMSG() {
@@ -189,7 +189,7 @@ void LED::SendIdleMSG() {
 }
 
 void LED::SetNoComms() {
-    LED_currentCommand = RIO_msgs_enum::NO_COMMS;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::NO_COMMS;
 }
 
 void LED::SendNoCommsMSG() {
@@ -206,7 +206,7 @@ void LED::SendNoCommsMSG() {
 }
 
 void LED::SetElevatorL1() {
-    LED_currentCommand = RIO_msgs_enum::ELEVATOR_L1;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1;
 }
 
 void LED::SendElevatorL1MSG() {
@@ -217,7 +217,7 @@ void LED::SendElevatorL1MSG() {
 }
 
 void LED::SetAlgaeHeld() {
-    LED_currentCommand = RIO_msgs_enum::ALGAE_HELD;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ALGAE_HELD;
 }
 
 void LED::SendAlgaeHeldMSG() {
@@ -229,7 +229,7 @@ void LED::SendAlgaeHeldMSG() {
 }
 
 void LED::SetElevatorL2() {
-    LED_currentCommand = RIO_msgs_enum::ELEVATOR_L2;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2;
 }
 
 void LED::SendElevatorL2MSG() {
@@ -240,7 +240,7 @@ void LED::SendElevatorL2MSG() {
 }
 
 void LED::SetElevatorL3() {
-    LED_currentCommand = RIO_msgs_enum::ELEVATOR_L3;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3;
 }
 
 void LED::SendElevatorL3MSG() {
@@ -251,7 +251,7 @@ void LED::SendElevatorL3MSG() {
 }
 
 void LED::SetIDK() {
-    LED_currentCommand = RIO_msgs_enum::IDK;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::IDK;
 }
 
 void LED::SendIDKMSG() {
@@ -262,7 +262,7 @@ void LED::SendIDKMSG() {
 }
 
 void LED::SetGoToMcDonalds() {
-    LED_currentCommand = RIO_msgs_enum::GOTOMCDONALDS;
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::GOTOMCDONALDS;
 }
 
 void LED::SendGoToMcDonaldsMSG() {

@@ -12,7 +12,7 @@ namespace ArduinoConstants {
     static constexpr int ARDUINO_DIO_PIN = 1;
     static constexpr int NUMBER_OF_LED_STATES = 9;
 
-    constexpr enum RIO_MESSAGES {
+    enum RIO_MESSAGES {
         WHITE = 0,
         MSG_IDLE = 1,
         NO_COMMS = 2,

@@ -13,5 +13,5 @@ public:
 private:
     LED* m_LED;
 
-    RIO_MESSAGES m_ledState;
+    ArduinoConstants::RIO_MESSAGES m_ledState;
 };
