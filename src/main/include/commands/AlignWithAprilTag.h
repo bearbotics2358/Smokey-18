@@ -9,5 +9,5 @@ class AlignWithAprilTag : public frc2::CommandHelper<frc2::Command, AlignWithApr
     
     private:
     int m_aprilTagId;
-    subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
+    subsystems::CommandSwerveDrivetrain* m_drivetrain;
 };
