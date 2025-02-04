@@ -257,6 +257,9 @@ public:
 private:
     void ConfigureAutoBuilder();
     void StartSimThread();
+
+public:
+    frc2::CommandPtr AlignWithAprilTag(int aprilTagId);
 };
 
 }

@@ -1,7 +1,13 @@
 #include "subsystems/CommandSwerveDrivetrain.h"
+#include "Constants.h"
+
 #include <frc/RobotController.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <pathplanner/lib/path/PathPlannerPath.h>
+#include <pathplanner/lib/commands/FollowPathCommand.h>
 
 using namespace subsystems;
 
@@ -73,4 +79,39 @@ void CommandSwerveDrivetrain::StartSimThread()
         UpdateSimState(deltaTime, frc::RobotController::GetBatteryVoltage());
     });
     m_simNotifier->StartPeriodic(kSimLoopPeriod);
+}
+
+frc2::CommandPtr CommandSwerveDrivetrain::AlignWithAprilTag(int aprilTagId) {
+    using namespace pathplanner;
+    // frc::SmartDashboard::PutBoolean("Aligning with AprilTag?", true);
+
+    std::vector<frc::Pose2d> poses {
+        VisionConstants::aprilTagsToPoses.at(aprilTagId)
+    };
+    std::vector<Waypoint> waypoints = PathPlannerPath::waypointsFromPoses(poses);
+
+    // TODO: implement the correct constraints
+    PathConstraints constraints(
+        1_mps, // Max Velocity
+        1_mps_sq, // Max Acceleration
+        1_rad_per_s, // Max Angular Velocity
+        1_rad_per_s_sq, // Max Angular Acceleration
+        12_V, // OPTIONAL PARAMETER: Nominal Voltage
+        false // OPTIONAL PARAMETER: unlimited
+    );
+
+    std::shared_ptr<PathPlannerPath> path = std::make_shared<PathPlannerPath>(
+        waypoints,
+        constraints,
+        std::nullopt, // To indicate that we're generating a path on the play
+        GoalEndState(0.0_mps, frc::Rotation2d(0_deg)) // TODO: implement the correct GoalEndState
+    );
+
+    /* This following line of code is for preventing the path from being flipped if the coordinates 
+     * are already correct
+     * TODO: Is this correct?
+     */
+    path->preventFlipping = true;
+
+    return AutoBuilder::followPath(path);
 }
