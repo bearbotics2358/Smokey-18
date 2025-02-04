@@ -108,7 +108,8 @@ frc2::CommandPtr CommandSwerveDrivetrain::AlignWithAprilTag(int aprilTagId) {
     );
 
     /* This following line of code is for preventing the path from being flipped if the coordinates 
-     * are already correct
+     * are already correct; I believe that the path should be flipped based on whether you are in the red alliance
+     * or not.
      * TODO: Is this correct?
      */
     path->preventFlipping = true;

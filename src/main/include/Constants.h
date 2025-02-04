@@ -4,7 +4,7 @@
 #include <frc/geometry/Rotation2d.h>
 
 namespace VisionConstants {
-    // TODO: make the poses correct
+    // TODO: make the poses correct, they should be robot centric
     const std::unordered_map<int, frc::Pose2d> aprilTagsToPoses = {
         {6, frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))},
         {7, frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))},
