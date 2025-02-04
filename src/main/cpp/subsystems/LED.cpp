@@ -42,9 +42,9 @@ void LED::Init() {
     m_pserial->SetReadBufferSize(0);
     m_pserial->SetWriteBufferMode(frc::SerialPort::kFlushOnAccess);
 
-    rx_index = 0;
+    m_rxIndex = 0;
     for(int i = 0; i < BUFF_SIZE; i++) {
-        rx_buff[i] = 0;
+        m_rxBuff[i] = 0;
     }
     //SetTargetType(LED_STAGE_enum::WHITE);
 }
@@ -66,21 +66,21 @@ void LED::Update() {
     // printf("LED: in Update, attempting to receive\n");
 
     while (m_pserial->GetBytesReceived() > 0) {
-        m_pserial->Read(&rx_buff[rx_index], 1);
+        m_pserial->Read(&m_rxBuff[m_rxIndex], 1);
     
-        if((rx_buff[rx_index] == '\r') || (rx_buff[rx_index] == '\n')) {
+        if((m_rxBuff[m_rxIndex] == '\r') || (m_rxBuff[m_rxIndex] == '\n')) {
 
             // process report
-            if(rx_index == 0) {
+            if(m_rxIndex == 0) {
                 // no report
                 continue;
             }
 
             // terminate the report string
-            rx_buff[rx_index] = 0;
+            m_rxBuff[m_rxIndex] = 0;
 
             // print the report:
-            printf("RX: %s\n", rx_buff);
+            printf("RX: %s\n", m_rxBuff);
             m_pserial->Flush();
 
             ProcessReport();
@@ -88,11 +88,11 @@ void LED::Update() {
             // printf("LED report: rx_buff\n");
 
             // reset for next report
-            rx_index = 0;
+            m_rxIndex = 0;
         } else {
             // have not received end of report yet
-            if(rx_index < BUFF_SIZE - 1) {
-                rx_index++;
+            if(m_rxIndex < BUFF_SIZE - 1) {
+                m_rxIndex++;
             }
         }
     }

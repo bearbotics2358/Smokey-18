@@ -5,7 +5,7 @@
 #ifndef H_LED
 #define H_LED
 
-#include "Constants.h" //yay i can use CONE and CUBE
+#include "Constants.h"
 #include <frc/SerialPort.h>
 
 #define BUFF_SIZE 256
@@ -51,9 +51,9 @@ private:
     std::array<std::function<void()>, ArduinoConstants::NUMBER_OF_LED_STATES> m_LEDArray;
 
     frc::SerialPort* m_pserial;
-    char rx_buff[BUFF_SIZE];
-    int rx_index = 0;
-    float valAngle  = 0;
+    char m_rxBuff[BUFF_SIZE];
+    int m_rxIndex = 0;
+    float m_valAngle = 0;
     //LED_STAGE_enum target_type = LED_STAGE_enum::WHITE;
     ArduinoConstants::RIO_MESSAGES LED_prevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
     ArduinoConstants::RIO_MESSAGES LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
