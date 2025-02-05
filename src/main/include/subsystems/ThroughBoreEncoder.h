@@ -10,6 +10,6 @@ class ThroughBoreEncoder : public frc2::SubsystemBase {
         double GetDistanceExample();
         double GetDirectionExample();
     private:
-        // TODO: {0, 1} sets up the DIO ports on 0 and 1. Change accordingly
+        // TODO: {0, 1} sets up the DIO ports on 0 and 1. Change accordingly.
         frc::Encoder throughboreencoder{0, 1, false, frc::Encoder::EncodingType::k4X};
 };

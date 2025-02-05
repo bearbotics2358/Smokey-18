@@ -4,6 +4,8 @@ ThroughBoreEncoder::ThroughBoreEncoder() {
 
 };
 
+// The two functions below are examples
+
 double ThroughBoreEncoder::GetDistanceExample () {
     return throughboreencoder.GetDistance();
 };
