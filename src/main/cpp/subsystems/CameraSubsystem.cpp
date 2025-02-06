@@ -13,7 +13,6 @@ bool CameraSubsystem::visibleTargets() {
 
 frc2::CommandPtr CameraSubsystem::updateData() {
     return RunOnce([this] {
-        frc::SmartDashboard::PutString("shdbnksndkjdsnkjs", "sjdnkjsndkjsdnkjd");
         photon::PhotonPipelineResult result = limelightCamera.GetLatestResult();
         if (result.HasTargets()) {
             photon::PhotonTrackedTarget bestTarget = result.GetBestTarget();
@@ -32,23 +31,5 @@ frc2::CommandPtr CameraSubsystem::updateData() {
 }
 
 void CameraSubsystem::Periodic() {
-    frc::SmartDashboard::PutString("please work", "work work work");
-    photon::PhotonPipelineResult result = limelightCamera.GetLatestResult();
-    if (result.HasTargets()) {
-        photon::PhotonTrackedTarget bestTarget = result.GetBestTarget();
-        frc::SmartDashboard::PutNumber("Yaw To Best Tag", bestTarget.GetYaw());
-        frc::Transform3d pose = bestTarget.GetBestCameraToTarget();
-        double x = pose.X().value();
-        double y = pose.Y().value();
-        double rot = pose.Rotation().Z().value();
-        frc::SmartDashboard::PutNumber("X To Best Tag", x);
-        frc::SmartDashboard::PutNumber("Y To Best Tag", y);
-        frc::SmartDashboard::PutNumber("Rotation To Best Tag", rot);
-        frc::SmartDashboard::PutNumber("Best Tag ID", bestTarget.GetFiducialId());
-    } else {
-        frc::SmartDashboard::PutNumber("Yaw To Best Tag", 0);
-        frc::SmartDashboard::PutNumber("X To Best Tag", 0);
-        frc::SmartDashboard::PutNumber("Y To Best Tag", 0);
-        frc::SmartDashboard::PutNumber("Best Tag ID", 0);
-    }
+    updateData();
 }
