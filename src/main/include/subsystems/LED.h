@@ -5,7 +5,7 @@
 #ifndef H_LED
 #define H_LED
 
-#include "Constants.h" //yay i can use CONE and CUBE
+#include "Constants.h"
 #include <frc/SerialPort.h>
 
 #define BUFF_SIZE 256
@@ -16,17 +16,12 @@
 #include <functional>
 #include <array>
 
-// enum LED_STAGE_enum {
-//   WHITE = 0,
-//   LED_IDLE,
-//   NO_COMMS,
-//   NOTE_COLLECTED  
-// };
-
 class LED : public frc2::SubsystemBase {
 public:
     LED();
     virtual ~LED() = default;
+
+    void Periodic() override;
 
     void Init();
     void Update();
@@ -40,10 +35,7 @@ public:
     void SetElevatorL3();
     void SetIDK();
     void ProcessReport();
-    void SetGoToMcDonalds();
-    //enum LED_STAGE_enum GetTargetRangeIndicator();
-    //void SetTargetType(LED_STAGE_enum target_type_param);
-    //LED_STAGE_enum GetTargetType();
+    void SetTest();
 
     void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
@@ -54,9 +46,10 @@ private:
     char rx_buff[BUFF_SIZE];
     int rx_index = 0;
     float valAngle  = 0;
-    //LED_STAGE_enum target_type = LED_STAGE_enum::WHITE;
+
     ArduinoConstants::RIO_MESSAGES LED_prevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
     ArduinoConstants::RIO_MESSAGES LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+
     void SendWhiteMSG();
     void SendIdleMSG();
     void SendNoCommsMSG();
@@ -65,7 +58,7 @@ private:
     void SendElevatorL2MSG();
     void SendElevatorL3MSG();
     void SendIDKMSG();
-    void SendGoToMcDonaldsMSG();
+    void SendTestMSG();
 };
 
 #endif

@@ -1,10 +1,10 @@
-#include <commands/ChangeLEDs.h>
+#include "commands/ChangeLEDs.h"
 
-ChangeLEDs::ChangeLEDs(LED* ledSubsystem, ArduinoConstants::RIO_MESSAGES ledState) {
+ChangeLEDs::ChangeLEDs(LED* ledSubsystem, ArduinoConstants::RIO_MESSAGES ledState) 
+    : m_LED(ledSubsystem), m_ledState(ledState) {
     AddRequirements(ledSubsystem);
-    m_ledState = ledState;
 }
 
 void ChangeLEDs::Initialize() {
-    m_LED->SetLEDState(m_ledState);
+    m_LED->SetLEDState(m_ledState); 
 }

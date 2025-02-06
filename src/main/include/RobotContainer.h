@@ -9,6 +9,9 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "Telemetry.h"
+#include <Constants.h>
+#include <frc2/command/button/CommandGenericHID.h>
+#include <commands/ChangeLEDs.h>
 
 class RobotContainer {
 private:
@@ -28,8 +31,8 @@ private:
      *       define a destructor to un-register the telemetry from the drivetrain */
     Telemetry logger{MaxSpeed};
 
-    frc2::CommandXboxController joystick{0};
-
+    frc2::CommandXboxController joystick{DriverConstants::kDriverPort};
+    
 public:
     subsystems::CommandSwerveDrivetrain drivetrain{TunerConstants::CreateDrivetrain()};
 
@@ -44,4 +47,6 @@ public:
 
 private:
     void ConfigureBindings();
+    frc2::Command *CommandGenericHID gamepad(int kOperatorPort); 
+    LED m_led; 
 };

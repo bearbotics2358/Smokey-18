@@ -21,6 +21,14 @@ namespace ArduinoConstants {
         ELEVATOR_L2 = 5,
         ELEVATOR_L3 = 6,
         IDK = 7,
-        GOTOMCDONALDS = 8,
+        TEST = 8,
     };
+}
+
+namespace OperatorConstants {
+    static constexpr int kOperatorPort = 4;
+}
+
+namespace DriverConstants {
+    static constexpr int kDriverPort = 5;
 }

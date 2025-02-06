@@ -21,8 +21,12 @@ LED::LED() {
         std::bind(&LED::SetElevatorL2, this),
         std::bind(&LED::SetElevatorL3, this),
         std::bind(&LED::SetIDK, this),
-        std::bind(&LED::SetGoToMcDonalds, this),
+        std::bind(&LED::SetTest, this),
     };
+}
+
+void LED::Periodic() {
+    Update();
 }
 
 void LED::Init() {
@@ -46,7 +50,6 @@ void LED::Init() {
     for(int i = 0; i < BUFF_SIZE; i++) {
         rx_buff[i] = 0;
     }
-    //SetTargetType(LED_STAGE_enum::WHITE);
 }
 
 void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
@@ -132,8 +135,8 @@ void LED::Update() {
                 SendIDKMSG();
                 break;  
 
-            case ArduinoConstants::RIO_MESSAGES::GOTOMCDONALDS:
-                SendGoToMcDonaldsMSG();
+            case ArduinoConstants::RIO_MESSAGES::TEST:
+                SendTestMSG();
                 break;  
 
             default:
@@ -148,26 +151,6 @@ void LED::ProcessReport() {
     // parse report
     // no action needed, no report expected
 }
-
-
-// void LED::SetTargetType(LED_STAGE_enum target_type_param)
-// {
-// #ifdef COMP_BOT  // Not available on the practice bot
-//  char cmd[10];
-//  strncpy(cmd, "1,1,1\r\n", 8);
-//  target_type = target_type_param;
-//  // lazy way to build a message
-//  cmd[4] = target_type ? '1' : '0';
-//  m_serial.Write(cmd, strlen(cmd));
-//  m_serial.Flush();
-// #endif
-// }
-
-
-// LED_STAGE_enum LED::GetTargetType()
-// {
-//  return target_type;
-// }
 
 void LED::SetWhite() {
     LED_currentCommand = ArduinoConstants::RIO_MESSAGES::WHITE;
@@ -264,11 +247,11 @@ void LED::SendIDKMSG() {
     m_pserial->Flush();
 }
 
-void LED::SetGoToMcDonalds() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::GOTOMCDONALDS;
+void LED::SetTest() {
+    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::TEST;
 }
 
-void LED::SendGoToMcDonaldsMSG() {
+void LED::SendTestMSG() {
     char cmd[10];
     strncpy(cmd, "8,0\r\n", 8);
     m_pserial->Write(cmd, strlen(cmd));
