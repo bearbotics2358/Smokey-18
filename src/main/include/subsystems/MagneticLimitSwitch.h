@@ -3,12 +3,11 @@
 #include <frc/DigitalInput.h>
 #include <frc2/command/SubsystemBase.h>
 
-// Class for a Magnetic Limit Switchs.
-
+// Class for a Magnetic Limit Switches.
 class LimitSwitch : public frc2::SubsystemBase {
    public:
         LimitSwitch(int port);
-        bool LimitDetection();
+        bool GetBeamBroken();
    private:
        frc::DigitalInput a_Input;
 };

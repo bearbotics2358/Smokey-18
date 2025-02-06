@@ -1,15 +1,12 @@
 #include <subsystems/ThroughBoreEncoder.h>
 
-ThroughBoreEncoder::ThroughBoreEncoder() {
-
-};
+ThroughBoreEncoder::ThroughBoreEncoder() {};
 
 // The two functions below are examples
-
-double ThroughBoreEncoder::GetDistanceExample () {
-    return throughboreencoder.GetDistance();
+double ThroughBoreEncoder::GetDistance() {
+    return m_throughBorEncoder.GetDistance();
 };
 
-double ThroughBoreEncoder::GetDirectionExample () {
-    return throughboreencoder.GetDirection();
+double ThroughBoreEncoder::GetDirection() {
+    return m_throughBorEncoder.GetDirection();
 };
