@@ -31,5 +31,5 @@ frc2::CommandPtr CameraSubsystem::updateData() {
 }
 
 void CameraSubsystem::Periodic() {
-    updateData();
+    frc2::CommandScheduler::GetInstance().Schedule(updateData());
 }

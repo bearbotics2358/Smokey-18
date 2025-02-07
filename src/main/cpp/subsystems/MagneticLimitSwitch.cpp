@@ -1,9 +1,9 @@
 #include "subsystems/MagneticLimitSwitch.h"
 
 LimitSwitch::LimitSwitch(int port):
-a_Input(port) {}
+m_Input(port) {}
 
 
 bool LimitSwitch::GetBeamBroken() {
-   return a_Input.Get();
+   return m_Input.Get();
 };

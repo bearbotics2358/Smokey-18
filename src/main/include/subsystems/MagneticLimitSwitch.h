@@ -9,5 +9,5 @@ class LimitSwitch : public frc2::SubsystemBase {
         LimitSwitch(int port);
         bool GetBeamBroken();
    private:
-       frc::DigitalInput a_Input;
+       frc::DigitalInput m_Input;
 };
