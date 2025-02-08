@@ -18,20 +18,19 @@ class LED : public frc2::SubsystemBase {
   LED();
   ~LED() override = default;  // Use override keyword
 
-  void Periodic() override;
+  void Periodic() override; // Declare Update
 
   void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
  private:
-  void Update();  // Declare Update
   void ProcessReport();  // Declare ProcessReport
 
   frc::SerialPort* m_pserial;
-  char rx_buff[32];  // Smaller buffer
-  int rx_index = 0;
+  char m_rxBuff[32];  // Smaller buffer
+  int m_rxIndex = 0;
 
-  ArduinoConstants::RIO_MESSAGES LED_prevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
-  ArduinoConstants::RIO_MESSAGES LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+  ArduinoConstants::RIO_MESSAGES m_LEDPrevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+  ArduinoConstants::RIO_MESSAGES m_LEDCurrentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
 
   void SendWhiteMSG();
   void SendIdleMSG();

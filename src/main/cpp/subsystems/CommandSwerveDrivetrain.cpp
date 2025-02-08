@@ -5,8 +5,7 @@
 
 using namespace subsystems;
 
-void CommandSwerveDrivetrain::ConfigureAutoBuilder()
-{
+void CommandSwerveDrivetrain::ConfigureAutoBuilder() {
     auto config = pathplanner::RobotConfig::fromGUISettings();
     pathplanner::AutoBuilder::configure(
         // Supplier of current robot pose
@@ -39,8 +38,7 @@ void CommandSwerveDrivetrain::ConfigureAutoBuilder()
     );
 }
 
-void CommandSwerveDrivetrain::Periodic()
-{
+void CommandSwerveDrivetrain::Periodic() {
     /*
      * Periodically try to apply the operator perspective.
      * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.

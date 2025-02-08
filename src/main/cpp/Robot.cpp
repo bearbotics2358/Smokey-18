@@ -5,14 +5,6 @@
 #include "Robot.h"
 #include "LimelightHelpers.h"
 #include <frc2/command/CommandScheduler.h>
-#include "subsystems/LED.h"
-#include "commands/ChangeLEDs.h" 
-#include <frc2/command/button/CommandGenericHID.h>
-#include <Constants.h>
-#include <RobotContainer.h>
-#include <frc/DriverStation.h>
-#include <iostream>
-
 
 Robot::Robot() {} 
 
@@ -30,8 +22,6 @@ void Robot::RobotPeriodic() {
             m_container.drivetrain.AddVisionMeasurement(llMeasurement->pose, llMeasurement->timestampSeconds);
         }
     }
-    
-
 }
 
 void Robot::DisabledInit() {}

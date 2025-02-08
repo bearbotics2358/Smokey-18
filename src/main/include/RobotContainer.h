@@ -10,9 +10,7 @@
 #include <frc2/command/button/CommandGenericHID.h>
 #include <commands/ChangeLEDs.h>
 #include <map> // Required for std::map
-#include <wpi/SmallVector.h> // Required for SmallVector
 #include <frc2/command/CommandHelper.h> //For command Based Requirements
-#include <functional>
 
 class RobotContainer {
 private:
@@ -64,9 +62,9 @@ public:
 
 private:
     void ConfigureBindings();
-    frc2::CommandGenericHID gamepad{4};
+    frc2::CommandGenericHID m_gamepad{4};
     LED m_led;
-    ArduinoConstants::RIO_MESSAGES currentLEDMessage;
-    std::map<int, ArduinoConstants::RIO_MESSAGES> buttonMap; // Map button numbers to LED messages
+    ArduinoConstants::RIO_MESSAGES m_currentLEDMessage;
+    std::map<int, ArduinoConstants::RIO_MESSAGES> m_buttonMap; // Map button numbers to LED messages
     void SetLED(ArduinoConstants::RIO_MESSAGES message); // SetLED Prototype
 };

@@ -1,4 +1,3 @@
-// RobotContainer.cpp
 #include "RobotContainer.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -6,21 +5,20 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <frc2/command/button/CommandGenericHID.h>
 #include <commands/ChangeLEDs.h>
-#include <frc2/command/InstantCommand.h>
 
 RobotContainer::RobotContainer() {
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
 
-    currentLEDMessage = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
-    m_led.SetLEDState(currentLEDMessage);
+    m_currentLEDMessage = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+    m_led.SetLEDState(m_currentLEDMessage);
 
     // Initialize the button map
-    buttonMap[12] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1;
-    buttonMap[11] = ArduinoConstants::RIO_MESSAGES::ALGAE_HELD;
-    buttonMap[10] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2;
-    buttonMap[9] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3;
-    buttonMap[8] = ArduinoConstants::RIO_MESSAGES::IDK;
+    m_buttonMap[12] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1;
+    m_buttonMap[11] = ArduinoConstants::RIO_MESSAGES::ALGAE_HELD;
+    m_buttonMap[10] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2;
+    m_buttonMap[9] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3;
+    m_buttonMap[8] = ArduinoConstants::RIO_MESSAGES::IDK;
 
     ConfigureBindings();
 }
@@ -46,20 +44,20 @@ void RobotContainer::ConfigureBindings() {
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     //Button bindings using commands.
-    for (const auto& pair : buttonMap) {
+    for (const auto& pair : m_buttonMap) {
         int buttonNumber = pair.first;
-        gamepad.Button(buttonNumber).ToggleOnTrue(new LEDSetCommand(this, buttonMap[buttonNumber]));
+        m_gamepad.Button(buttonNumber).ToggleOnTrue(new LEDSetCommand(this, m_buttonMap[buttonNumber]));
     }
 }
 
 //This is a LED Setting Call
 void RobotContainer::SetLED(ArduinoConstants::RIO_MESSAGES message) {
-    if (currentLEDMessage != message) {
+    if (m_currentLEDMessage != message) {
         m_led.SetLEDState(message);
-        currentLEDMessage = message;
+        m_currentLEDMessage = message;
     } else {
         m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
-        currentLEDMessage = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+        m_currentLEDMessage = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
     }
 }
 
