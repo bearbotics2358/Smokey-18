@@ -11,6 +11,7 @@
 #include <Constants.h>
 #include <RobotContainer.h>
 #include <frc/DriverStation.h>
+#include <iostream>
 
 
 Robot::Robot() {} 
@@ -30,9 +31,6 @@ void Robot::RobotPeriodic() {
         }
     }
     
-     if (!frc::DriverStation::IsDSAttached()) {
-        ArduinoConstants::RIO_MESSAGES::NO_COMMS;
-     }
 
 }
 

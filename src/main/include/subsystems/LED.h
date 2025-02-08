@@ -23,6 +23,9 @@ class LED : public frc2::SubsystemBase {
   void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
  private:
+  void Update();  // Declare Update
+  void ProcessReport();  // Declare ProcessReport
+
   frc::SerialPort* m_pserial;
   char rx_buff[32];  // Smaller buffer
   int rx_index = 0;

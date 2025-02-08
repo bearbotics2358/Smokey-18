@@ -1,3 +1,8 @@
+// commands/ChangeLEDs.h
+
+#ifndef COMMANDS_CHANGELEDS_H
+#define COMMANDS_CHANGELEDS_H
+
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/LED.h"
@@ -8,8 +13,10 @@ public:
     explicit ChangeLEDs(LED* ledSubsystem, ArduinoConstants::RIO_MESSAGES ledState);
 
     void Initialize() override;
-    LED* m_LED;
-private:
 
+private:
+    LED* m_LED;
     ArduinoConstants::RIO_MESSAGES m_ledState;
 };
+
+#endif // COMMANDS_CHANGELEDS_H

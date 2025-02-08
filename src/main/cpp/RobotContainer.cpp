@@ -1,68 +1,68 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+// RobotContainer.cpp
 #include "RobotContainer.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandGenericHID.h>
 #include <commands/ChangeLEDs.h>
+#include <frc2/command/InstantCommand.h>
 
-RobotContainer::RobotContainer()
-{
+RobotContainer::RobotContainer() {
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
+
+    currentLEDMessage = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+    m_led.SetLEDState(currentLEDMessage);
+
+    // Initialize the button map
+    buttonMap[12] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1;
+    buttonMap[11] = ArduinoConstants::RIO_MESSAGES::ALGAE_HELD;
+    buttonMap[10] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2;
+    buttonMap[9] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3;
+    buttonMap[8] = ArduinoConstants::RIO_MESSAGES::IDK;
 
     ConfigureBindings();
 }
 
-void RobotContainer::ConfigureBindings()
-{
-    // Note that X is defined as forward according to WPILib convention,
-    // and Y is defined as to the left according to WPILib convention.
-    drivetrain.SetDefaultCommand(
-        // Drivetrain will execute this command periodically
-        drivetrain.ApplyRequest([this]() -> auto&& {
-            return drive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
-        })
-    );
+void RobotContainer::ConfigureBindings() {
+    drivetrain.SetDefaultCommand(drivetrain.ApplyRequest([this]() -> auto&& {
+        return drive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed)
+            .WithVelocityY(-joystick.GetLeftX() * MaxSpeed)
+            .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate);
+    }));
 
     joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
     joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
         return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
     }));
 
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
     (joystick.Back() && joystick.Y()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
     (joystick.Back() && joystick.X()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
     (joystick.Start() && joystick.Y()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     (joystick.Start() && joystick.X()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
-    // reset the field-centric heading on left bumper press
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
-
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-     (gamepad.Button(12) || gamepad.Button(11) || gamepad.Button(10) || gamepad.Button(9) || gamepad.Button(8)).ToggleOnFalse(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::MSG_IDLE));
-    gamepad.Button(12).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1));
-    gamepad.Button(11).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ALGAE_HELD));
-    gamepad.Button(10).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2));
-    gamepad.Button(9).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3));
-    gamepad.Button(8).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::IDK));
-    (gamepad.Button(12) && gamepad.Button(11) && gamepad.Button(10) && gamepad.Button(9) && gamepad.Button(8)).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::TEST));
+    //Button bindings using commands.
+    for (const auto& pair : buttonMap) {
+        int buttonNumber = pair.first;
+        gamepad.Button(buttonNumber).ToggleOnTrue(new LEDSetCommand(this, buttonMap[buttonNumber]));
+    }
 }
 
-frc2::Command *RobotContainer::GetAutonomousCommand()
-{
-    return autoChooser.GetSelected();
-    return autoChooser.GetSelected();
+//This is a LED Setting Call
+void RobotContainer::SetLED(ArduinoConstants::RIO_MESSAGES message) {
+    if (currentLEDMessage != message) {
+        m_led.SetLEDState(message);
+        currentLEDMessage = message;
+    } else {
+        m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+        currentLEDMessage = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+    }
 }
 
+frc2::Command* RobotContainer::GetAutonomousCommand() {
+    return autoChooser.GetSelected();
+}
