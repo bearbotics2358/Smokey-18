@@ -1,259 +1,138 @@
-/* 
- *LED.cpp - Control LED lights representing desired game pieces
- */
-
 #include <stdio.h> // printf
 #include <stdlib.h> // atoi
 #include <Constants.h>
 #include <string.h>
-
+#include <commands/ChangeLEDs.h>
 #include "subsystems/LED.h"
 
-
 LED::LED() {
-    Init();
-    m_LEDArray = {
-        std::bind(&LED::SetWhite, this),
-        std::bind(&LED::SetMSGIdle, this),
-        std::bind(&LED::SetNoComms, this),
-        std::bind(&LED::SetElevatorL1, this),
-        std::bind(&LED::SetAlgaeHeld, this),
-        std::bind(&LED::SetElevatorL2, this),
-        std::bind(&LED::SetElevatorL3, this),
-        std::bind(&LED::SetIDK, this),
-        std::bind(&LED::SetTest, this),
-    };
+  m_pserial = new frc::SerialPort(
+      ArduinoConstants::BAUD_RATE_ARDUINO, ArduinoConstants::USB_PORT_ARDUINO,
+      ArduinoConstants::DATA_BITS_ARDUINO, ArduinoConstants::PARITY_ARDUINO,
+      ArduinoConstants::STOP_BITS_ARDUINO);
+  m_pserial->DisableTermination();
+  m_pserial->SetFlowControl(frc::SerialPort::kFlowControl_None);
+  m_pserial->SetReadBufferSize(1);  // Read one byte at a time
+  m_pserial->SetWriteBufferMode(frc::SerialPort::WriteBufferMode::kFlushOnAccess); // Correct Usage
+
+  rx_index = 0;
+  memset(rx_buff, 0, sizeof(rx_buff));
 }
 
-void LED::Periodic() {
-    Update();
-}
-
-void LED::Init() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
-    LED_prevCommand = ArduinoConstants::RIO_MESSAGES::WHITE;
-
-    m_pserial = new frc::SerialPort(
-        ArduinoConstants::BAUD_RATE_ARDUINO,
-        ArduinoConstants::USB_PORT_ARDUINO,
-        ArduinoConstants::DATA_BITS_ARDUINO,
-        ArduinoConstants::PARITY_ARDUINO,
-        ArduinoConstants::STOP_BITS_ARDUINO
-    );
-    m_pserial->DisableTermination();
-    m_pserial->frc::SerialPort::kFlushOnAccess;
-    m_pserial->SetFlowControl(frc::SerialPort::kFlowControl_None);
-    m_pserial->SetReadBufferSize(0);
-    m_pserial->SetWriteBufferMode(frc::SerialPort::kFlushOnAccess);
-
-    rx_index = 0;
-    for(int i = 0; i < BUFF_SIZE; i++) {
-        rx_buff[i] = 0;
-    }
-}
+void LED::Periodic() { Update(); }
 
 void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
-    (m_LEDArray[static_cast<int>(ledState)])();
+  LED_currentCommand = ledState;
 }
 
 void LED::Update() {
-    // Not available on the practice bot
-    // call this routine periodically to check for any readings and store
-    // into result registers
+  while (m_pserial->GetBytesReceived() > 0) {
+    char byte;
+    m_pserial->Read(&byte, 1);
 
-    // get report if there is one
-    // every time called, and every time through loop, get report chars if available
-    // and add to rx buffer
-    // when '\r' (or '\t') found, process reading
-   
-    // printf("LED: in Update, attempting to receive\n");
+    if (byte == '\r' || byte == '\n') {
+      if (rx_index > 0) {
+        rx_buff[rx_index] = 0;  // Null-terminate
+        printf("RX: %s\n", rx_buff);
+        // m_pserial->Flush(); // No need to flush reads
 
-    while (m_pserial->GetBytesReceived() > 0) {
-        m_pserial->Read(&rx_buff[rx_index], 1);
-    
-        if((rx_buff[rx_index] == '\r') || (rx_buff[rx_index] == '\n')) {
-
-            // process report
-            if(rx_index == 0) {
-                // no report
-                continue;
-            }
-
-            // terminate the report string
-            rx_buff[rx_index] = 0;
-
-            // print the report:
-            printf("RX: %s\n", rx_buff);
-            m_pserial->Flush();
-
-            ProcessReport();
-           
-            // printf("LED report: rx_buff\n");
-
-            // reset for next report
-            rx_index = 0;
-        } else {
-            // have not received end of report yet
-            if(rx_index < BUFF_SIZE - 1) {
-                rx_index++;
-            }
-        }
+        ProcessReport();
+      }
+      rx_index = 0;
+      memset(rx_buff, 0, sizeof(rx_buff));  // Clear buffer
+    } else {
+      if (rx_index < static_cast<int>(sizeof(rx_buff)) - 1) {
+        rx_buff[rx_index++] = byte;
+      } else {
+        // Buffer overflow!  Handle the error (e.g., reset the index, log a message)
+        printf("LED: RX buffer overflow!\n");
+        rx_index = 0;
+        memset(rx_buff, 0, sizeof(rx_buff));
+      }
     }
+  }
 
-    if(LED_currentCommand != LED_prevCommand){
-        LED_prevCommand = LED_currentCommand;
-        switch (LED_currentCommand) {
-            case ArduinoConstants::RIO_MESSAGES::WHITE:
-                SendWhiteMSG();
-                break;
-
-            case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:
-                SendIdleMSG();
-                break;
-
-            case ArduinoConstants::RIO_MESSAGES::NO_COMMS:
-                SendNoCommsMSG();
-                break;
-
-            case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:
-                SendElevatorL1MSG();
-                break;  
-
-            case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:
-                SendAlgaeHeldMSG();
-                break;  
-
-            case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:
-                SendElevatorL2MSG();
-                break;  
-
-            case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:
-                SendElevatorL3MSG();
-                break;  
-
-            case ArduinoConstants::RIO_MESSAGES::IDK:
-                SendIDKMSG();
-                break;  
-
-            case ArduinoConstants::RIO_MESSAGES::TEST:
-                SendTestMSG();
-                break;  
-
-            default:
-                break;
-        }
+  if (LED_currentCommand != LED_prevCommand) {
+    LED_prevCommand = LED_currentCommand;
+    switch (LED_currentCommand) {
+      case ArduinoConstants::RIO_MESSAGES::WHITE:
+        SendWhiteMSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:
+        SendIdleMSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:
+        SendNoCommsMSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:
+        SendElevatorL1MSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:
+        SendAlgaeHeldMSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:
+        SendElevatorL2MSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:
+        SendElevatorL3MSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::IDK:
+        SendIDKMSG();
+        break;
+      case ArduinoConstants::RIO_MESSAGES::TEST:
+        SendTestMSG();
+        break;
+      default:
+        break;
     }
+  }
 }
-
-// instead of atoi(), UltrasonicSerial used strtol(&readBuffer[1], (char **)NULL, 10);
 
 void LED::ProcessReport() {
-    // parse report
-    // no action needed, no report expected
-}
-
-void LED::SetWhite() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::WHITE;
+  // Parse report - no action needed in this example
 }
 
 void LED::SendWhiteMSG() {
-    char cmd[10];
-    strncpy(cmd, "(0,0)\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetMSGIdle() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+  m_pserial->Write("0,0\r\n", 6); // Use literal, shorter length
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendIdleMSG() {
-    char cmd[10];
-    strncpy(cmd, "1,0\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetNoComms() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::NO_COMMS;
+  m_pserial->Write("1,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendNoCommsMSG() {
-    int ret = 0;
-    printf("in SetNoComms\n");
-    char cmd[10];
-    strncpy(cmd, "2,0\r\n", 8);
-    printf("about to Write: %s\n", cmd);
-    ret = m_pserial->Write(cmd, strlen(cmd));
-    printf("written: %d characters\n", ret);
-    printf("about to Flush\n");
-    m_pserial->Flush();
-    printf("flushed\n\n");
-}
-
-void LED::SetElevatorL1() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1;
+  m_pserial->Write("2,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendElevatorL1MSG() {
-    char cmd[10];
-    strncpy(cmd, "3,0\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetAlgaeHeld() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ALGAE_HELD;
+  m_pserial->Write("3,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendAlgaeHeldMSG() {
-    char cmd[10];
-    sprintf(cmd, "4,0,%1.2f\r\n");
-    printf("%s\n", cmd);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetElevatorL2() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2;
+  m_pserial->Write("4,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendElevatorL2MSG() {
-    char cmd[10];
-    strncpy(cmd, "5,0\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetElevatorL3() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3;
+  m_pserial->Write("5,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendElevatorL3MSG() {
-    char cmd[10];
-    strncpy(cmd, "6,0\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetIDK() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::IDK;
+  m_pserial->Write("6,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendIDKMSG() {
-    char cmd[10];
-    strncpy(cmd, "7,0\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();
-}
-
-void LED::SetTest() {
-    LED_currentCommand = ArduinoConstants::RIO_MESSAGES::TEST;
+  m_pserial->Write("7,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendTestMSG() {
-    char cmd[10];
-    strncpy(cmd, "8,0\r\n", 8);
-    m_pserial->Write(cmd, strlen(cmd));
-    m_pserial->Flush();    
+  m_pserial->Write("8,0\r\n", 6);
+  //m_pserial->Flush(); //kFlushOnAccess is set.
 }

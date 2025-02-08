@@ -1,9 +1,6 @@
-/* 
- * LED.cpp - Control LED lights representing desired game piece
- */
-
-#ifndef H_LED
-#define H_LED
+// LED.h - Control LED lights representing desired game piece
+#ifndef LED_H
+#define LED_H
 
 #include "Constants.h"
 #include <frc/SerialPort.h>
@@ -17,48 +14,31 @@
 #include <array>
 
 class LED : public frc2::SubsystemBase {
-public:
-    LED();
-    virtual ~LED() = default;
+ public:
+  LED();
+  ~LED() override = default;  // Use override keyword
 
-    void Periodic() override;
+  void Periodic() override;
 
-    void Init();
-    void Update();
+  void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
-    void SetWhite();
-    void SetMSGIdle();
-    void SetNoComms();
-    void SetElevatorL1();
-    void SetAlgaeHeld();
-    void SetElevatorL2();
-    void SetElevatorL3();
-    void SetIDK();
-    void ProcessReport();
-    void SetTest();
+ private:
+  frc::SerialPort* m_pserial;
+  char rx_buff[32];  // Smaller buffer
+  int rx_index = 0;
 
-    void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
+  ArduinoConstants::RIO_MESSAGES LED_prevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+  ArduinoConstants::RIO_MESSAGES LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
 
-private:
-    std::array<std::function<void()>, ArduinoConstants::NUMBER_OF_LED_STATES> m_LEDArray;
-
-    frc::SerialPort* m_pserial;
-    char rx_buff[BUFF_SIZE];
-    int rx_index = 0;
-    float valAngle  = 0;
-
-    ArduinoConstants::RIO_MESSAGES LED_prevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
-    ArduinoConstants::RIO_MESSAGES LED_currentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
-
-    void SendWhiteMSG();
-    void SendIdleMSG();
-    void SendNoCommsMSG();
-    void SendElevatorL1MSG();
-    void SendAlgaeHeldMSG();
-    void SendElevatorL2MSG();
-    void SendElevatorL3MSG();
-    void SendIDKMSG();
-    void SendTestMSG();
+  void SendWhiteMSG();
+  void SendIdleMSG();
+  void SendNoCommsMSG();
+  void SendElevatorL1MSG();
+  void SendAlgaeHeldMSG();
+  void SendElevatorL2MSG();
+  void SendElevatorL3MSG();
+  void SendIDKMSG();
+  void SendTestMSG();
 };
 
-#endif
+#endif  // LED_H

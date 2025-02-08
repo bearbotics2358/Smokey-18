@@ -47,6 +47,6 @@ public:
 
 private:
     void ConfigureBindings();
-    frc2::Command *CommandGenericHID gamepad(int kOperatorPort); 
+    frc2::CommandGenericHID gamepad{4}; 
     LED m_led; 
 };

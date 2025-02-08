@@ -51,13 +51,13 @@ void RobotContainer::ConfigureBindings()
 
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-     (gamepad.GetRawButton(12) || gamepad.GetRawButton(11) || gamepad.GetRawButton(10) || gamepad.GetRawButton(9) || gamepad.GetRawButton(8)).ToggleOnFalse(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::MSG_IDLE));
-    gamepad.GetRawButton(12).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1));
-    gamepad.GetRawButton(11).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ALGAE_HELD));
-    gamepad.GetRawButton(10).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2));
-    gamepad.GetRawButton(9).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3));
-    gamepad.GetRawButton(8).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::IDK));
-    (gamepad.GetRawButton(12) && gamepad.GetRawButton(11) && gamepad.GetRawButton(10) && gamepad.GetRawButton(9) && gamepad.GetRawButton(8)).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::TEST));
+     (gamepad.Button(12) || gamepad.Button(11) || gamepad.Button(10) || gamepad.Button(9) || gamepad.Button(8)).ToggleOnFalse(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::MSG_IDLE));
+    gamepad.Button(12).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1));
+    gamepad.Button(11).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ALGAE_HELD));
+    gamepad.Button(10).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2));
+    gamepad.Button(9).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3));
+    gamepad.Button(8).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::IDK));
+    (gamepad.Button(12) && gamepad.Button(11) && gamepad.Button(10) && gamepad.Button(9) && gamepad.Button(8)).ToggleOnTrue(ChangeLEDs(&m_led, ArduinoConstants::RIO_MESSAGES::TEST));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
