@@ -137,7 +137,7 @@ private:
     };
 
     // Front Left
-    static constexpr int kFrontLeftDriveMotorModuleId = 5;
+    static constexpr int kFrontLeftDriveMotorModuleId = 1;
     // TODO: Drive motor and Steer motor Ids are swapped
     static constexpr int kFrontLeftDriveMotorId = 2 * kFrontLeftDriveMotorModuleId;
     static constexpr int kFrontLeftSteerMotorId = 2 * kFrontLeftDriveMotorModuleId - 1;
@@ -150,7 +150,7 @@ private:
     static constexpr units::inch_t kFrontLeftYPos = 14.65_in;
 
     // Front Right
-    static constexpr int kFrontRightDriveMotorModuleId = 6;
+    static constexpr int kFrontRightDriveMotorModuleId = 8;
     static constexpr int kFrontRightDriveMotorId = 2 * kFrontRightDriveMotorModuleId - 1;
     static constexpr int kFrontRightSteerMotorId = 2 * kFrontRightDriveMotorModuleId;
     static constexpr int kFrontRightEncoderId = 16 + kFrontRightDriveMotorModuleId;
@@ -162,7 +162,7 @@ private:
     static constexpr units::inch_t kFrontRightYPos = -14.65_in;
 
     // Back Left
-    static constexpr int kBackLeftDriveMotorModuleId = 8;
+    static constexpr int kBackLeftDriveMotorModuleId = 3;
     static constexpr int kBackLeftDriveMotorId = 2 * kBackLeftDriveMotorModuleId - 1;
     static constexpr int kBackLeftSteerMotorId = 2 * kBackLeftDriveMotorModuleId;
     static constexpr int kBackLeftEncoderId = 16 + kBackLeftDriveMotorModuleId;
