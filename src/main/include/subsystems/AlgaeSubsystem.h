@@ -10,19 +10,12 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem();
 
-  void setSpeed(double speed);
+  void SetSpeed(double speed);
 
-  double getAngle();
-  void goToAngle(double angle);
+  double GetAngle();
+  void GoToAngle(double angle);
 
  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-
-  // TODO These need to be declared in constants.h when it gets merged
-    #define CORALMOTORPORT = 0
-    #define PIVOTMOTORPORT = 1
-
     rev::spark::SparkMax m_algaeMotor;
-
+    rev::spark::SparkMax m_coralMotor;
 };
