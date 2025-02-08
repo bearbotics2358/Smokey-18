@@ -1,18 +1,22 @@
 
 #include <subsystems/AlgaeSubsystem.h>
+#include <Constants.h>
 
-AlgaeSubsystem::AlgaeSubsystem() {
-  // Implementation of subsystem constructor goes here.
+AlgaeSubsystem::AlgaeSubsystem():
+m_algaeMotor{AlgaeConstants::CORAL_MOTOR_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed},
+m_coralMotor{AlgaeConstants::PIVOT_MOTOR_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed}
+{
+  
 }
 
-void AlgaeSubsystem::setSpeed(double speed) {
+void AlgaeSubsystem::SetSpeed(double speed) {
 
 }
 
-double AlgaeSubsystem::getAngle() {
+double AlgaeSubsystem::GetAngle() {
 
 }
 
-void AlgaeSubsystem::goToAngle(double angle) {
+void AlgaeSubsystem::GoToAngle(double angle) {
 
 }
