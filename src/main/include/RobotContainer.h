@@ -10,7 +10,7 @@
 #include <frc2/command/button/CommandGenericHID.h>
 #include <commands/ChangeLEDs.h>
 #include <map> // Required for std::map
-#include <frc2/command/CommandHelper.h> //For command Based Requirements
+#include <subsystems/LED.h>
 
 class RobotContainer {
 private:
@@ -43,5 +43,6 @@ private:
     void ConfigureBindings();
     // TODO: Change `4` into a port constant.
     frc2::CommandGenericHID m_gamepad{4};
-    std::map<int, ArduinoConstants::RIO_MESSAGES> m_buttonMap; // Map button numbers to LED messages
+    std::map<int, ArduinoConstants::RIO_MESSAGES> m_buttonMap;
+    LED* m_led;
 };

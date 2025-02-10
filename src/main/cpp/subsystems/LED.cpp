@@ -78,8 +78,6 @@ void LED::Periodic() {
       case ArduinoConstants::RIO_MESSAGES::TEST:
         SendTestMSG();
         break;
-      default:
-        break;
     }
   } 
 }

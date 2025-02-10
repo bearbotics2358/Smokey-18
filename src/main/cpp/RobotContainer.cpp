@@ -36,6 +36,12 @@ void RobotContainer::ConfigureBindings() {
 
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+
+    for(auto button = m_buttonMap.begin(); button != m_buttonMap.end(); button++) {
+        // To get the key: button->first
+        // To get the value: button->second
+        m_gamepad.Button(button->first).OnTrue(ChangeLEDs(m_led, button->second).ToPtr());
+    }
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
