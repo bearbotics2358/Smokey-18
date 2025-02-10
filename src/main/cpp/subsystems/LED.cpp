@@ -82,8 +82,10 @@ void LED::Periodic() {
   } 
 }
 
-void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
-  m_LEDCurrentCommand = ledState;
+frc2::CommandPtr LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
+  return RunOnce([this, ledState] {
+    m_LEDCurrentCommand = ledState;
+  });
 }
 
 // TODO: Can we remove this function?

@@ -8,6 +8,7 @@
 #define BUFF_SIZE 256
 
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/CommandPtr.h>
 #include <Constants.h>
 
 #include <functional>
@@ -20,7 +21,7 @@ class LED : public frc2::SubsystemBase {
 
   void Periodic() override; // Declare Update
 
-  void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
+  frc2::CommandPtr SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
  private:
   void ProcessReport();  // Declare ProcessReport
