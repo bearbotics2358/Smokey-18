@@ -35,36 +35,13 @@ public:
 private:
     frc::SendableChooser<frc2::Command *> autoChooser;
 
-    // Define LEDSetCommand as a nested class - Now captures 'this'
-    class LEDSetCommand : public frc2::CommandHelper<frc2::Command, LEDSetCommand> {
-    public:
-        LEDSetCommand(RobotContainer* container, ArduinoConstants::RIO_MESSAGES message)
-            : m_container(container), m_message(message) {
-            AddRequirements(&container->m_led); // Require the LED subsystem
-        }
-
-        void Initialize() override {
-            m_container->SetLED(m_message); // Call SetLED on the RobotContainer
-        }
-
-        bool IsFinished() override {
-            return true; // This is an instant command
-        }
-
-    private:
-        RobotContainer* m_container;
-        ArduinoConstants::RIO_MESSAGES m_message;
-    };
-
 public:
     RobotContainer();
     frc2::Command *GetAutonomousCommand();
 
 private:
     void ConfigureBindings();
+    // TODO: Change `4` into a port constant.
     frc2::CommandGenericHID m_gamepad{4};
-    LED m_led;
-    ArduinoConstants::RIO_MESSAGES m_currentLEDMessage;
     std::map<int, ArduinoConstants::RIO_MESSAGES> m_buttonMap; // Map button numbers to LED messages
-    void SetLED(ArduinoConstants::RIO_MESSAGES message); // SetLED Prototype
 };
