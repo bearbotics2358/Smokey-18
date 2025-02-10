@@ -40,7 +40,11 @@ void RobotContainer::ConfigureBindings() {
     for(auto button = m_buttonMap.begin(); button != m_buttonMap.end(); button++) {
         // To get the key: button->first
         // To get the value: button->second
-        m_gamepad.Button(button->first).OnTrue(m_led->SetLEDState(button->second));
+        #include <frc/smartdashboard/SmartDashboard.h>
+        m_gamepad.Button(button->first).OnTrue(frc2::cmd::RunOnce({
+            frc::SmartDashboard::PutNumber("Button Pressed", button->first);
+        }))
+        // m_gamepad.Button(button->first).OnTrue(m_led->SetLEDState(button->second));
     }
 }
 
