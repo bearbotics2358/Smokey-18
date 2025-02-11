@@ -17,10 +17,13 @@ RobotContainer::RobotContainer()
 }
 
 void RobotContainer::ConfigureBindings() {
+    // Note that X is defined as forward according to WPILib convention,
+    // and Y is defined as to the left according to WPILib convention.
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier);
+        // Drivetrain will execute this command periodically
+        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
+            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
+            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
     }));
 
     m_joystick.LeftBumper()
