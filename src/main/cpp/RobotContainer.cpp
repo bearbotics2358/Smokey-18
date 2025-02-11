@@ -38,9 +38,25 @@ void RobotContainer::ConfigureBindings() {
     m_gamepad.Button(8).OnTrue(m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK));
 
     // Example for running parallel commands with a single button press
+    // m_gamepad.Button(12).OnTrue(frc2::cmd::Parallel(
+    //     m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1),
+    //     frc2::cmd::RunOnce([this] { frc::SmartDashboard::PutString("Elevator", "L1"); })));
+
+    // m_gamepad.Button(11).OnTrue(frc2::cmd::Parallel(
+    //     m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD),
+    //     frc2::cmd::RunOnce([this] { frc::SmartDashboard::PutString("ALGAE", "HELD"); })));
+
     // m_gamepad.Button(10).OnTrue(frc2::cmd::Parallel(
     //     m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2),
     //     frc2::cmd::RunOnce([this] { frc::SmartDashboard::PutString("Elevator", "L2"); })));
+    
+    //  m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
+    //     m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3),
+    //     frc2::cmd::RunOnce([this] { frc::SmartDashboard::PutString("Elevator", "L3"); })));
+
+    // m_gamepad.Button(8).OnTrue(frc2::cmd::Parallel(
+    //     m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK),
+    //     frc2::cmd::RunOnce([this] { frc::SmartDashboard::PutString("IDK", "IDK"); })));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

@@ -5,6 +5,8 @@
 #include <Constants.h>
 #include "subsystems/LED.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 LED::LED() {
   m_pserial = new frc::SerialPort(
     ArduinoConstants::BAUD_RATE_ARDUINO, 
@@ -22,6 +24,7 @@ LED::LED() {
 }
 
 void LED::Periodic() { 
+  SendElevatorL1MSG();
   while (m_pserial->GetBytesReceived() > 0) {
     char byte;
     m_pserial->Read(&byte, 1);
@@ -48,38 +51,49 @@ void LED::Periodic() {
     }
   }
 
+  frc::SmartDashboard::PutNumber("Current Command", static_cast<int>(m_LEDCurrentCommand));
+  frc::SmartDashboard::PutNumber("Past Command", static_cast<int>(m_LEDPrevCommand));
   if (m_LEDCurrentCommand != m_LEDPrevCommand) {
     m_LEDPrevCommand = m_LEDCurrentCommand;
     switch (m_LEDCurrentCommand) {
       case ArduinoConstants::RIO_MESSAGES::WHITE:
+        frc::SmartDashboard::PutString("Function", "SendWhiteMSG");
         SendWhiteMSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:
+        frc::SmartDashboard::PutString("Function", "SendIdleMSG");
         SendIdleMSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::NO_COMMS:
+        frc::SmartDashboard::PutString("Function", "SendNoCommsMSG");
         SendNoCommsMSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:
+        frc::SmartDashboard::PutString("Function", "SendElevatorL1MSG");
         SendElevatorL1MSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:
+        frc::SmartDashboard::PutString("Function", "SendAlgaeHeldMSG");
         SendAlgaeHeldMSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:
+        frc::SmartDashboard::PutString("Function", "SendElevatorL2MSG");
         SendElevatorL2MSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:
+        frc::SmartDashboard::PutString("Function", "SendElevatorL3MSG");
         SendElevatorL3MSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::IDK:
+        frc::SmartDashboard::PutString("Function", "SendIDKMSG");
         SendIDKMSG();
         break;
       case ArduinoConstants::RIO_MESSAGES::TEST:
+        frc::SmartDashboard::PutString("Function", "SendTestMSG");
         SendTestMSG();
         break;
     }
-  } 
+  }
 }
 
 frc2::CommandPtr LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
