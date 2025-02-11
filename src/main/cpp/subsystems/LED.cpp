@@ -24,7 +24,6 @@ LED::LED() {
 }
 
 void LED::Periodic() { 
-  SendElevatorL1MSG();
   while (m_pserial->GetBytesReceived() > 0) {
     char byte;
     m_pserial->Read(&byte, 1);
@@ -108,46 +107,55 @@ void LED::ProcessReport() {
 }
 
 void LED::SendWhiteMSG() {
-  m_pserial->Write("0,0\r\n", 6); // Use literal, shorter length
+  int a = m_pserial->Write("0,0\r\n", 6); // Use literal, shorter length
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendIdleMSG() {
-  m_pserial->Write("1,0\r\n", 6);
+  int a = m_pserial->Write("1,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendNoCommsMSG() {
-  m_pserial->Write("2,0\r\n", 6);
+  int a = m_pserial->Write("2,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendElevatorL1MSG() {
-  m_pserial->Write("3,0\r\n", 6);
+  int a = m_pserial->Write("3,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendAlgaeHeldMSG() {
-  m_pserial->Write("4,0\r\n", 6);
+  int a = m_pserial->Write("4,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendElevatorL2MSG() {
-  m_pserial->Write("5,0\r\n", 6);
+  int a = m_pserial->Write("5,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendElevatorL3MSG() {
-  m_pserial->Write("6,0\r\n", 6);
+  int a = m_pserial->Write("6,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendIDKMSG() {
-  m_pserial->Write("7,0\r\n", 6);
+  int a = m_pserial->Write("7,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
 
 void LED::SendTestMSG() {
-  m_pserial->Write("8,0\r\n", 6);
+  int a = m_pserial->Write("8,0\r\n", 6);
+  frc::SmartDashboard::PutNumber("Bytes", a);
   //m_pserial->Flush(); //kFlushOnAccess is set.
 }
