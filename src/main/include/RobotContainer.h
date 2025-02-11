@@ -15,7 +15,7 @@
 class RobotContainer {
 private:
     units::meters_per_second_t m_maxSpeed = TunerConstants::kSpeedAt12Volts;
-    double m_speedMultiplier = 0.2;
+    double m_speedMultiplier = 1.0;
     units::radians_per_second_t m_maxAngularRate = 0.75_tps;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
