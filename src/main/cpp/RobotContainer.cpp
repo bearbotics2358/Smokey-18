@@ -3,6 +3,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
+
 RobotContainer::RobotContainer() {
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
@@ -40,7 +41,6 @@ void RobotContainer::ConfigureBindings() {
     for(auto button = m_buttonMap.begin(); button != m_buttonMap.end(); button++) {
         // To get the key: button->first
         // To get the value: button->second
-        #include <frc/smartdashboard/SmartDashboard.h>
         m_gamepad.Button(button->first).OnTrue(frc2::cmd::RunOnce({
             frc::SmartDashboard::PutNumber("Button Pressed", button->first);
         }))
