@@ -7,13 +7,6 @@ RobotContainer::RobotContainer() {
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
 
-    // Initialize the button map
-    m_buttonMap[12] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1;
-    m_buttonMap[11] = ArduinoConstants::RIO_MESSAGES::ALGAE_HELD;
-    m_buttonMap[10] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2;
-    m_buttonMap[9] = ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3;
-    m_buttonMap[8] = ArduinoConstants::RIO_MESSAGES::IDK;
-
     ConfigureBindings();
 }
 
@@ -37,15 +30,12 @@ void RobotContainer::ConfigureBindings() {
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-    for(auto button = m_buttonMap.begin(); button != m_buttonMap.end(); button++) {
-        // To get the key: button->first
-        // To get the value: button->second
-        #include <frc/smartdashboard/SmartDashboard.h>
-        m_gamepad.Button(button->first).OnTrue(frc2::cmd::RunOnce({
-            frc::SmartDashboard::PutNumber("Button Pressed", button->first);
-        }))
-        // m_gamepad.Button(button->first).OnTrue(m_led->SetLEDState(button->second));
-    }
+    m_gamepad.Button(9).OnTrue(m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3));
+
+    // Example for running parallel commands with a single button press
+    m_gamepad.Button(10).OnTrue(frc2::cmd::Parallel(
+        m_led.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2),
+        frc2::cmd::RunOnce([this] { frc::SmartDashboard::PutString("Elevator", "L2"); })));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

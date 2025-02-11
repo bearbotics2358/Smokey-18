@@ -42,6 +42,5 @@ private:
     void ConfigureBindings();
     // TODO: Change `4` into a port constant.
     frc2::CommandGenericHID m_gamepad{4};
-    std::map<int, ArduinoConstants::RIO_MESSAGES> m_buttonMap;
-    LED* m_led;
+    LED m_led;
 };
