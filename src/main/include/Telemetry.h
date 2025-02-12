@@ -14,7 +14,7 @@
 
 class Telemetry {
 private:
-    units::meters_per_second_t MaxSpeed;
+    units::meters_per_second_t m_maxSpeed;
 
     /* What to publish over networktables for telemetry */
     nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
@@ -66,7 +66,7 @@ public:
      *
      * \param maxSpeed Maximum speed
      */
-    Telemetry(units::meters_per_second_t maxSpeed) : MaxSpeed{maxSpeed}
+    Telemetry(units::meters_per_second_t maxSpeed) : m_maxSpeed{maxSpeed}
     {
         ctre::phoenix6::SignalLogger::Start();
     }
