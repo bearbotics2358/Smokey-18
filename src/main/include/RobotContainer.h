@@ -14,7 +14,7 @@
 
 class RobotContainer {
 private:
-    double m_acceleration = 1.0;
+    double m_acceleration = 0.5;
     double m_xPosition;
     double m_yPosition;
     double m_zPosition;
