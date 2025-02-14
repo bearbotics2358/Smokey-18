@@ -14,6 +14,14 @@
 
 class RobotContainer {
 private:
+    double m_acceleration = 1.0;
+    double m_xPosition;
+    double m_yPosition;
+    double m_zPosition;
+    double m_xPrevPosition;
+    double m_yPrevPosition;
+    double m_zPrevPosition;
+
     units::meters_per_second_t m_maxSpeed = TunerConstants::kSpeedAt12Volts;
     double m_speedMultiplier = 1.0;
     units::radians_per_second_t m_maxAngularRate = 0.75_tps;

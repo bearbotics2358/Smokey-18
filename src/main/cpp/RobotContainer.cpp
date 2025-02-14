@@ -20,10 +20,22 @@ void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
+        m_xPosition = m_joystick.GetLeftY();
+        m_yPosition = m_joystick.GetLeftX();
+        m_zPosition = m_joystick.GetRightX();
+
+        m_xPosition = (1 - m_acceleration) * m_xPrevPosition + m_acceleration * m_xPosition;
+        m_yPosition = (1 - m_acceleration) * m_yPrevPosition + m_acceleration * m_yPosition;
+        m_zPosition = (1 - m_acceleration) * m_zPrevPosition + m_acceleration * m_zPosition;
+
+        m_xPrevPosition = m_xPosition;
+        m_yPrevPosition = m_yPosition;
+        m_zPrevPosition = m_zPosition;
+
         // Drivetrain will execute this command periodically
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
+        return drive.WithVelocityX(-m_xPosition * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
+            .WithVelocityY(-m_yPosition * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
+            .WithRotationalRate(-m_zPosition * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
     }));
 
     m_joystick.LeftBumper()
