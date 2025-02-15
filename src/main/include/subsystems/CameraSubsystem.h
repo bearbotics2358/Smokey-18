@@ -14,8 +14,11 @@ class CameraSubsystem : public frc2::SubsystemBase {
  public:
   CameraSubsystem();
 
+  void updateData();
   bool visibleTargets();
-  frc2::CommandPtr updateData();
+  double gethorizontalTransformation();
+  double getZRotation();
+  double getYDistance();
 
   void Periodic() override;
 
@@ -23,8 +26,12 @@ class CameraSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2024Crescendo);
-  #define CAMERA_NAME "limelight1"
+  photon::PhotonPipelineResult result;
+  photon::PhotonTrackedTarget bestTarget;
+  frc::Transform3d transformation;
+
+  frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025Reefscape);
+  #define CAMERA_NAME "limelight3"
   photon::PhotonCamera limelightCamera{CAMERA_NAME};
   
 };
