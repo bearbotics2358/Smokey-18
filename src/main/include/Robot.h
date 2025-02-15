@@ -11,6 +11,8 @@
 
 #include "RobotContainer.h"
 
+#include <io/FeatherCanDecoder.h>
+
 class Robot : public frc::TimedRobot {
  public:
   Robot();
@@ -28,6 +30,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   void TestExit() override;
 
+  FeatherCanDecoder m_featherCanDecoder;
  private:
   frc2::Command *m_autonomousCommand;
 
