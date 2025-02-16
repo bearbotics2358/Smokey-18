@@ -2,7 +2,7 @@
 
 #include "frc/smartdashboard/SmartDashboard.h"
 
-FeatherCanDecoder::FeatherCanDecoder():m_coralCAN(kCoralCanID)
+FeatherCanDecoder::FeatherCanDecoder():m_coralCAN(kCoralDeviceID)
 {
     m_coralIntakeAngleDegrees = 0.0;
     m_coralCollected = false;

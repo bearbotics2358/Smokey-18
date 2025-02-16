@@ -7,7 +7,7 @@
 
 class FeatherCanDecoder: public ICoralIntakeDataProvider {
 public:
-    const int kCoralCanID = 1;
+    const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
 
     FeatherCanDecoder();
