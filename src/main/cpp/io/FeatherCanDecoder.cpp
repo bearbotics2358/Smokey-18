@@ -1,12 +1,17 @@
 #include "io/FeatherCanDecoder.h"
 
-FeatherCanDecoder::FeatherCanDecoder() {
+#include "frc/smartdashboard/SmartDashboard.h"
+
+FeatherCanDecoder::FeatherCanDecoder():m_coralCAN(kCoralDeviceID)
+{
     m_coralIntakeAngleDegrees = 0.0;
     m_coralCollected = false;
 }
 
 void FeatherCanDecoder::Update() {
-    // @todo Read and unpack the CAN bus data to set m_coralIntakeAngleDegrees and m_coralCollected
+    UnpackCoralCANData();
+
+    frc::SmartDashboard::PutNumber("Angles of Coral FeatherCan", m_coralIntakeAngleDegrees);
 }
 
 float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
@@ -15,4 +20,15 @@ float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
 
 bool FeatherCanDecoder::IsCoralCollected() {
     return m_coralCollected;
+}
+
+void FeatherCanDecoder::UnpackCoralCANData() {
+    frc::CANData data;
+
+    bool isCoralDataValid = m_coralCAN.ReadPacketNew(kCoralAPIId, &data);
+
+    if (isCoralDataValid) {
+        int angleX10 = (data.data[0] << 8) | data.data[1];
+        m_coralIntakeAngleDegrees = angleX10 / 10.0;
+    }
 }
