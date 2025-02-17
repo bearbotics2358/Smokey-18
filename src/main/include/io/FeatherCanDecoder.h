@@ -9,6 +9,7 @@ class FeatherCanDecoder: public ICoralIntakeDataProvider {
 public:
     const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
+    const int kCoralProximityThreshold = 1500;
 
     FeatherCanDecoder();
 
