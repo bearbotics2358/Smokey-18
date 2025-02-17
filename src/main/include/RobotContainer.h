@@ -55,5 +55,5 @@ public:
 private:
     void ConfigureBindings();
 
-    double desiredAngle = 20.0;
+    double desiredAngle;
 };
