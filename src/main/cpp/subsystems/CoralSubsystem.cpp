@@ -35,10 +35,11 @@ double CoralSubsystem::CalculatePID(double goal) {
 }
 
 bool CoralSubsystem::GoToAngle(double angle) {
-    while(fabs(m_coralDataProvider->GetCoralIntakeAngleDegrees() - angle) > 3.0) {
+    if(fabs(m_coralDataProvider->GetCoralIntakeAngleDegrees() - angle) > 3.0) {
         CoralSubsystem::SetPivotSpeed(CoralSubsystem::CalculatePID(angle));
         return false;
+    } else {
+        CoralSubsystem::SetPivotSpeed(0.0);
+        return true;
     }
-    CoralSubsystem::SetPivotSpeed(0.0);
-    return true;
 }
