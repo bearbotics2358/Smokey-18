@@ -11,7 +11,9 @@ FeatherCanDecoder::FeatherCanDecoder():m_coralCAN(kCoralDeviceID)
 void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
 
+
     frc::SmartDashboard::PutNumber("Angles of Coral FeatherCan", m_coralIntakeAngleDegrees);
+    frc::SmartDashboard::PutBoolean("Coral Collected?", m_coralCollected);
 }
 
 float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
@@ -30,5 +32,12 @@ void FeatherCanDecoder::UnpackCoralCANData() {
     if (isCoralDataValid) {
         int angleX10 = (data.data[0] << 8) | data.data[1];
         m_coralIntakeAngleDegrees = angleX10 / 10.0;
+        int proximity = (data.data[2] << 8) | data.data[3];
+        if (proximity > kCoralProximityThreshold){
+            m_coralCollected = true;
+        }
+        else {
+            m_coralCollected = false;
+        }
     }
 }
