@@ -34,6 +34,10 @@ void RobotContainer::ConfigureBindings() {
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
 
+    m_joystick.RightBumper()
+        .OnTrue(m_elevatorSubsystem.TurnToPosition(3_tr))
+        .OnFalse(m_elevatorSubsystem.TurnToPosition(0_tr));
+
     m_joystick.A().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
     m_joystick.B().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& {
         return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});

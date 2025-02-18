@@ -11,6 +11,7 @@
 #include "subsystems/CameraSubsystem.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include <subsystems/ElevatorSubsystem.h>
 
 class RobotContainer {
 private:
@@ -49,4 +50,6 @@ public:
 
 private:
     void ConfigureBindings();
+
+    ElevatorSubsystem m_elevatorSubsystem;
 };
