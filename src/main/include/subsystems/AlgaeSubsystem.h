@@ -12,10 +12,13 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
   void SetSpeed(double speed);
 
-  double GetAngle();
   void GoToAngle(double angle);
 
  private:
-    rev::spark::SparkMax m_algaeMotor;
-    rev::spark::SparkMax m_coralMotor;
+    // TODO: change ids later
+    const int MOTOR_LEFT_PORT = 0;
+    const int MOTOR_RIGHT_PORT = 1;
+
+    rev::spark::SparkMax m_algaeLeftMotor;
+    rev::spark::SparkMax m_algaeRightMotor;
 };

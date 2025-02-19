@@ -1,19 +1,22 @@
 
 #include <subsystems/AlgaeSubsystem.h>
-#include <Constants.h>
+#include <rev/config/SparkBaseConfig.h>
 
 AlgaeSubsystem::AlgaeSubsystem():
-m_algaeMotor{AlgaeConstants::CORAL_MOTOR_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed},
-m_coralMotor{AlgaeConstants::PIVOT_MOTOR_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed}
+m_algaeLeftMotor{MOTOR_LEFT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed},
+m_algaeRightMotor{MOTOR_RIGHT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed}
 {
-  
+    rev::spark::SparkBaseConfig followerConfig;
+    followerConfig.Follow(MOTOR_RIGHT_PORT, true);
+
+    // TODO: Configure these variables later.
+    rev::spark::SparkBase::ResetMode resetMode;
+    rev::spark::SparkBase::PersistMode persistMode;
+
+    m_algaeLeftMotor.Configure(followerConfig, resetMode, persistMode);
 }
 
 void AlgaeSubsystem::SetSpeed(double speed) {
-
-}
-
-double AlgaeSubsystem::GetAngle() {
 
 }
 
