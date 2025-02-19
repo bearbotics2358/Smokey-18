@@ -12,6 +12,7 @@
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
 #include "subsystems/CoralSubsystem.h"
+#include <io/FeatherCanDecoder.h>
 
 class RobotContainer {
 private:
@@ -35,10 +36,9 @@ private:
     frc2::CommandXboxController m_joystick{0};
 
     CameraSubsystem m_cameraSubsystem;
-
     CoralSubsystem m_coralSubsystem;
 
-    ICoralIntakeDataProvider* m_coralDataProvider;
+    FeatherCanDecoder* m_featherCanDecoder;
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
@@ -54,6 +54,4 @@ public:
 
 private:
     void ConfigureBindings();
-
-    double desiredAngle;
 };

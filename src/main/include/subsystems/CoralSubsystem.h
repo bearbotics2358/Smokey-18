@@ -7,17 +7,17 @@
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
 #include "subsystems/ICoralIntakeDataProvider.h"
+#include "io/FeatherCanDecoder.h"
 
 class CoralSubsystem : public frc2::SubsystemBase {
  public:
-  CoralSubsystem(ICoralIntakeDataProvider* coralDataProvider);
+  CoralSubsystem(FeatherCanDecoder* featherPointer);
 
   void SetIntakeSpeed(double speed);
   void SetPivotSpeed(double speed);
 
   double GetAngle();
   bool CoralPresent();
-  double CalculatePID(double goal);
   bool GoToAngle(double angle);
 
  private:
@@ -35,5 +35,5 @@ class CoralSubsystem : public frc2::SubsystemBase {
 
     ICoralIntakeDataProvider* m_coralDataProvider;
 
-    frc::PIDController coralPID{kCoralP, kCoralI, kCoralD};
+    frc::PIDController m_coralPID{kCoralP, kCoralI, kCoralD};
 };
