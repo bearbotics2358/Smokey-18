@@ -3,6 +3,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/Commands.h>
 
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
