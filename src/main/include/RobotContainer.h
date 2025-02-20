@@ -7,8 +7,12 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include "io/FeatherCanDecoder.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/CameraSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
+#include "subsystems/CoralSubsystem.h"
+#include "subsystems/ScoringSuperstructure.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
 
@@ -33,7 +37,12 @@ private:
 
     frc2::CommandXboxController m_joystick{0};
 
+    // Robot.cpp owns the FeatherCanDecoder object
+    FeatherCanDecoder* m_featherCanDecoder;
     CameraSubsystem m_cameraSubsystem;
+    ElevatorSubsystem m_elevatorSubsystem;
+    CoralSubsystem m_coralSubsystem;
+    subsystems::ScoringSuperstructure m_scoringSuperstructure;
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
@@ -43,7 +52,7 @@ private:
     frc::SendableChooser<frc2::Command *> m_autoChooser;
 
 public:
-    RobotContainer();
+    RobotContainer(FeatherCanDecoder* featherCanDecoder);
 
     frc2::Command *GetAutonomousCommand();
 

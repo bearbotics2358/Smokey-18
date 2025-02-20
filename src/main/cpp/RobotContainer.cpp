@@ -8,7 +8,10 @@
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
-RobotContainer::RobotContainer()
+RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
+    m_featherCanDecoder(featherCanDecoder),
+    m_coralSubsystem(m_featherCanDecoder),
+    m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
