@@ -29,12 +29,29 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
     m_pivotMotor.Set(speed);
 }
 
-bool CoralSubsystem::GoToAngle(double angle) {
-    if(fabs(m_coralDataProvider->GetCoralIntakeAngleDegrees() - angle) > 3.0) {
+//Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
+frc2::CommandPtr CoralSubsystem::GoToAngle(double angle) {
+    while(fabs(m_coralDataProvider->GetCoralIntakeAngleDegrees() - angle) > 3.0) {
         CoralSubsystem::SetPivotSpeed(m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), angle));
-        return false;
-    } else {
-        CoralSubsystem::SetPivotSpeed(0.0);
-        return true;
     }
+    CoralSubsystem::SetPivotSpeed(0.0);
+}
+
+//Start the intake motor and stop it when the coral is collected
+frc2::CommandPtr CoralSubsystem::collectCoral() {
+    return this -> RunOnce(
+        [this] {
+            while(!CoralPresent()) {
+            SetIntakeSpeed(0.5);
+            }
+            SetIntakeSpeed(0.0);   
+        });
+}
+
+//Run the intake motor backwards for 1 second to dispense held coral
+frc2::CommandPtr CoralSubsystem::dispenseCoral() {
+    return this -> RunEnd(
+        [this] {SetIntakeSpeed(-0.5); }, 
+        [this] {SetIntakeSpeed(0.0); }
+        ).WithTimeout(1_s);
 }
