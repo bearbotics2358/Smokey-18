@@ -35,7 +35,7 @@ void RobotContainer::ConfigureBindings() {
         );
 
     m_joystick.RightBumper()
-        .OnTrue(m_elevatorSubsystem.TurnToPosition(3_tr))
+        .OnTrue(m_elevatorSubsystem.TurnToPosition(2_tr))
         .OnFalse(m_elevatorSubsystem.TurnToPosition(0_tr));
 
     m_joystick.A().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));

@@ -5,7 +5,7 @@
 #include <frc/DigitalInput.h>
 
 // @todo Set these to the correct IDs when they are assigned on the real robot
-constexpr int kElevatorMotor1Id = 9;
+constexpr int kElevatorMotor1Id = 34;
 constexpr int kElevatorMotor2Id = 19;
 constexpr int kLimitSwitchId = 18;
 
