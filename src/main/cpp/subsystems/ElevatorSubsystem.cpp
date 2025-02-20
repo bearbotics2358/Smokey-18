@@ -8,10 +8,10 @@ m_elevatorMotor1(kElevatorMotor1Id),
 m_elevatorLimitSwitch(kLimitSwitchId)
 {
     ctre::phoenix6::configs::Slot0Configs slot0Configs{};
-    slot0Configs.kV = .12;
-    slot0Configs.kP = 0.0;
-    slot0Configs.kI = 0.0;
-    slot0Configs.kD = 0.0;
+    // slot0Configs.kV = .5;
+    slot0Configs.kP = 0.8;
+    slot0Configs.kI = 0.2;
+    slot0Configs.kD = 0.1;
     m_elevatorMotor1.GetConfigurator().Apply(slot0Configs);
     m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
 
