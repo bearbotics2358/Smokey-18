@@ -41,4 +41,10 @@ void ElevatorSubsystem::Periodic() {
 void ElevatorSubsystem::PlotElevatorPosition() {
     ctre::phoenix6::StatusSignal<units::turn_t> position = m_elevatorMotor1.GetPosition();
     frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValue().value());
+};
+
+frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
+    return frc2::cmd::RunOnce([this, position] {
+            // @todo Implement the command to move the elevator to the given position
+        });
 }

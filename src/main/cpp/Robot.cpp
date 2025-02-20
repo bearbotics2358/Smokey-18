@@ -6,7 +6,9 @@
 
 #include <frc2/command/CommandScheduler.h>
 
-Robot::Robot() {}
+Robot::Robot():
+  m_container(&m_featherCanDecoder)
+{}
 
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
