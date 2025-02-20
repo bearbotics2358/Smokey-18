@@ -10,9 +10,9 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem();
 
-  void SetSpeed(double speed);
+  frc2::CommandPtr SetSpeed(double speed);
 
-  void GoToAngle(double angle);
+  frc2::CommandPtr GoToAngle(double angle);
 
  private:
     // TODO: change ids later

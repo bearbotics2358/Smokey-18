@@ -2,6 +2,8 @@
 #include <subsystems/AlgaeSubsystem.h>
 #include <rev/config/SparkBaseConfig.h>
 
+#include <frc2/command/Commands.h>
+
 AlgaeSubsystem::AlgaeSubsystem():
 m_algaeLeftMotor{MOTOR_LEFT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushless},
 m_algaeRightMotor{MOTOR_RIGHT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushless}
@@ -16,10 +18,14 @@ m_algaeRightMotor{MOTOR_RIGHT_PORT, rev::spark::SparkLowLevel::MotorType::kBrush
     m_algaeLeftMotor.Configure(followerConfig, resetMode, persistMode);
 }
 
-void AlgaeSubsystem::SetSpeed(double speed) {
-
+frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
+    return frc2::cmd::RunOnce([this, speed] {
+        
+    });
 }
 
-void AlgaeSubsystem::GoToAngle(double angle) {
+frc2::CommandPtr AlgaeSubsystem::GoToAngle(double angle) {
+    return frc2::cmd::RunOnce([this, angle] {
 
+    });
 }
