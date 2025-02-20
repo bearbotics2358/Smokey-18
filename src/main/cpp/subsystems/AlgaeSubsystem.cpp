@@ -3,8 +3,8 @@
 #include <rev/config/SparkBaseConfig.h>
 
 AlgaeSubsystem::AlgaeSubsystem():
-m_algaeLeftMotor{MOTOR_LEFT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed},
-m_algaeRightMotor{MOTOR_RIGHT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushed}
+m_algaeLeftMotor{MOTOR_LEFT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushless},
+m_algaeRightMotor{MOTOR_RIGHT_PORT, rev::spark::SparkLowLevel::MotorType::kBrushless}
 {
     rev::spark::SparkBaseConfig followerConfig;
     followerConfig.Follow(MOTOR_RIGHT_PORT, true);
