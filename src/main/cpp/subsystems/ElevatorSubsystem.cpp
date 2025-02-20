@@ -15,7 +15,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     slot0Configs.kI = 0.2;
     slot0Configs.kD = 0.1;
     m_elevatorMotor1.GetConfigurator().Apply(slot0Configs);
-    m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
+    // m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
 
     m_elevatorMotor1.SetPosition(0_tr);
     /*
@@ -44,4 +44,10 @@ void ElevatorSubsystem::Periodic() {
 void ElevatorSubsystem::PlotElevatorPosition() {
     ctre::phoenix6::StatusSignal<units::turn_t> position = m_elevatorMotor1.GetPosition();
     frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValue().value());
+}
+
+frc2::CommandPtr ElevatorSubsystem::TurnToPosition(units::turn_t turns) {
+    return frc2::cmd::RunOnce([this, turns] {
+        m_elevatorMotor1.SetControl(m_positionVoltage.WithPosition(turns).WithVelocity(1_rad_per_s));
+    });
 }
