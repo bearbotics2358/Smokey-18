@@ -36,9 +36,6 @@ private:
     frc2::CommandXboxController m_joystick{0};
 
     CameraSubsystem m_cameraSubsystem;
-    CoralSubsystem m_coralSubsystem;
-
-    FeatherCanDecoder* m_featherCanDecoder;
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
