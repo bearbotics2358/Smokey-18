@@ -12,6 +12,8 @@ constexpr int kLimitSwitchId = 18;
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
+        void Periodic() override;
+        void PlotElevatorPosition();
     private:
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
