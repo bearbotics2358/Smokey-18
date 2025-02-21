@@ -33,7 +33,7 @@ private:
 
     frc2::CommandXboxController m_joystick{0};
 
-    CameraSubsystem cameraSubsystem;
+    CameraSubsystem m_cameraSubsystem;
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
