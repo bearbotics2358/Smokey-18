@@ -3,7 +3,7 @@
 
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
-m_elevatorMotor2(kElevatorMotor2Id),
+// m_elevatorMotor2(kElevatorMotor2Id),
 m_elevatorLimitSwitch(kLimitSwitchId)
 {
     ctre::phoenix6::configs::Slot0Configs slot0Configs{};
@@ -12,7 +12,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     slot0Configs.kI = 0.0;
     slot0Configs.kD = 0.0;
     m_elevatorMotor1.GetConfigurator().Apply(slot0Configs);
-    m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
+    // m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
 
     m_elevatorMotor1.SetPosition(0_tr);
     /*
@@ -43,8 +43,8 @@ void ElevatorSubsystem::PlotElevatorPosition() {
     frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValue().value());
 };
 
-frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
+frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::turn_t position) {
     return frc2::cmd::RunOnce([this, position] {
-            // @todo Implement the command to move the elevator to the given position
+            m_elevatorMotor1.SetControl(m_positionVoltage.WithPosition(position).WithVelocity(1_rad_per_s));
         });
 }

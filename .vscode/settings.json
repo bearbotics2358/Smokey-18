@@ -18,5 +18,6 @@
   "files.associations": {
     "*.inc": "cpp",
     "random": "cpp"
-  }
+  },
+  "C_Cpp.errorSquiggles": "enabled"
 }
