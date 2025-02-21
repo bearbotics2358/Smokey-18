@@ -3,7 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "RobotContainer.h"
-
+#include <subsystems/LED.h>
+#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -15,9 +16,13 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
+    m_LED.SendElevatorL1MSG();
+    
 
     ConfigureBindings();
 }
+
+
 
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
@@ -55,6 +60,12 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.LeftBumper().OnTrue(m_drivetrain.RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+
+    // m_gamepad.Button(12).ToggleOnTrue(m_LED.SendElevatorL1MSG());
+    // m_gamepad.Button(11).ToggleOnTrue(m_LED.SendAlgaeHeldMSG());
+    // m_gamepad.Button(10).ToggleOnTrue(m_LED.SendElevatorL2MSG());
+    // m_gamepad.Button(9).ToggleOnTrue(m_LED.SendElevatorL3MSG());
+//     m_gamepad.Button(8).ToggleOnTrue(frc2::InstantCommand([this] { m_LED.SendIDKMSG(); }).ToPtr());
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

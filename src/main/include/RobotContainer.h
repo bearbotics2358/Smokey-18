@@ -9,12 +9,13 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include "io/FeatherCanDecoder.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
-#include "subsystems/CameraSubsystem.h"
+#include "subsystems/LED.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/CoralSubsystem.h"
 #include "subsystems/ScoringSuperstructure.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/button/CommandGenericHID.h>
 
 class RobotContainer {
 private:
@@ -47,6 +48,8 @@ private:
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
 
+
+
 private:
     /* Path follower */
     frc::SendableChooser<frc2::Command *> m_autoChooser;
@@ -56,6 +59,10 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
+    LED m_LED;
+
 private:
     void ConfigureBindings();
+    // TODO: Change `4` into a port constant.
+    frc2::CommandGenericHID m_gamepad{4};
 };
