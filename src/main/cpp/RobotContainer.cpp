@@ -27,7 +27,10 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
-    m_gamepad.Button(12).OnTrue(m_elevatorSubsystem.SetPositionCommand(2_tr));
+    m_gamepad.Button(12)
+    .OnTrue(m_elevatorSubsystem.SetPositionCommand(2_tr))
+    .OnFalse(m_elevatorSubsystem.SetPositionCommand(0_tr));
+    
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
         return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
