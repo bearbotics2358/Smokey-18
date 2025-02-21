@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Commands.h>
 
@@ -24,7 +23,7 @@ class CoralSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr dispenseCoral();
 
  private:
-
+    const int ANGLE_TOLERANCE = 3.0;
     //TODO - properly define the motor ports
     const int kCoralPivotMotorID = 0;
     const int kCoralIntakeMotorID = 0;
