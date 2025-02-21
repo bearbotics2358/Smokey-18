@@ -11,8 +11,6 @@
 #include "subsystems/CameraSubsystem.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
-#include "subsystems/CoralSubsystem.h"
-#include <io/FeatherCanDecoder.h>
 
 class RobotContainer {
 private:
