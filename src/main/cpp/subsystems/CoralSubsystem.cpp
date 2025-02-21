@@ -1,10 +1,10 @@
 
 #include <subsystems/CoralSubsystem.h>
 
-CoralSubsystem::CoralSubsystem(FeatherCanDecoder* featherPointer) :
-m_intakeMotor(kCoralIntakeMotorPort, rev::spark::SparkMax::MotorType::kBrushless), 
-m_pivotMotor(kCoralPivotMotorPort, rev::spark::SparkMax::MotorType::kBrushless), 
-m_coralDataProvider(featherPointer)
+CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
+m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
+m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
+m_coralDataProvider(dataProvider)
 {
   
 }

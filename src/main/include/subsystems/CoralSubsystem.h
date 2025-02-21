@@ -8,11 +8,10 @@
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
 #include "subsystems/ICoralIntakeDataProvider.h"
-#include "io/FeatherCanDecoder.h"
 
 class CoralSubsystem : public frc2::SubsystemBase {
  public:
-  CoralSubsystem(FeatherCanDecoder* featherPointer);
+  CoralSubsystem(ICoralIntakeDataProvider* dataProvider);
 
   void SetIntakeSpeed(double speed);
   void SetPivotSpeed(double speed);
@@ -27,8 +26,8 @@ class CoralSubsystem : public frc2::SubsystemBase {
  private:
 
     //TODO - properly define the motor ports
-    const int kCoralPivotMotorPort = 0;
-    const int kCoralIntakeMotorPort = 0;
+    const int kCoralPivotMotorID = 0;
+    const int kCoralIntakeMotorID = 0;
 
     const double kCoralP = 0.5;
     const double kCoralI = 0.0;
