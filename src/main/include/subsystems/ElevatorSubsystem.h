@@ -29,8 +29,13 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         frc2::CommandPtr SetPositionCommand(units::inch_t position);
 
+        units::inch_t CurrentHeight();
+
     private:
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
         frc::DigitalInput m_elevatorLimitSwitch;
+
+        const int WHEEL_RADIUS = 1;
+        const int GEAR_RATIO = 1;
 };

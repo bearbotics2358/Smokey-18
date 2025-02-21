@@ -48,3 +48,9 @@ frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
             // @todo Implement the command to move the elevator to the given position
         });
 }
+
+units::inch_t ElevatorSubsystem::CurrentHeight() {
+    return units::inch_t(
+        (m_elevatorMotor1.GetPosition().GetValueAsDouble() * 2 * M_PI *  WHEEL_RADIUS) / GEAR_RATIO
+    );
+}
