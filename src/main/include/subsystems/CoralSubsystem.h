@@ -18,7 +18,6 @@ class CoralSubsystem : public frc2::SubsystemBase {
   bool getLRStatus = false;
   void PrepareCoralSide(bool currentSide);
 
-  double GetAngle();
   bool CoralPresent();
 
   frc2::CommandPtr GoToAngle(double angle);
