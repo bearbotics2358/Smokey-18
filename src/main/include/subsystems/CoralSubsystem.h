@@ -30,8 +30,8 @@ class CoralSubsystem : public frc2::SubsystemBase {
  private:
     const int ANGLE_TOLERANCE = 3.0;
     //TODO - properly define the motor ports
-    const int kCoralPivotMotorID = 0;
-    const int kCoralIntakeMotorID = 0;
+    const int kCoralPivotMotorID = 62;
+    const int kCoralIntakeMotorID = 61;
 
     const double kCoralP = 0.5;
     const double kCoralI = 0.0;
