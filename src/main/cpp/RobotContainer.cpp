@@ -73,16 +73,21 @@ void RobotContainer::ConfigureBindings() {
     (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
-    // reset the field-centric heading on left bumper press
-    m_joystick.LeftBumper().OnTrue(m_drivetrain.RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
-
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-    // m_gamepad.Button(12).ToggleOnTrue(m_LED.SendElevatorL1MSG());
-    // m_gamepad.Button(11).ToggleOnTrue(m_LED.SendAlgaeHeldMSG());
-    // m_gamepad.Button(10).ToggleOnTrue(m_LED.SendElevatorL2MSG());
-    // m_gamepad.Button(9).ToggleOnTrue(m_LED.SendElevatorL3MSG());
-    //m_gamepad.Button(8).ToggleOnTrue(frc2::InstantCommand([this] { m_LED.SendIDKMSG(); }).ToPtr());
+    m_joystick.X().OnTrue(
+        m_coralSubsystem.GoToAngle(90.0)
+    );
+    m_joystick.Y().OnTrue(
+        m_coralSubsystem.GoToAngle(45.0)
+    );
+    
+    m_joystick.A().OnTrue(
+        m_coralSubsystem.collectCoral()
+    );
+    m_joystick.B().OnTrue(
+        m_coralSubsystem.dispenseCoral()
+    );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

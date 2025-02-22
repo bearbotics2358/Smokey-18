@@ -29,16 +29,15 @@ class CoralSubsystem : public frc2::SubsystemBase {
 
  private:
     const int ANGLE_TOLERANCE = 3.0;
-    //TODO - properly define the motor ports
-    const int kCoralPivotMotorID = 62;
+    const int kCoralPivotMotorID = 58;
     const int kCoralIntakeMotorID = 61;
 
     const double kCoralP = 0.5;
     const double kCoralI = 0.0;
     const double kCoralD = 0.0;
 
-    rev::spark::SparkMax m_pivotMotor;
     rev::spark::SparkMax m_intakeMotor;
+    rev::spark::SparkMax m_pivotMotor;
 
     ICoralIntakeDataProvider* m_coralDataProvider;
 
