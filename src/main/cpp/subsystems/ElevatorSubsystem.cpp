@@ -43,6 +43,10 @@ void ElevatorSubsystem::PlotElevatorPosition() {
     frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValue().value());
 };
 
+void SetCurrentElevatorCommand(units::inch_t newPosition) {
+kCurrentElevatorCommand = newPosition;
+}
+
 frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::turn_t position) {
     return frc2::cmd::RunOnce([this, position] {
             m_elevatorMotor1.SetControl(m_positionVoltage.WithPosition(position).WithVelocity(1_rad_per_s));

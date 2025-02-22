@@ -20,9 +20,14 @@ constexpr units::inch_t kElevatorL2Position = 0_in;
 constexpr units::inch_t kElevatorL3Position = 0_in;
 constexpr units::inch_t kElevatorL4Position = 0_in;
 
+// variable for go button use(will be changed when buttons are pressed on the driverstation)
+    units::inch_t kCurrentElevatorCommand = units::inch_t{0};  // Initialize to a default value
+
+
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
+        void SetCurrentElevatorCommand(units::inch_t newPosition);
 
         void Periodic() override;
         void PlotElevatorPosition();
