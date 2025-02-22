@@ -8,10 +8,9 @@
 #include <frc/DigitalInput.h>
 #include <units/length.h>
 
-// @todo Set these to the correct IDs when they are assigned on the real robot
-constexpr int kElevatorMotor1Id = 20;
-constexpr int kElevatorMotor2Id = 19;
-constexpr int kLimitSwitchId = 18;
+constexpr int kElevatorMotor1Id = 36;
+constexpr int kElevatorMotor2Id = 37;
+constexpr int kLimitSwitchId = 1;
 
 // @todo Assign these to real values when we know the distances
 constexpr units::inch_t kElevatorStowPosition = 0_in;

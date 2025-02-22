@@ -126,21 +126,20 @@ private:
 
     // The encoder offsets for all the Swerve Modules
     static constexpr units::turn_t kEncoderOffsets[] = {                      
+        -0.467529296875_tr,
+        -0.30443_tr,
+        0.303466796875_tr,
+        -0.153564453125_tr,
+        -0.355224609375_tr,
         0_tr,
         0_tr,
-        0_tr,
-        -0.1611328125_tr,
-        0.366455078125_tr,
-        -0.355224609375_tr,    
-        0_tr,
-        0.07763671875_tr
+        -0.18896484375_tr,
     };
 
     // Front Left
-    static constexpr int kFrontLeftDriveMotorModuleId = 1;
-    // TODO: Drive motor and Steer motor Ids are swapped
-    static constexpr int kFrontLeftDriveMotorId = 2 * kFrontLeftDriveMotorModuleId;
-    static constexpr int kFrontLeftSteerMotorId = 2 * kFrontLeftDriveMotorModuleId - 1;
+    static constexpr int kFrontLeftDriveMotorModuleId = 4;
+    static constexpr int kFrontLeftDriveMotorId = 2 * kFrontLeftDriveMotorModuleId - 1;
+    static constexpr int kFrontLeftSteerMotorId = 2 * kFrontLeftDriveMotorModuleId;
     static constexpr int kFrontLeftEncoderId = 16 + kFrontLeftDriveMotorModuleId;
     static constexpr units::turn_t kFrontLeftEncoderOffset = kEncoderOffsets[kFrontLeftDriveMotorModuleId - 1];
     static constexpr bool kFrontLeftSteerMotorInverted = true;
@@ -150,7 +149,7 @@ private:
     static constexpr units::inch_t kFrontLeftYPos = 14.65_in;
 
     // Front Right
-    static constexpr int kFrontRightDriveMotorModuleId = 8;
+    static constexpr int kFrontRightDriveMotorModuleId = 3;
     static constexpr int kFrontRightDriveMotorId = 2 * kFrontRightDriveMotorModuleId - 1;
     static constexpr int kFrontRightSteerMotorId = 2 * kFrontRightDriveMotorModuleId;
     static constexpr int kFrontRightEncoderId = 16 + kFrontRightDriveMotorModuleId;
@@ -162,7 +161,7 @@ private:
     static constexpr units::inch_t kFrontRightYPos = -14.65_in;
 
     // Back Left
-    static constexpr int kBackLeftDriveMotorModuleId = 3;
+    static constexpr int kBackLeftDriveMotorModuleId = 1;
     static constexpr int kBackLeftDriveMotorId = 2 * kBackLeftDriveMotorModuleId - 1;
     static constexpr int kBackLeftSteerMotorId = 2 * kBackLeftDriveMotorModuleId;
     static constexpr int kBackLeftEncoderId = 16 + kBackLeftDriveMotorModuleId;
@@ -174,7 +173,7 @@ private:
     static constexpr units::inch_t kBackLeftYPos = 14.65_in;
 
     // Back Right
-    static constexpr int kBackRightDriveMotorModuleId = 4;
+    static constexpr int kBackRightDriveMotorModuleId = 8;
     static constexpr int kBackRightDriveMotorId = 2 * kBackRightDriveMotorModuleId - 1;
     static constexpr int kBackRightSteerMotorId = 2 * kBackRightDriveMotorModuleId;
     static constexpr int kBackRightEncoderId = 16 + kBackRightDriveMotorModuleId;
