@@ -12,11 +12,15 @@ void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
 
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", m_coralIntakeAngleDegrees);
-    frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", m_coralIntakeAngleDegrees + kCoralAngleOffset);
+    frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", m_coralIntakeAngleDegrees + kCoralAngleOffsetDegrees);
     frc::SmartDashboard::PutBoolean("Coral Collected?", m_coralCollected);
 }
 
 float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
+    return m_coralIntakeAngleDegrees - kCoralAngleOffsetDegrees;
+}
+
+float FeatherCanDecoder::GetCoralIntakeRawAngleDegrees() {
     return m_coralIntakeAngleDegrees;
 }
 

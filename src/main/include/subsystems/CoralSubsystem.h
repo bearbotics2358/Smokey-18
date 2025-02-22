@@ -15,7 +15,6 @@ class CoralSubsystem : public frc2::SubsystemBase {
   void SetIntakeSpeed(double speed);
   void SetPivotSpeed(double speed);
 
-  double GetAngle();
   bool CoralPresent();
 
   frc2::CommandPtr GoToAngle(double angle);
