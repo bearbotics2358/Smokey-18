@@ -10,7 +10,7 @@ public:
     const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
     const int kCoralProximityThreshold = 1500;
-    const double kCoralAngleOffset = 262.6;
+    const double kCoralAngleOffsetDegrees = 262.6;
 
     FeatherCanDecoder();
 
@@ -18,6 +18,7 @@ public:
 
     // **** ICoralIntakeDataProvider interface functions **** //
     float GetCoralIntakeAngleDegrees() override;
+    float GetCoralIntakeRawAngleDegrees() override;
     bool IsCoralCollected() override;
 
 private:
