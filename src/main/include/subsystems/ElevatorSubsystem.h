@@ -69,7 +69,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
     private:
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
-        // ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
+        ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
         frc::DigitalInput m_elevatorLimitSwitch;
 
         ctre::phoenix6::controls::PositionVoltage m_positionVoltage = ctre::phoenix6::controls::PositionVoltage{0_tr}.WithSlot(0);

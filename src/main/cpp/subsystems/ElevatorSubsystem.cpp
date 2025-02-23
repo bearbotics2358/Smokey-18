@@ -5,7 +5,7 @@
 
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
-// m_elevatorMotor2(kElevatorMotor2Id),
+m_elevatorMotor2(kElevatorMotor2Id),
 m_elevatorLimitSwitch(kLimitSwitchId)
 {
     ctre::phoenix6::configs::Slot0Configs slot0Configs{};
