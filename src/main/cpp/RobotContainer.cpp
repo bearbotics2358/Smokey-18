@@ -37,11 +37,6 @@ void RobotContainer::ConfigureBindings() {
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
 
-    m_joystick.A().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
-    m_joystick.B().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});
-    }));
-
     (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
     // Run SysId routines when holding back/start and X/Y.
@@ -54,18 +49,18 @@ void RobotContainer::ConfigureBindings() {
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     m_joystick.X().OnTrue(
-        m_coralSubsystem.GoToAngle(90.0)
+        m_elevatorSubsystem.Lower()
     );
     m_joystick.Y().OnTrue(
-        m_coralSubsystem.GoToAngle(45.0)
+        // m_elevatorSubsystem.Raise()
+        m_elevatorSubsystem.SetPositionCommand(5_in)
     );
     
     m_joystick.A().OnTrue(
-        m_coralSubsystem.collectCoral()
+        m_elevatorSubsystem.Stop()
     );
-    m_joystick.B().OnTrue(
-        m_coralSubsystem.dispenseCoral()
-    );
+
+    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
