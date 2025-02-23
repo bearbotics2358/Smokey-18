@@ -1,18 +1,23 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <ctre/phoenix6/controls/Follower.hpp>
+
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
 m_elevatorMotor2(kElevatorMotor2Id),
 m_elevatorLimitSwitch(kLimitSwitchId)
 {
     ctre::phoenix6::configs::Slot0Configs slot0Configs{};
-    slot0Configs.kV = .12;
-    slot0Configs.kP = 0.0;
+    // slot0Configs.kV = .12;
+    slot0Configs.kP = 7.0;
     slot0Configs.kI = 0.0;
     slot0Configs.kD = 0.0;
     m_elevatorMotor1.GetConfigurator().Apply(slot0Configs);
     m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
+
+    // ctre::phoenix6::controls::Follower follower(kElevatorMotor1Id, true);
+    // m_elevatorMotor2.SetControl(follower);
 
     m_elevatorMotor1.SetPosition(0_tr);
     /*
@@ -22,10 +27,19 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
      */ 
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
+
+    ctre::phoenix6::configs::MotorOutputConfigs m_motorConfigs;
+    m_motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
+        .WithPeakForwardDutyCycle(kSlowElevator)
+        .WithPeakReverseDutyCycle(kSlowElevator);
+    m_elevatorMotor1.GetConfigurator().Apply(m_motorConfigs);
+    m_elevatorMotor2.GetConfigurator().Apply(m_motorConfigs);
 };
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
+
+    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", !m_elevatorLimitSwitch.Get());
 }
 
 /*
@@ -40,11 +54,53 @@ void ElevatorSubsystem::Periodic() {
  */
 void ElevatorSubsystem::PlotElevatorPosition() {
     ctre::phoenix6::StatusSignal<units::turn_t> position = m_elevatorMotor1.GetPosition();
-    frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValue().value());
+    frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValueAsDouble());
+
+    frc::SmartDashboard::PutNumber("Elevator Height", CurrentHeight().value());
 };
+
+units::turn_t ElevatorSubsystem::HeightToTurns(units::inch_t height) {
+    return units::turn_t(
+        -(height.value() * GEAR_RATIO) / (2 * M_PI * WHEEL_RADIUS.value())
+    );
+}
 
 frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
     return frc2::cmd::RunOnce([this, position] {
-            // @todo Implement the command to move the elevator to the given position
-        });
+        units::turn_t desiredTurns = HeightToTurns(position);
+        frc::SmartDashboard::PutNumber("Desired Turns", desiredTurns.value());
+        m_elevatorMotor1.SetControl(
+            m_positionVoltage.WithPosition(desiredTurns)
+        );
+        m_elevatorMotor2.SetControl(
+            m_positionVoltage.WithPosition(desiredTurns)
+        );
+    });
+}
+
+frc2::CommandPtr ElevatorSubsystem::Lower() {
+    return frc2::cmd::RunOnce([this] {
+        // Test command to slowly lower the elevator
+        m_elevatorMotor1.SetControl(ctre::phoenix6::controls::DutyCycleOut(kSlowElevator));
+    });
+}
+
+frc2::CommandPtr ElevatorSubsystem::Raise() {
+    return frc2::cmd::RunOnce([this] {
+        // Test command to slowly raise the elevator
+        m_elevatorMotor1.SetControl(ctre::phoenix6::controls::DutyCycleOut(-kSlowElevator));
+    });
+}
+
+frc2::CommandPtr ElevatorSubsystem::Stop() {
+    return frc2::cmd::RunOnce([this] {
+        m_elevatorMotor1.StopMotor();
+        m_elevatorMotor2.StopMotor();
+    });
+}
+
+units::inch_t ElevatorSubsystem::CurrentHeight() {
+    return units::inch_t(
+        -(m_elevatorMotor1.GetPosition().GetValueAsDouble() * 2 * M_PI * WHEEL_RADIUS) / GEAR_RATIO
+    );
 }
