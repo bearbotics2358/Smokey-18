@@ -67,18 +67,15 @@ units::turn_t ElevatorSubsystem::HeightToTurns(units::inch_t height) {
     );
 }
 
-void PrepareElevatorCommand(units::inch_t newPosition) {
-    m_SavedElevatorCommand = newPosition;
-
+void ElevatorSubsystem::PrepareElevatorCommand(units::inch_t newPosition) {
+    m_desiredElevatorPosition = newPosition;
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
-    return frc2::cmd::RunOnce([this] {
-            m_elevatorMotor1.SetControl(m_positionVoltage.WithPosition(m_SavedElevatorCommand).WithVelocity(1_rad_per_s));
-        });
+    return SetPositionCommand(m_desiredElevatorPosition);
 }
 
-frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::turn_t position) {
+frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
     return frc2::cmd::RunOnce([this, position] {
         units::turn_t desiredTurns = HeightToTurns(position);
         frc::SmartDashboard::PutNumber("Desired Turns", desiredTurns.value());
