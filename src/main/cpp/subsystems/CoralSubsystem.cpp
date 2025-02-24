@@ -1,12 +1,14 @@
 
 #include <subsystems/CoralSubsystem.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
 m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
 m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
 m_coralDataProvider(dataProvider)
 {
-  
+    m_setpointAngle = 0;
 }
 
 //Returns true if a coral is collected and false otherwise
@@ -14,48 +16,49 @@ bool CoralSubsystem::CoralPresent() {
     return m_coralDataProvider->IsCoralCollected();
 }
 
-//Returns the angle of the coral manipulator as a double
-double CoralSubsystem::GetAngle() {
-    return m_coralDataProvider->GetCoralIntakeAngleDegrees();
-}
-
 //Set the speed of the coral collector - parameter should be a value from -1.0 to 1.0
 void CoralSubsystem::SetIntakeSpeed(double speed) {
-    m_intakeMotor.Set(speed);
+    const double kSlowDown = 0.2;
+    m_intakeMotor.Set(speed * kSlowDown);
 }
 
 //Set the speed of the coral collector's pivot motor - parameter should be from -1.0 to 1.0
 void CoralSubsystem::SetPivotSpeed(double speed) {
-    m_pivotMotor.Set(speed);
+    frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
+    const double kSlowDown = 0.2;
+    m_pivotMotor.Set(speed * kSlowDown);
 }
 
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
 frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
-    return frc2::cmd::RunEnd(
-        [this, targetAngle] { 
-            SetPivotSpeed(m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), targetAngle));
+    m_setpointAngle = targetAngle;
+    targetAngle -= 262.6;
+    return frc2::cmd::Run(
+        [this, targetAngle] {
+            SetPivotSpeed(-0.025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeRawAngleDegrees(), targetAngle));
         },
-        [this] { SetPivotSpeed(0.0); },
         {this}
-    ).Until([this, targetAngle] {
-        return fabs(m_coralDataProvider->GetCoralIntakeAngleDegrees() - targetAngle) <= ANGLE_TOLERANCE;
-    });
+    );
 }
 
 //Start the intake motor and stop it when the coral is collected
 frc2::CommandPtr CoralSubsystem::collectCoral() {
-    return frc2::cmd::StartEnd(
-        [this] {SetIntakeSpeed(0.5);}, 
-        [this] {SetIntakeSpeed(0.0);}, 
-        {this}
-    ).Until(([this] {return CoralPresent();})).WithName("collectCoral");
-}
+    return frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {SetIntakeSpeed(0.5);}).WithTimeout(3_s).AndThen([this] {SetIntakeSpeed(0.0);}),
+        GoToAngle(m_setpointAngle)
+    ).WithName("collectCoral");
+}   
 
 //Run the intake motor backwards for 1 second to dispense held coral
 frc2::CommandPtr CoralSubsystem::dispenseCoral() {
     return frc2::cmd::StartEnd(
-        [this] {SetIntakeSpeed(-0.5); }, 
-        [this] {SetIntakeSpeed(0.0); }, 
+        [this] {
+            SetIntakeSpeed(-0.5);
+        }, 
+        [this] {
+            m_intakeMotor.StopMotor();
+            SetPivotSpeed(-0.0025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeRawAngleDegrees(), -262.6));
+        }, 
         {this}
     ).WithTimeout(1_s).WithName("dispenseCoral");
 }

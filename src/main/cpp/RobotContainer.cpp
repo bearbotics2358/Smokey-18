@@ -37,11 +37,6 @@ void RobotContainer::ConfigureBindings() {
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
 
-    m_joystick.A().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
-    m_joystick.B().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});
-    }));
-
     (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
     // Run SysId routines when holding back/start and X/Y.
@@ -51,10 +46,21 @@ void RobotContainer::ConfigureBindings() {
     (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
-    // reset the field-centric heading on left bumper press
-    m_joystick.LeftBumper().OnTrue(m_drivetrain.RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
-
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+
+    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
+
+    m_joystick.X().OnTrue(
+        m_elevatorSubsystem.Lower()
+    );
+    m_joystick.Y().OnTrue(
+        // m_elevatorSubsystem.Raise()
+        m_elevatorSubsystem.SetPositionCommand(5_in)
+    );
+    
+    m_joystick.A().OnTrue(
+        m_elevatorSubsystem.Stop()
+    );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
