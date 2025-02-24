@@ -1,12 +1,13 @@
 #pragma once
 
+
 #include <frc2/command/Commands.h>
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <string>
 #include <iostream>
 #include <frc/DigitalInput.h>
-#include <units/length.h>
+
 
 // @todo Set these to the correct IDs when they are assigned on the real robot
 constexpr int kElevatorMotor1Id = 20;
@@ -21,17 +22,18 @@ constexpr units::inch_t kElevatorL3Position = 0_in;
 constexpr units::inch_t kElevatorL4Position = 0_in;
 
 // variable for go button use(will be changed when buttons are pressed on the driverstation)
-    units::inch_t kCurrentElevatorCommand = units::inch_t{0};  // Initialize to a default value
+    units::inch_t m_SavedElevatorCommand = units::inch_t{0};  // Initialize to a default value
 
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
-        void SetCurrentElevatorCommand(units::inch_t newPosition);
+        void PrepareElevatorCommand(units::inch_t newPosition);
 
         void Periodic() override;
         void PlotElevatorPosition();
 
+        frc2::CommandPtr GoToSavedPosition();
         frc2::CommandPtr SetPositionCommand(units::turn_t position);
 
     private:

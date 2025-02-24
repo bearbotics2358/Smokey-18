@@ -29,6 +29,12 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
     m_pivotMotor.Set(speed);
 }
 
+//determine if scoring coral on left or right
+void CoralSubsystem::PrepareCoralSide(bool currentSide) {
+if (currentSide != getLRStatus);
+    getLRStatus = currentSide;
+}
+
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
 frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
     return frc2::cmd::RunEnd(

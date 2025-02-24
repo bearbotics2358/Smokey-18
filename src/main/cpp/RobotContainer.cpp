@@ -16,7 +16,7 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
-    m_LED.SendElevatorL1MSG();
+    m_LED.SendIdleMSG();
     
 
     ConfigureBindings();
@@ -48,16 +48,20 @@ void RobotContainer::ConfigureBindings() {
         return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});    
     }));
 
-    m_gamepad.Button(12).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.SetCurrentElevatorCommand(kElevatorL4Position); }).ToPtr());
-    m_gamepad.Button(11).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.SetCurrentElevatorCommand(kElevatorL3Position); }).ToPtr());
-    m_gamepad.Button(10).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.SetCurrentElevatorCommand(kElevatorL2Position); }).ToPtr());
-    // m_gamepad.Button(9).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.SetCurrentElevatorCommand(kElevatorProcessorPosition); }).ToPtr()); @todo make processor height for elevator
-    m_gamepad.Button(8).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.SetCurrentElevatorCommand(kElevatorL1Position); }).ToPtr());
-    m_gamepad.Button(17).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.SetCurrentElevatorCommand(kElevatorStowPosition); }).ToPtr());    //button below 8 on universal driverstation for stow position
-    //m_gamepad.Button(7).OnTrue()
-
+    m_gamepad.Button(12).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL4Position); }).ToPtr());
+    m_gamepad.Button(11).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL3Position); }).ToPtr());
+    m_gamepad.Button(10).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL2Position); }).ToPtr());
+    // m_gamepad.Button(9).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorProcessorPosition); }).ToPtr()); @todo make processor height for elevator
+    m_gamepad.Button(8).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL1Position); }).ToPtr());
+    m_gamepad.Button(17).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorStowPosition); }).ToPtr());    //button below 8 on universal driverstation for stow position
+    // m_gamepad.Button(7)
+    // .OnTrue(frc2::InstantCommand([this] {m_coralSubsystem.})
+    // )
+    // .OnFalse(frc2::InstantCommand([this] {m_coralSubsystem.} )
+    // );
+    
     m_joystick.RightBumper()
-        .OnTrue(frc2::cmd::RunOnce([this]   {m_elevatorSubsystem.SetPositionCommand(kCurrentElevatorCommand);})
+        .OnTrue(frc2::cmd::RunOnce([this]   {m_elevatorSubsystem.GoToSavedPosition();})
         )   
         .OnFalse(frc2::cmd::RunOnce([this]  {m_elevatorSubsystem.SetPositionCommand(kElevatorStowPosition);})
         );

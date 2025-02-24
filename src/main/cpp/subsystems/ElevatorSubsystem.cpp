@@ -1,6 +1,7 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
+
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
 // m_elevatorMotor2(kElevatorMotor2Id),
@@ -43,8 +44,15 @@ void ElevatorSubsystem::PlotElevatorPosition() {
     frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValue().value());
 };
 
-void SetCurrentElevatorCommand(units::inch_t newPosition) {
-kCurrentElevatorCommand = newPosition;
+void PrepareElevatorCommand(units::inch_t newPosition) {
+    m_SavedElevatorCommand = newPosition;
+
+}
+
+frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
+    return frc2::cmd::RunOnce([this] {
+            m_elevatorMotor1.SetControl(m_positionVoltage.WithPosition(m_SavedElevatorCommand).WithVelocity(1_rad_per_s));
+        });
 }
 
 frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::turn_t position) {
@@ -52,3 +60,4 @@ frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::turn_t position) {
             m_elevatorMotor1.SetControl(m_positionVoltage.WithPosition(position).WithVelocity(1_rad_per_s));
         });
 }
+

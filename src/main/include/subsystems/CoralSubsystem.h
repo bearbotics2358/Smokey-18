@@ -14,6 +14,9 @@ class CoralSubsystem : public frc2::SubsystemBase {
 
   void SetIntakeSpeed(double speed);
   void SetPivotSpeed(double speed);
+  
+  bool getLRStatus = false;
+  void PrepareCoralSide(bool currentSide);
 
   double GetAngle();
   bool CoralPresent();
@@ -21,6 +24,8 @@ class CoralSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr GoToAngle(double angle);
   frc2::CommandPtr collectCoral();
   frc2::CommandPtr dispenseCoral();
+
+    
 
  private:
     const int ANGLE_TOLERANCE = 3.0;
