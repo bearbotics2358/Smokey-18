@@ -13,8 +13,6 @@
 
 #include <io/FeatherCanDecoder.h>
 
-#include "subsystems/LED.h"
-
 class Robot : public frc::TimedRobot {
  public:
   Robot();
@@ -31,8 +29,6 @@ class Robot : public frc::TimedRobot {
   void TestInit() override;
   void TestPeriodic() override;
   void TestExit() override;
-  
-  LED a_LED;
 
   FeatherCanDecoder m_featherCanDecoder;
  private:

@@ -13,9 +13,7 @@ Robot::Robot():
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
   m_featherCanDecoder.Update();
-   if (frc::DriverStation::IsDSAttached()){
-    a_LED.SendNoCommsMSG();
- }
+  m_container.Update();
 }
 
 void Robot::DisabledInit() {}

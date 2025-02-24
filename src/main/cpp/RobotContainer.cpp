@@ -44,12 +44,13 @@ void RobotContainer::ConfigureBindings() {
         return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});    
     }));
 
+    m_gamepad.Button(3).OnTrue(frc2::cmd::RunOnce([this] {m_LED.SendElevatorL1MSG();}));
     m_gamepad.Button(12).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL4Position); }));
     m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL3Position); }));
     m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); }));
     m_gamepad.Button(8).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); }));
     m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
-    
+     
     m_joystick.RightBumper()
         .OnTrue(frc2::cmd::RunOnce([this]   {m_elevatorSubsystem.GoToSavedPosition();}))   
         .OnFalse(frc2::cmd::RunOnce([this]  {m_elevatorSubsystem.GoToCoralLevel(kElevatorStowPosition);}));
@@ -76,6 +77,12 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.A().OnTrue(
         m_elevatorSubsystem.Stop()
     );
+}
+
+void RobotContainer::Update() {
+    if (frc::DriverStation::IsDSAttached()){
+        m_LED.SendNoCommsMSG();
+    }
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
