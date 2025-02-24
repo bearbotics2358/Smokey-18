@@ -20,7 +20,7 @@ constexpr units::inch_t kElevatorL2Position = 0_in;
 constexpr units::inch_t kElevatorL3Position = 0_in;
 constexpr units::inch_t kElevatorL4Position = 0_in;
 
-constexpr float kSlowElevator = 0.5;
+constexpr float kSlowElevator = 0.2;
 
 // variable for go button use(will be changed when buttons are pressed on the driverstation)
     units::inch_t m_SavedElevatorCommand = units::inch_t{0};  // Initialize to a default value
@@ -73,4 +73,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc::DigitalInput m_elevatorLimitSwitch;
 
         ctre::phoenix6::controls::PositionVoltage m_positionVoltage = ctre::phoenix6::controls::PositionVoltage{0_tr}.WithSlot(0);
+
+        bool IsMagneticLimitSwitchActive();
 };

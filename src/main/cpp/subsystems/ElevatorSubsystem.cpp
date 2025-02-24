@@ -16,6 +16,18 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     m_elevatorMotor1.GetConfigurator().Apply(slot0Configs);
     m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
 
+    ctre::phoenix6::configs::MotorOutputConfigs motorConfigs;
+    motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
+        // Limit the forward and reverse duty cycle while getting the elevator working.
+        .WithPeakForwardDutyCycle(kSlowElevator)
+        .WithPeakReverseDutyCycle(kSlowElevator);
+
+    m_elevatorMotor1.GetConfigurator().Apply(motorConfigs);
+    m_elevatorMotor2.GetConfigurator().Apply(motorConfigs);
+
+    ctre::phoenix6::controls::Follower follower(kElevatorMotor1Id, true);
+    m_elevatorMotor2.SetControl(follower);
+
     m_elevatorMotor1.SetPosition(0_tr);
     /*
      * This method blocks the current robot loop until the signal is retrieved or the timeout is activated.
@@ -24,13 +36,6 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
      */ 
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
-
-    ctre::phoenix6::configs::MotorOutputConfigs m_motorConfigs;
-    m_motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
-        .WithPeakForwardDutyCycle(kSlowElevator)
-        .WithPeakReverseDutyCycle(kSlowElevator);
-    m_elevatorMotor1.GetConfigurator().Apply(m_motorConfigs);
-    m_elevatorMotor2.GetConfigurator().Apply(m_motorConfigs);
 };
 
 void ElevatorSubsystem::Periodic() {
@@ -80,9 +85,6 @@ frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::turn_t position) {
         m_elevatorMotor1.SetControl(
             m_positionVoltage.WithPosition(desiredTurns)
         );
-        m_elevatorMotor2.SetControl(
-            m_positionVoltage.WithPosition(desiredTurns)
-        );
     });
 }
 
@@ -103,7 +105,6 @@ frc2::CommandPtr ElevatorSubsystem::Raise() {
 frc2::CommandPtr ElevatorSubsystem::Stop() {
     return frc2::cmd::RunOnce([this] {
         m_elevatorMotor1.StopMotor();
-        m_elevatorMotor2.StopMotor();
     });
 }
 
@@ -113,3 +114,7 @@ units::inch_t ElevatorSubsystem::CurrentHeight() {
     );
 }
 
+bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
+    // The REV magnetic limit switch is Active-low so a false from the Get() call means the elevator is at the bottom
+    return !m_elevatorLimitSwitch.Get();
+}
