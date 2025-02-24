@@ -36,7 +36,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
      */ 
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
-};
+}
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
