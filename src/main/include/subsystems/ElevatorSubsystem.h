@@ -22,13 +22,13 @@ constexpr float kSlowElevator = 0.2;
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
-        void PrepareElevatorCommand(units::inch_t newPosition);
+        void PrepareElevator(units::inch_t newPosition);
 
         void Periodic() override;
         void PlotElevatorPosition();
 
         frc2::CommandPtr GoToSavedPosition();
-        frc2::CommandPtr SetPositionCommand(units::inch_t position);
+        frc2::CommandPtr GoToCoralLevel(units::inch_t position);
 
         frc2::CommandPtr Stop();
 

@@ -67,15 +67,15 @@ units::turn_t ElevatorSubsystem::HeightToTurns(units::inch_t height) {
     );
 }
 
-void ElevatorSubsystem::PrepareElevatorCommand(units::inch_t newPosition) {
+void ElevatorSubsystem::PrepareElevator(units::inch_t newPosition) {
     m_desiredElevatorPosition = newPosition;
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
-    return SetPositionCommand(m_desiredElevatorPosition);
+    return GoToCoralLevel(m_desiredElevatorPosition);
 }
 
-frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
+frc2::CommandPtr ElevatorSubsystem::GoToCoralLevel(units::inch_t position) {
     return frc2::cmd::RunOnce([this, position] {
         units::turn_t desiredTurns = HeightToTurns(position);
         frc::SmartDashboard::PutNumber("Desired Turns", desiredTurns.value());

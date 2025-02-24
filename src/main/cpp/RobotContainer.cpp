@@ -17,11 +17,8 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
     m_LED.SendIdleMSG();
     
-
     ConfigureBindings();
 }
-
-
 
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
@@ -47,21 +44,15 @@ void RobotContainer::ConfigureBindings() {
         return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});    
     }));
 
-    m_gamepad.Button(12).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL4Position); }));
-    m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL3Position); }));
-    m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL2Position); }));
-    // m_gamepad.Button(9).OnTrue(frc2::InstantCommand([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorProcessorPosition); }).ToPtr()); @todo make processor height for elevator
-    m_gamepad.Button(8).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorL1Position); }));
-    m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevatorCommand(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
-    // m_gamepad.Button(7)
-    // .OnTrue(frc2::InstantCommand([this] {m_coralSubsystem.})
-    // )
-    // .OnFalse(frc2::InstantCommand([this] {m_coralSubsystem.} )
-    // );
+    m_gamepad.Button(12).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL4Position); }));
+    m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL3Position); }));
+    m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); }));
+    m_gamepad.Button(8).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); }));
+    m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
     
     m_joystick.RightBumper()
         .OnTrue(frc2::cmd::RunOnce([this]   {m_elevatorSubsystem.GoToSavedPosition();}))   
-        .OnFalse(frc2::cmd::RunOnce([this]  {m_elevatorSubsystem.SetPositionCommand(kElevatorStowPosition);}));
+        .OnFalse(frc2::cmd::RunOnce([this]  {m_elevatorSubsystem.GoToCoralLevel(kElevatorStowPosition);}));
         
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
@@ -79,7 +70,7 @@ void RobotContainer::ConfigureBindings() {
     );
     m_joystick.Y().OnTrue(
         // m_elevatorSubsystem.Raise()
-        m_elevatorSubsystem.SetPositionCommand(5_in)
+        m_elevatorSubsystem.GoToCoralLevel(5_in)
     );
     
     m_joystick.A().OnTrue(
