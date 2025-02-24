@@ -31,6 +31,8 @@ class CoralSubsystem : public frc2::SubsystemBase {
     const int kCoralPivotMotorID = 58;
     const int kCoralIntakeMotorID = 61;
 
+    double m_setpointAngle;
+
     const double kCoralP = 0.5;
     const double kCoralI = 0.0;
     const double kCoralD = 0.0;

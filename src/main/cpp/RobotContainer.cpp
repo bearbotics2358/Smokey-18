@@ -76,18 +76,18 @@ void RobotContainer::ConfigureBindings() {
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     m_joystick.X().OnTrue(
-        m_coralSubsystem.GoToAngle(90.0)
+        m_elevatorSubsystem.Lower()
     );
     m_joystick.Y().OnTrue(
-        m_coralSubsystem.GoToAngle(45.0)
+        // m_elevatorSubsystem.Raise()
+        m_elevatorSubsystem.SetPositionCommand(5_in)
     );
     
     m_joystick.A().OnTrue(
-        m_coralSubsystem.collectCoral()
+        m_elevatorSubsystem.Stop()
     );
-    m_joystick.B().OnTrue(
-        m_coralSubsystem.dispenseCoral()
-    );
+
+    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
