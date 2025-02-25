@@ -10,7 +10,7 @@ public:
     const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
     const int kCoralProximityThreshold = 1500;
-    const double kCoralAngleOffsetDegrees = 262.6;
+    const double kCoralAngleOffsetDegrees = -262.6;
 
     FeatherCanDecoder();
 
