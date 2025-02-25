@@ -50,16 +50,22 @@ void RobotContainer::ConfigureBindings() {
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
+    m_joystick.B().OnTrue(
+        frc2::cmd::RunOnce([this] {
+            m_coralSubsystem.GoToAngle(90.0);
+        })
+    );
+    m_joystick.A().OnTrue(
+        frc2::cmd::RunOnce([this] {
+            m_coralSubsystem.GoToAngle(135.0);
+        })
+    );
+
     m_joystick.X().OnTrue(
-        m_elevatorSubsystem.Lower()
+        m_coralSubsystem.collectCoral()
     );
     m_joystick.Y().OnTrue(
-        // m_elevatorSubsystem.Raise()
-        m_elevatorSubsystem.SetPositionCommand(5_in)
-    );
-    
-    m_joystick.A().OnTrue(
-        m_elevatorSubsystem.Stop()
+        m_coralSubsystem.dispenseCoral()
     );
 }
 

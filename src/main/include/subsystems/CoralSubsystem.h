@@ -12,12 +12,14 @@ class CoralSubsystem : public frc2::SubsystemBase {
  public:
   CoralSubsystem(ICoralIntakeDataProvider* dataProvider);
 
+  void Periodic() override;
+
   void SetIntakeSpeed(double speed);
   void SetPivotSpeed(double speed);
 
   bool CoralPresent();
 
-  frc2::CommandPtr GoToAngle(double angle);
+  void GoToAngle(double angle);
   frc2::CommandPtr collectCoral();
   frc2::CommandPtr dispenseCoral();
 
