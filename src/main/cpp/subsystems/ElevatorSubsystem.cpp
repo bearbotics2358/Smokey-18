@@ -107,3 +107,11 @@ bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
     // The REV magnetic limit switch is Active-low so a false from the Get() call means the elevator is at the bottom
     return !m_elevatorLimitSwitch.Get();
 }
+
+frc2::CommandPtr ElevatorSubsystem::SetMotorVoltage() {
+    m_elevatorMotor1.SetVoltage(
+        units::volt_t{
+            m_elevatorController.Calculate(units::inch_t{m_elevatorEncoder.GetDistance()})
+        } + m_feedforward.Calculate(m_elevatorController.GetSetpoint().velocity)
+    );
+}
