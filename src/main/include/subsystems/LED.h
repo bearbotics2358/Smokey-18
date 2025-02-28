@@ -32,7 +32,7 @@ class LED : public frc2::SubsystemBase {
   char m_rxBuff[32];
   int m_rxIndex = 0;
 
-  ArduinoConstants::RIO_MESSAGES m_LEDPrevCommand = ArduinoConstants::RIO_MESSAGES::NO_COMMS;
+  ArduinoConstants::RIO_MESSAGES m_LEDPrevCommand;
   ArduinoConstants::RIO_MESSAGES m_LEDCurrentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
 };
 

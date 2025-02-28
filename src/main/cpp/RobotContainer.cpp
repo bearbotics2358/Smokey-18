@@ -71,7 +71,10 @@ void RobotContainer::ConfigureBindings() {
      
     m_joystick.RightBumper()
         .OnTrue(frc2::cmd::RunOnce([this]   {m_elevatorSubsystem.GoToSavedPosition();}))   
-        .OnFalse(frc2::cmd::RunOnce([this]  {m_elevatorSubsystem.GoToCoralLevel(kElevatorStowPosition);}));
+        .OnFalse(frc2::cmd::RunOnce([this]  {
+            m_elevatorSubsystem.GoToCoralLevel(kElevatorStowPosition);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+        }));
         
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
@@ -98,9 +101,6 @@ void RobotContainer::ConfigureBindings() {
 }
 
 void RobotContainer::Update() {
-    if (frc::DriverStation::IsDSAttached()){
-        m_LED.SendNoCommsMSG();
-    }
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
