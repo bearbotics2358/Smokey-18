@@ -12,6 +12,7 @@
 #include "subsystems/CameraSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/CoralSubsystem.h"
+#include "subsystems/Climber.h"
 #include "subsystems/ScoringSuperstructure.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
@@ -42,6 +43,7 @@ private:
     CameraSubsystem m_cameraSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
+    Climber m_climberSubsystem;
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
 
 public:
