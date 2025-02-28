@@ -68,7 +68,7 @@ void RobotContainer::ConfigureBindings() {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
         }));
     m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
-    
+     
     m_joystick.RightBumper()
         .OnTrue(frc2::cmd::RunOnce([this]   {m_elevatorSubsystem.GoToSavedPosition();}))   
         .OnFalse(frc2::cmd::RunOnce([this]  {m_elevatorSubsystem.GoToCoralLevel(kElevatorStowPosition);}));
@@ -95,6 +95,12 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.A().OnTrue(
         m_elevatorSubsystem.Stop()
     );
+}
+
+void RobotContainer::Update() {
+    if (frc::DriverStation::IsDSAttached()){
+        m_LED.SendNoCommsMSG();
+    }
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

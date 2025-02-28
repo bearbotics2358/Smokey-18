@@ -13,8 +13,6 @@
 
 #include <io/FeatherCanDecoder.h>
 
-#include "subsystems/LED.h"
-
 class Robot : public frc::TimedRobot {
  public:
   Robot();
