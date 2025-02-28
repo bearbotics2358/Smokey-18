@@ -22,12 +22,12 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
-    m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
-        // Drivetrain will execute this command periodically
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
-    }));
+    // m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
+    //     // Drivetrain will execute this command periodically
+    //     return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
+    //         .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
+    //         .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
+    // }));
 
     m_joystick.LeftBumper()
         .OnTrue(
@@ -41,23 +41,18 @@ void RobotContainer::ConfigureBindings() {
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
-    (m_joystick.Back() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
-    (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
-    (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
-    (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+    // (m_joystick.Back() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
+    // (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
+    // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
+    // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
+    m_joystick.POVRight().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
     m_joystick.B().OnTrue(
         frc2::cmd::RunOnce([this] {
-            m_coralSubsystem.GoToAngle(90.0);
-        })
-    );
-    m_joystick.A().OnTrue(
-        frc2::cmd::RunOnce([this] {
-            m_coralSubsystem.GoToAngle(135.0);
+            m_coralSubsystem.GoToAngle(55.0);
         })
     );
 
@@ -66,6 +61,27 @@ void RobotContainer::ConfigureBindings() {
     );
     m_joystick.Y().OnTrue(
         m_coralSubsystem.dispenseCoral()
+    );
+    m_joystick.POVDown().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(12_in),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(135.0);
+            })
+        )
+    );
+
+    m_joystick.POVUp().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(40_in),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(55.0);
+            })
+        )
+    );
+
+    m_joystick.A().OnTrue(
+        m_elevatorSubsystem.GoToHeight(0_in)
     );
 }
 
