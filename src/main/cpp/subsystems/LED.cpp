@@ -1,5 +1,4 @@
 #include <stdio.h> // for using printf
-// TODO: can we remove this stdlib.h include statement?
 #include <stdlib.h> // atoi
 #include "frc/DriverStation.h"
 #include <Constants.h>
@@ -8,124 +7,89 @@
 LED::LED() {
   m_pserial = new frc::SerialPort(
     ArduinoConstants::BAUD_RATE_ARDUINO, 
-    ArduinoConstants::USB_PORT_ARDUINO,
+    frc::SerialPort::Port::kUSB,  // Specify the port
     ArduinoConstants::DATA_BITS_ARDUINO,
     ArduinoConstants::PARITY_ARDUINO,
     ArduinoConstants::STOP_BITS_ARDUINO
   );
-  m_pserial->DisableTermination();
-  m_pserial->SetFlowControl(frc::SerialPort::kFlowControl_None);
-  m_pserial->SetReadBufferSize(1);  // Read one byte at a time
-  m_pserial->SetWriteBufferMode(frc::SerialPort::WriteBufferMode::kFlushOnAccess); // Correct Usage
+    
+  try {
+    m_pserial->DisableTermination();
+    m_pserial->SetFlowControl(frc::SerialPort::kFlowControl_None);
+    m_pserial->SetReadBufferSize(1);  // Read one byte at a time
+    m_pserial->SetWriteBufferMode(frc::SerialPort::WriteBufferMode::kFlushOnAccess);
+  } catch (std::exception& e) {
+    std::printf("Error configuring serial port: %s\n", e.what());
+  }
 
   memset(m_rxBuff, 0, sizeof(m_rxBuff));
 }
 
 void LED::Periodic() { 
-  while (m_pserial->GetBytesReceived() > 0) {
-    char byte;
-    m_pserial->Read(&byte, 1);
+  try {
+    while (m_pserial->GetBytesReceived() > 0) {
+      char byte;
+      m_pserial->Read(&byte, 1);
 
-    if (byte == '\r' || byte == '\n') {
-      if (m_rxIndex > 0) {
-        m_rxBuff[m_rxIndex] = 0;  // Null-terminate
-        printf("RX: %s\n", m_rxBuff);
-        // m_pserial->Flush(); // No need to flush reads
-
-        ProcessReport();
-      }
-      m_rxIndex = 0;
-      memset(m_rxBuff, 0, sizeof(m_rxBuff));  // Clear buffer
-    } else {
-      if (m_rxIndex < static_cast<int>(sizeof(m_rxBuff)) - 1) {
-        m_rxBuff[m_rxIndex++] = byte;
-      } else {
-        // Buffer overflow!  Handle the error (e.g., reset the index, log a message)
-        printf("LED: RX buffer overflow!\n");
+      if (byte == '\r' || byte == '\n') {
+        if (m_rxIndex > 0) {
+          m_rxBuff[m_rxIndex] = 0;  // Null-terminate
+          printf("RX: %s\n", m_rxBuff);
+          ProcessReport();
+        }
         m_rxIndex = 0;
-        memset(m_rxBuff, 0, sizeof(m_rxBuff));
+        memset(m_rxBuff, 0, sizeof(m_rxBuff));  // Clear buffer
+      } else {
+        if (m_rxIndex < static_cast<int>(sizeof(m_rxBuff)) - 1) {
+          m_rxBuff[m_rxIndex++] = byte;
+        } else {
+          printf("LED: RX buffer overflow!\n");
+          m_rxIndex = 0;
+          memset(m_rxBuff, 0, sizeof(m_rxBuff));
+        }
       }
     }
+  } catch (std::exception& e) {
+    std::printf("Error reading from serial port: %s\n", e.what());
   }
 
   if (m_LEDCurrentCommand != m_LEDPrevCommand) {
     m_LEDPrevCommand = m_LEDCurrentCommand;
+    const char* message = "";
+
     switch (m_LEDCurrentCommand) {
-      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:
-        SendIdleMSG();
+      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:     message = "1\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:     message = "2\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:  message = "3\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:   message = "4\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:  message = "5\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:  message = "6\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::IDK:          message = "7\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::TEST:         message = "8\r\n"; break;
+      default: 
+        std::printf("Unknown LED command: %d\n", static_cast<int>(m_LEDCurrentCommand));
         break;
-      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:
-        SendNoCommsMSG();
-        break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:
-        SendElevatorL1MSG();
-        break;
-      case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:
-        SendAlgaeHeldMSG();
-        break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:
-        SendElevatorL2MSG();
-        break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:
-        SendElevatorL3MSG();
-        break;
-      case ArduinoConstants::RIO_MESSAGES::IDK:
-        SendIDKMSG();
-        break;
-      case ArduinoConstants::RIO_MESSAGES::TEST:
-        SendTestMSG();
-        break;
+    }
+    if (message[0] != '\0') {
+      SendMSG(message);
     }
   } 
 }
 
-frc2::CommandPtr LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
-  return RunOnce([this, ledState] {
-    m_LEDCurrentCommand = ledState;
-  });
+void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
+  m_LEDCurrentCommand = ledState;
 }
 
-// TODO: Can we remove this function?
+void LED::SendMSG(const char* message) {
+   try {
+    m_pserial->Write(message, strlen(message));
+    printf("Wrote message: %s\n", message); // Debugging
+   } catch (const std::exception& e) {
+    std::printf("Error writing to serial port: %s\n", e.what());
+  }
+}
+
 void LED::ProcessReport() {
   // Parse report - no action needed in this example
-}
-
-void LED::SendIdleMSG() {
-  m_pserial->Write("1,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendNoCommsMSG() {
-  m_pserial->Write("2,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendElevatorL1MSG() {
-  m_pserial->Write("3,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendAlgaeHeldMSG() {
-  m_pserial->Write("4,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendElevatorL2MSG() {
-  m_pserial->Write("5,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendElevatorL3MSG() {
-  m_pserial->Write("6,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendIDKMSG() {
-  m_pserial->Write("7,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
-}
-
-void LED::SendTestMSG() {
-  m_pserial->Write("8,0\r\n", 6);
-  //m_pserial->Flush(); //kFlushOnAccess is set.
+  // Kept as it was in the original file
 }

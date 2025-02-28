@@ -7,6 +7,7 @@
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <frc2/command/CommandScheduler.h>
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     m_featherCanDecoder(featherCanDecoder),
@@ -15,7 +16,7 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
-    m_LED.SendIdleMSG();
+    m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
     
     ConfigureBindings();
 }
@@ -44,10 +45,28 @@ void RobotContainer::ConfigureBindings() {
         return point.WithModuleDirection(frc::Rotation2d{-m_joystick.GetLeftY(), -m_joystick.GetLeftX()});    
     }));
 
-    m_gamepad.Button(12).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL4Position); }));
-    m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL3Position); }));
-    m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); }));
-    m_gamepad.Button(8).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); }));
+
+
+
+    m_gamepad.Button(12).OnTrue(frc2::cmd::RunOnce([this] {
+        m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK); 
+        }));
+    m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] {
+        m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+        }));
+    m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] { 
+        m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); 
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+        }));
+    m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {
+         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
+        }));
+    m_gamepad.Button(8).OnTrue(frc2::cmd::RunOnce([this] { 
+        m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); 
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+        }));
     m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
     
     m_joystick.RightBumper()

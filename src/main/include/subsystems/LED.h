@@ -20,32 +20,20 @@ class LED : public frc2::SubsystemBase {
   LED();
   ~LED() override = default;  // Use override keyword
 
-  void Periodic() override; // Declare Update
+  void Periodic() override;
 
-  frc2::CommandPtr SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
-
-
-  void SendIdleMSG();
-  void SendNoCommsMSG();
-  void SendElevatorL1MSG();
-  void SendAlgaeHeldMSG();
-  void SendElevatorL2MSG();
-  void SendElevatorL3MSG();
-  void SendIDKMSG();
-  void SendTestMSG();
+ void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
 
  private:
-  void ProcessReport();  // Declare ProcessReport
+  void SendMSG(const char* message);
+  void ProcessReport();  // Kept this as it was in the original
 
-  
   frc::SerialPort* m_pserial;
-  char m_rxBuff[32];  // Smaller buffer
+  char m_rxBuff[32];
   int m_rxIndex = 0;
 
-  ArduinoConstants::RIO_MESSAGES m_LEDPrevCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
+  ArduinoConstants::RIO_MESSAGES m_LEDPrevCommand = ArduinoConstants::RIO_MESSAGES::NO_COMMS;
   ArduinoConstants::RIO_MESSAGES m_LEDCurrentCommand = ArduinoConstants::RIO_MESSAGES::MSG_IDLE;
-
-
 };
 
 #endif  // LED_H

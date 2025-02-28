@@ -30,9 +30,11 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
 }
 
 //determine if scoring coral on left or right
+// getLRstatus is true when the robot needs to slide 13 in to the right to score coral
 void CoralSubsystem::PrepareCoralSide(bool currentSide) {
-if (currentSide != getLRStatus);
+if (currentSide != getLRStatus){
     getLRStatus = currentSide;
+    };
 }
 
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
