@@ -9,7 +9,7 @@
 #include <frc/DigitalInput.h>
 #include <units/length.h>
 #include <frc/controller/ProfiledPIDController.h>
-#include <frc/controller/ElevatorFeedForward.h>
+#include <frc/controller/ElevatorFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <frc/Encoder.h>
 
