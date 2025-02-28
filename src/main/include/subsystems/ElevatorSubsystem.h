@@ -35,16 +35,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         void Periodic() override;
         void PlotElevatorPosition();
 
-        frc2::CommandPtr SetPositionCommand(units::inch_t position);
-
-        frc2::CommandPtr Stop();
-
-        // Test function to slowly raise the elevator
-        frc2::CommandPtr Raise();
-
-        // Test function to slowly lower the elevator
-        frc2::CommandPtr Lower();
-
         units::inch_t CurrentHeight();
 
         frc2::CommandPtr GoToHeight(units::inch_t height);
@@ -62,7 +52,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         bool IsMagneticLimitSwitchActive();
 
-        static constexpr units::meters_per_second_t kMaxVelocity = 0.50_mps;
+        static constexpr units::meters_per_second_t kMaxVelocity = 0.25_mps;
         static constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.75_mps_sq;
         static constexpr double kP = 40.0;
         static constexpr double kI = 1.0;
@@ -74,7 +64,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
             kMaxVelocity, kMaxAcceleration};
 
-        frc::ProfiledPIDController<units::meters> m_elevatorController{
+        frc::ProfiledPIDController<units::meters> m_elevatorPID{
             kP, kI, kD, m_constraints
         };
         
