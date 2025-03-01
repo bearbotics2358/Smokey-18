@@ -3,7 +3,6 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include <frc/smartdashboard/SmartDashboard.h>
 
 CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
 m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless), 

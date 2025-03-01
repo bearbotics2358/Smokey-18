@@ -36,10 +36,8 @@ void FeatherCanDecoder::UnpackCoralCANData() {
     if (isCoralDataValid) {
         int angleX10 = (data.data[0] << 8) | data.data[1];
         m_coralIntakeAngleDegrees = -angleX10 / 10.0;
-        m_coralIntakeAngleDegrees = -angleX10 / 10.0;
 
         int proximity = (data.data[2] << 8) | data.data[3];
-        frc::SmartDashboard::PutNumber("Coral Collected Value", proximity);
         frc::SmartDashboard::PutNumber("Coral Collected Value", proximity);
         m_coralCollected = proximity > kCoralProximityThreshold;
     }

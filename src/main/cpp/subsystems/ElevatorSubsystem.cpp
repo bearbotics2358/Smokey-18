@@ -3,7 +3,6 @@
 
 #include <ctre/phoenix6/controls/Follower.hpp>
 
-#include <ctre/phoenix6/controls/Follower.hpp>
 
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
@@ -11,8 +10,6 @@ m_elevatorMotor2(kElevatorMotor2Id),
 m_elevatorLimitSwitch(kLimitSwitchId)
 {
     ctre::phoenix6::configs::Slot0Configs slot0Configs{};
-    // slot0Configs.kV = .12;
-    slot0Configs.kP = 7.0;
     // slot0Configs.kV = .12;
     slot0Configs.kP = 7.0;
     slot0Configs.kI = 0.0;
@@ -47,8 +44,6 @@ void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
 
     frc::SmartDashboard::PutBoolean("Elevator Limit Switch", !m_elevatorLimitSwitch.Get());
-
-    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", !m_elevatorLimitSwitch.Get());
 }
 
 /*
@@ -63,9 +58,6 @@ void ElevatorSubsystem::Periodic() {
  */
 void ElevatorSubsystem::PlotElevatorPosition() {
     ctre::phoenix6::StatusSignal<units::turn_t> position = m_elevatorMotor1.GetPosition();
-    frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValueAsDouble());
-
-    frc::SmartDashboard::PutNumber("Elevator Height", CurrentHeight().value());
     frc::SmartDashboard::PutNumber("Elevator Motor Position", position.GetValueAsDouble());
 
     frc::SmartDashboard::PutNumber("Elevator Height", CurrentHeight().value());
