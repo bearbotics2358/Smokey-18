@@ -3,6 +3,8 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
 m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
 m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
@@ -25,13 +27,25 @@ bool CoralSubsystem::CoralPresent() {
 void CoralSubsystem::SetIntakeSpeed(double speed) {
     const double kSlowDown = 0.2;
     m_intakeMotor.Set(speed * kSlowDown);
+    const double kSlowDown = 0.2;
+    m_intakeMotor.Set(speed * kSlowDown);
 }
 
 //Set the speed of the coral collector's pivot motor - parameter should be from -1.0 to 1.0
 void CoralSubsystem::SetPivotSpeed(double speed) {
     frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
     const double kSlowDown = 0.2;
-    m_pivotMotor.Set(speed * kSlowDown);
+    frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
+    const double kSlowDown = 0.2;
+    m_pivotMotor.Set(speed * kSlowDown * kSlowDown);
+}
+
+//determine if scoring coral on left or right
+// getLRstatus is true when the robot needs to slide 13 in to the right to score coral
+void CoralSubsystem::PrepareCoralSide(bool currentSide) {
+if (currentSide != getLRStatus){
+    getLRStatus = currentSide;
+    };
 }
 
 /**
@@ -42,8 +56,15 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
  * @param targetAngle The desired angle of the mechanism in degrees
  */
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
-void CoralSubsystem::GoToAngle(double targetAngle) {
+frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
     m_setpointAngle = targetAngle;
+    targetAngle -= 262.6;
+    return frc2::cmd::Run(
+        [this, targetAngle] {
+            SetPivotSpeed(-0.025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeRawAngleDegrees(), targetAngle));
+        },
+        {this}
+    );
 }
 
 //Start the intake motor and stop it when the coral is collected
@@ -67,6 +88,7 @@ frc2::CommandPtr CoralSubsystem::dispenseCoral() {
         }, 
         [this] {
             m_intakeMotor.StopMotor();
+            SetPivotSpeed(-0.0025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeRawAngleDegrees(), -262.6));
         }, 
         {this}
     ).WithTimeout(1_s).WithName("dispenseCoral");

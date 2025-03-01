@@ -21,14 +21,19 @@ constexpr units::inch_t kElevatorL4Position = 0_in;
 
 constexpr float kSlowElevator = 0.2;
 
+constexpr float kSlowElevator = 0.2;
+
+constexpr float kSlowElevator = 0.2;
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
+        void PrepareElevator(units::inch_t newPosition);
 
         void Periodic() override;
         void PlotElevatorPosition();
 
-        frc2::CommandPtr SetPositionCommand(units::inch_t position);
+        frc2::CommandPtr GoToSavedPosition();
+        frc2::CommandPtr GoToCoralLevel(units::inch_t position);
 
         frc2::CommandPtr Stop();
 
@@ -51,6 +56,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc::DigitalInput m_elevatorLimitSwitch;
 
         ctre::phoenix6::controls::PositionVoltage m_positionVoltage = ctre::phoenix6::controls::PositionVoltage{0_tr}.WithSlot(0);
+
+        units::inch_t m_desiredElevatorPosition;
 
         bool IsMagneticLimitSwitchActive();
 };

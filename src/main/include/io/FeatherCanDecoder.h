@@ -19,6 +19,7 @@ public:
     // **** ICoralIntakeDataProvider interface functions **** //
     float GetCoralIntakeAngleDegrees() override;
     float GetCoralIntakeRawAngleDegrees() override;
+    float GetCoralIntakeRawAngleDegrees() override;
     bool IsCoralCollected() override;
 
 private:
