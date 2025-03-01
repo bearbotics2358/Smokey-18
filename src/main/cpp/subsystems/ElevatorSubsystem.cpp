@@ -10,10 +10,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
 {
     ctre::phoenix6::configs::MotorOutputConfigs motorConfigs;
     motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
-        .WithInverted(true)
-        // Limit the forward and reverse duty cycle while getting the elevator working.
-        .WithPeakForwardDutyCycle(kSlowElevator)
-        .WithPeakReverseDutyCycle(kSlowElevator);
+        .WithInverted(true);
 
     m_elevatorMotor1.GetConfigurator().Apply(motorConfigs);
 
@@ -78,8 +75,15 @@ void ElevatorSubsystem::SetMotorVoltage() {
     units::volt_t goalVolts = units::volt_t(value) + m_feedforward.Calculate(m_elevatorPID.GetSetpoint().velocity);
     frc::SmartDashboard::PutNumber("Elevator PID with feedforward", goalVolts.value());
 
-    m_elevatorMotor1.SetVoltage(goalVolts);
-    m_elevatorMotor2.SetVoltage(goalVolts);
+    double current_difference = fabs(m_setpointHeight.value() - CurrentHeight().value());
+    if (current_difference >= TOLERANCE) {
+        m_elevatorMotor1.SetVoltage(goalVolts);
+        m_elevatorMotor2.SetVoltage(goalVolts);
+    } else {
+        m_elevatorMotor1.SetVoltage(0.4_V);
+        m_elevatorMotor2.SetVoltage(0.4_V);
+    }
+    frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {

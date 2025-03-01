@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <frc2/command/Commands.h>
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
@@ -19,14 +18,12 @@ constexpr int kLimitSwitchId = 0;
 
 // @todo Assign these to real values when we know the distances
 constexpr units::inch_t kElevatorStowPosition = 0_in;
-constexpr units::inch_t kElevatorL1Position = 5_in;
+constexpr units::inch_t kElevatorL1Position = 31.5_in;
 constexpr units::inch_t kElevatorL2Position = 0_in;
 constexpr units::inch_t kElevatorL3Position = 0_in;
 constexpr units::inch_t kElevatorL4Position = 0_in;
 
 constexpr float kSlowElevator = 0.6;
-
-
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
@@ -39,7 +36,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         frc2::CommandPtr GoToHeight(units::inch_t height);
 
-        const units::inch_t WHEEL_RADIUS = 1.5_in;
+        const units::inch_t WHEEL_RADIUS = 1.375_in;
         // 9 to 1
         const double GEAR_RATIO = 9.0;
 
@@ -52,14 +49,16 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         bool IsMagneticLimitSwitchActive();
 
+        static constexpr double TOLERANCE = 0.35;
+
         static constexpr units::meters_per_second_t kMaxVelocity = 0.25_mps;
         static constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.75_mps_sq;
-        static constexpr double kP = 40.0;
-        static constexpr double kI = 1.0;
+        static constexpr double kP = 20.0;
+        static constexpr double kI = 2.0; // 1.0
         static constexpr double kD = 0.0;
-        static constexpr units::volt_t kS = 1.1_V;
-        static constexpr units::volt_t kG = 1.2_V;
-        static constexpr auto kV = 1.3_V / 0.3_mps;
+        static constexpr units::volt_t kS = 0.5_V;
+        static constexpr units::volt_t kG = 0.45_V;
+        static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
             kMaxVelocity, kMaxAcceleration};
@@ -68,6 +67,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
             kP, kI, kD, m_constraints
         };
         
-        frc::ElevatorFeedforward m_feedforward{kS, kG,kV};
+        frc::ElevatorFeedforward m_feedforward{kS, kG, kV};
         units::inch_t m_setpointHeight = 0_in;
 };

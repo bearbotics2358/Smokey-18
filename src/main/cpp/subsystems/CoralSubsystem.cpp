@@ -13,7 +13,7 @@ m_coralDataProvider(dataProvider)
 
 void CoralSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("Coral Setpoint", m_setpointAngle);
-    SetPivotSpeed(-0.025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle));
+    // SetPivotSpeed(-0.025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle));
 }
 
 //Returns true if a coral is collected and false otherwise
