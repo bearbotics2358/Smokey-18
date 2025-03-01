@@ -9,13 +9,14 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include "io/FeatherCanDecoder.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
-#include "subsystems/CameraSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/CoralSubsystem.h"
 #include "subsystems/Climber.h"
 #include "subsystems/ScoringSuperstructure.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/button/CommandGenericHID.h>
+#include "subsystems/LED.h"
 
 class RobotContainer {
 private:
@@ -40,7 +41,6 @@ private:
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
-    CameraSubsystem m_cameraSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
     Climber m_climberSubsystem;
@@ -48,16 +48,18 @@ private:
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
-
 private:
     /* Path follower */
     frc::SendableChooser<frc2::Command *> m_autoChooser;
-
 public:
     RobotContainer(FeatherCanDecoder* featherCanDecoder);
 
-    frc2::Command *GetAutonomousCommand();
+    void Update();
 
+    frc2::Command *GetAutonomousCommand();
 private:
     void ConfigureBindings();
+    // TODO: Change `4` into a port constant.
+    frc2::CommandGenericHID m_gamepad{4};
+    LED m_LED;
 };

@@ -30,9 +30,9 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   void TestExit() override;
 
+
   FeatherCanDecoder m_featherCanDecoder;
  private:
   frc2::Command *m_autonomousCommand;
-
   RobotContainer m_container;
 };

@@ -3,6 +3,7 @@
 
 #include <ctre/phoenix6/controls/Follower.hpp>
 
+
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
 m_elevatorMotor2(kElevatorMotor2Id),
@@ -28,6 +29,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     ctre::phoenix6::controls::Follower follower(kElevatorMotor1Id, true);
     m_elevatorMotor2.SetControl(follower);
 
+
     m_elevatorMotor1.SetPosition(0_tr);
     /*
      * This method blocks the current robot loop until the signal is retrieved or the timeout is activated.
@@ -36,7 +38,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
      */ 
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
-};
+}
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
@@ -67,7 +69,15 @@ units::turn_t ElevatorSubsystem::HeightToTurns(units::inch_t height) {
     );
 }
 
-frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
+void ElevatorSubsystem::PrepareElevator(units::inch_t newPosition) {
+    m_desiredElevatorPosition = newPosition;
+}
+
+frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
+    return GoToCoralLevel(m_desiredElevatorPosition);
+}
+
+frc2::CommandPtr ElevatorSubsystem::GoToCoralLevel(units::inch_t position) {
     return frc2::cmd::RunOnce([this, position] {
         units::turn_t desiredTurns = HeightToTurns(position);
         frc::SmartDashboard::PutNumber("Desired Turns", desiredTurns.value());
@@ -102,6 +112,7 @@ units::inch_t ElevatorSubsystem::CurrentHeight() {
         -(m_elevatorMotor1.GetPosition().GetValueAsDouble() * 2 * M_PI * WHEEL_RADIUS) / GEAR_RATIO
     );
 }
+
 
 bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
     // The REV magnetic limit switch is Active-low so a false from the Get() call means the elevator is at the bottom

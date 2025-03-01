@@ -3,6 +3,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+
 CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
 m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
 m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
@@ -31,7 +32,15 @@ void CoralSubsystem::SetIntakeSpeed(double speed) {
 void CoralSubsystem::SetPivotSpeed(double speed) {
     frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
     const double kSlowDown = 0.2;
-    m_pivotMotor.Set(speed * kSlowDown);
+    m_pivotMotor.Set(speed * kSlowDown * kSlowDown);
+}
+
+//determine if scoring coral on left or right
+// getLRstatus is true when the robot needs to slide 13 in to the right to score coral
+void CoralSubsystem::PrepareCoralSide(bool currentSide) {
+if (currentSide != getLRStatus){
+    getLRStatus = currentSide;
+    };
 }
 
 /**
@@ -41,7 +50,7 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
  * 
  * @param targetAngle The desired angle of the mechanism in degrees
  */
-//Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
+//Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter  
 void CoralSubsystem::GoToAngle(double targetAngle) {
     m_setpointAngle = targetAngle;
 }
@@ -67,6 +76,7 @@ frc2::CommandPtr CoralSubsystem::dispenseCoral() {
         }, 
         [this] {
             m_intakeMotor.StopMotor();
+            SetPivotSpeed(-0.0025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeRawAngleDegrees(), -262.6));
         }, 
         {this}
     ).WithTimeout(1_s).WithName("dispenseCoral");
