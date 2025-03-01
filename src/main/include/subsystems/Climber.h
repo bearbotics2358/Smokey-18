@@ -15,9 +15,9 @@ constexpr int kClimberMotor1Id = 50;
 
 constexpr float kSlowClimber = 0.5;
 
-constexpr units::turn_t kClimberStartTurns = 20.0_tr;
-constexpr units::turn_t kClimberEndTurns = 10.0_tr;
-constexpr units::turn_t kClimberStowTunrs = 0.0_tr;
+constexpr units::degree_t kClimberStartAngle = 150.0_deg;
+constexpr units::degree_t kClimberEndAngle = 90.0_deg;
+constexpr units::degree_t kClimberStowAngle = 0.0_deg;
 
 const double kClimberGearRatio = 1.0;
 
@@ -37,18 +37,18 @@ public:
 private:
     ctre::phoenix6::hardware::TalonFX m_climberMotor;
 
-        static constexpr units::meters_per_second_t kMaxVelocity = 0.25_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.75_mps_sq;
-        static constexpr double kP = 1.0;
-        static constexpr double kI = 1.0;
-        static constexpr double kD = 0.0;
+    static constexpr units::meters_per_second_t kMaxVelocity = 0.25_mps;
+    static constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.75_mps_sq;
+    static constexpr double kP = 1.0;
+    static constexpr double kI = 1.0;
+    static constexpr double kD = 0.0;
 
-        frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
-            kMaxVelocity, kMaxAcceleration};
+    frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
+        kMaxVelocity, kMaxAcceleration};
 
-        frc::ProfiledPIDController<units::meters> m_elevatorPID{
-            kP, kI, kD, m_constraints
-        };
+    frc::ProfiledPIDController<units::meters> m_elevatorPID{
+        kP, kI, kD, m_constraints
+    };
 
-        units::turn_t m_setpointTurns = 0_tr;
+    units::degree_t m_setpointAngle = 0.0_deg;
 };
