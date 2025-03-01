@@ -21,9 +21,6 @@ constexpr units::inch_t kElevatorL4Position = 0_in;
 
 constexpr float kSlowElevator = 0.2;
 
-constexpr float kSlowElevator = 0.2;
-
-constexpr float kSlowElevator = 0.2;
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();

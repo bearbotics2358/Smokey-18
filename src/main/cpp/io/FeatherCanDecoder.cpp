@@ -21,10 +21,6 @@ float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
 }
 
 float FeatherCanDecoder::GetCoralIntakeRawAngleDegrees() {
-    return m_coralIntakeAngleDegrees - kCoralAngleOffsetDegrees;
-}
-
-float FeatherCanDecoder::GetCoralIntakeRawAngleDegrees() {
     return m_coralIntakeAngleDegrees;
 }
 

@@ -23,6 +23,7 @@ class CoralSubsystem : public frc2::SubsystemBase {
   bool CoralPresent();
 
   void GoToAngle(double angle);
+
   frc2::CommandPtr collectCoral();
   frc2::CommandPtr dispenseCoral();
 

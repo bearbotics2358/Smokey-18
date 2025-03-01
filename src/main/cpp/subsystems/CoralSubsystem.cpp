@@ -27,14 +27,10 @@ bool CoralSubsystem::CoralPresent() {
 void CoralSubsystem::SetIntakeSpeed(double speed) {
     const double kSlowDown = 0.2;
     m_intakeMotor.Set(speed * kSlowDown);
-    const double kSlowDown = 0.2;
-    m_intakeMotor.Set(speed * kSlowDown);
 }
 
 //Set the speed of the coral collector's pivot motor - parameter should be from -1.0 to 1.0
 void CoralSubsystem::SetPivotSpeed(double speed) {
-    frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
-    const double kSlowDown = 0.2;
     frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
     const double kSlowDown = 0.2;
     m_pivotMotor.Set(speed * kSlowDown * kSlowDown);
@@ -55,16 +51,9 @@ if (currentSide != getLRStatus){
  * 
  * @param targetAngle The desired angle of the mechanism in degrees
  */
-//Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
-frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
+//Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter  
+void CoralSubsystem::GoToAngle(double targetAngle) {
     m_setpointAngle = targetAngle;
-    targetAngle -= 262.6;
-    return frc2::cmd::Run(
-        [this, targetAngle] {
-            SetPivotSpeed(-0.025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeRawAngleDegrees(), targetAngle));
-        },
-        {this}
-    );
 }
 
 //Start the intake motor and stop it when the coral is collected
