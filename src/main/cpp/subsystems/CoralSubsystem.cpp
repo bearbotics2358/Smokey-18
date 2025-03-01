@@ -8,12 +8,25 @@ m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless),
 m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
 m_coralDataProvider(dataProvider)
 {
-    m_setpointAngle = 0.0;
+    m_setpointAngle = 90.0;
+
+    rev::spark::SparkBaseConfig pivotConfig;
+    pivotConfig.SmartCurrentLimit(kPivotMotorMaxCurrentAmps)
+        .SetIdleMode(rev::spark::SparkBaseConfig::kBrake);
+
+    // m_pivotMotor.Configure(pivotConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
 }
 
 void CoralSubsystem::Periodic() {
+    frc::SmartDashboard::PutNumber("Pivot Temp", m_pivotMotor.GetMotorTemperature());
+    frc::SmartDashboard::PutBoolean("Pivot Temp Good?", m_pivotMotor.GetMotorTemperature() < 60.0);
+    frc::SmartDashboard::PutNumber("Pivot Current", m_pivotMotor.GetOutputCurrent());
+
     frc::SmartDashboard::PutNumber("Coral Setpoint", m_setpointAngle);
-    // SetPivotSpeed(-0.025 * m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle));
+
+    double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
+    frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
+    SetPivotSpeed(pid_calculation);
 }
 
 //Returns true if a coral is collected and false otherwise
@@ -30,8 +43,7 @@ void CoralSubsystem::SetIntakeSpeed(double speed) {
 //Set the speed of the coral collector's pivot motor - parameter should be from -1.0 to 1.0
 void CoralSubsystem::SetPivotSpeed(double speed) {
     frc::SmartDashboard::PutNumber("Coral Pivot speed", speed);
-    const double kSlowDown = 0.2;
-    m_pivotMotor.Set(speed * kSlowDown);
+    m_pivotMotor.Set(-speed);
 }
 
 /**

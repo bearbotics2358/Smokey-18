@@ -18,10 +18,10 @@ constexpr int kLimitSwitchId = 0;
 
 // @todo Assign these to real values when we know the distances
 constexpr units::inch_t kElevatorStowPosition = 0_in;
-constexpr units::inch_t kElevatorL1Position = 31.5_in;
-constexpr units::inch_t kElevatorL2Position = 0_in;
-constexpr units::inch_t kElevatorL3Position = 0_in;
-constexpr units::inch_t kElevatorL4Position = 0_in;
+constexpr units::inch_t kElevatorL1Position = 2.5_in;
+constexpr units::inch_t kElevatorL2Position = 12.5_in;
+constexpr units::inch_t kElevatorL3Position = 30.5_in;
+constexpr units::inch_t kElevatorL4Position = 56.5_in;
 
 constexpr float kSlowElevator = 0.6;
 
@@ -51,14 +51,16 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         static constexpr double TOLERANCE = 0.35;
 
-        static constexpr units::meters_per_second_t kMaxVelocity = 0.25_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.75_mps_sq;
+
+        static constexpr units::meters_per_second_t kMaxVelocity = 3.0_mps;
+        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 3.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 2.0; // 1.0
         static constexpr double kD = 0.0;
         static constexpr units::volt_t kS = 0.5_V;
         static constexpr units::volt_t kG = 0.45_V;
         static constexpr auto kV = 0.0_V / 1.0_mps;
+
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
             kMaxVelocity, kMaxAcceleration};

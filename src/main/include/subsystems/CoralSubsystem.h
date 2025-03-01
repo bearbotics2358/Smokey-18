@@ -24,15 +24,16 @@ class CoralSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr dispenseCoral();
 
  private:
+    const int kPivotMotorMaxCurrentAmps = 10;
     const int ANGLE_TOLERANCE = 3.0;
     const int kCoralPivotMotorID = 58;
     const int kCoralIntakeMotorID = 61;
 
     double m_setpointAngle;
 
-    const double kCoralP = 0.5;
+    const double kCoralP = 0.01;
     const double kCoralI = 0.0;
-    const double kCoralD = 0.0;
+    const double kCoralD = 0.0005;
 
     rev::spark::SparkMax m_intakeMotor;
     rev::spark::SparkMax m_pivotMotor;
