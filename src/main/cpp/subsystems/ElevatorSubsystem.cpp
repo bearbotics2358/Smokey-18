@@ -35,7 +35,11 @@ void ElevatorSubsystem::Periodic() {
 
     frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
 
-    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", !m_elevatorLimitSwitch.Get());
+    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
+
+    if (IsMagneticLimitSwitchActive()) {
+        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
+    }
 
     SetMotorVoltage();
 }

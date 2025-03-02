@@ -8,7 +8,7 @@ m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless),
 m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
 m_coralDataProvider(dataProvider)
 {
-    m_setpointAngle = 90.0;
+    m_setpointAngle = 160.0;
 
     rev::spark::SparkBaseConfig pivotConfig;
     pivotConfig.SmartCurrentLimit(kPivotMotorMaxCurrentAmps)
@@ -36,7 +36,7 @@ bool CoralSubsystem::CoralPresent() {
 
 //Set the speed of the coral collector - parameter should be a value from -1.0 to 1.0
 void CoralSubsystem::SetIntakeSpeed(double speed) {
-    const double kSlowDown = 0.2;
+    const double kSlowDown = 0.4;
     m_intakeMotor.Set(speed * kSlowDown);
 }
 
@@ -68,7 +68,7 @@ frc2::CommandPtr CoralSubsystem::collectCoral() {
             m_intakeMotor.StopMotor();
         }, 
         {this}
-    ).WithTimeout(3_s).WithName("collectCoral");
+    ).WithTimeout(3_s).Until(([this] {return CoralPresent();})).WithName("collectCoral");
 }   
 
 //Run the intake motor backwards for 1 second to dispense held coral
