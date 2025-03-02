@@ -10,6 +10,8 @@
 
 #include "generated/TunerConstants.h"
 
+#include <unordered_map>
+
 using namespace ctre::phoenix6;
 
 namespace subsystems {
@@ -257,6 +259,10 @@ public:
 private:
     void ConfigureAutoBuilder();
     void StartSimThread();
+
+    std::unordered_map<int, frc::Pose2d> m_aprilTagsToPoses = {
+        {6, frc::Pose2d()}
+    };
 
 public:
     frc2::CommandPtr AlignWithAprilTag(int aprilTagId);

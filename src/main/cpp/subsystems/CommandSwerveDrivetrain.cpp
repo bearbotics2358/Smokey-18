@@ -1,5 +1,4 @@
 #include "subsystems/CommandSwerveDrivetrain.h"
-#include "Constants.h"
 
 #include <frc/RobotController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -86,7 +85,7 @@ frc2::CommandPtr CommandSwerveDrivetrain::AlignWithAprilTag(int aprilTagId) {
     // frc::SmartDashboard::PutBoolean("Aligning with AprilTag?", true);
 
     std::vector<frc::Pose2d> poses {
-        VisionConstants::aprilTagsToPoses.at(aprilTagId)
+        m_aprilTagsToPoses.at(aprilTagId)
     };
     std::vector<Waypoint> waypoints = PathPlannerPath::waypointsFromPoses(poses);
 
