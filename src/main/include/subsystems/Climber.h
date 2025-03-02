@@ -30,7 +30,7 @@ public:
     frc2::CommandPtr CancelClimb();
     frc2::CommandPtr Stow();
     void SetMotorVoltage();
-    units::turn_t CurrentTurns();
+    units::degree_t CurrentAngle();
 
     frc2::CommandPtr StopClimbMotor();
 
@@ -46,7 +46,7 @@ private:
     frc::TrapezoidProfile<units::turns>::Constraints m_constraints {
         kMaxVelocity, kMaxAcceleration};
 
-    frc::ProfiledPIDController<units::turns> m_elevatorPID{
+    frc::ProfiledPIDController<units::turns> m_climberPID{
         kP, kI, kD, m_constraints
     };
 

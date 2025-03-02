@@ -6,10 +6,7 @@ Climber::Climber():
 {
     ctre::phoenix6::configs::MotorOutputConfigs motorConfigs;
     motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
-        .WithInverted(true)
-        // Limit the forward and reverse duty cycle while getting the climber working.
-        .WithPeakForwardDutyCycle(kSlowClimber)
-        .WithPeakReverseDutyCycle(kSlowClimber);
+        .WithInverted(true);  //We'll need to tests this
 
     m_climberMotor.GetConfigurator().Apply(motorConfigs);
     
@@ -24,48 +21,54 @@ Climber::Climber():
 }
 
 void Climber::Periodic() {
-    frc::SmartDashboard::PutNumber("Raw Climber Turns", CurrentTurns().value());
+    frc::SmartDashboard::PutNumber("Climber Angle", CurrentAngle().value());
 
-    frc::SmartDashboard::PutNumber("Climber Setpoint Degrees", m_setpointAngle.value());
+    frc::SmartDashboard::PutNumber("Climber Setpoint", m_setpointAngle.value());
 
     SetMotorVoltage();
 }
 
-units::turn_t Climber::CurrentTurns() {
-    return units::turn_t(m_climberMotor.GetPosition().GetValueAsDouble());
+//Returns the current angle of the climber in degrees
+units::degree_t Climber::CurrentAngle() {
+    return 0_deg; // @todo This needs to be changed once we have implemented a system to get climber angle with the through bore encoder. 
+                  //Something like -> return m_climberDataProvider->GetClimberDegrees();
 }
 
+//Starts the climb
 frc2::CommandPtr Climber::Climb() {
     return frc2::cmd::RunOnce([this] {
         m_setpointAngle = kClimberEndAngle;
     });
 }
 
+//Cancels the climb
 frc2::CommandPtr Climber::CancelClimb() {
     return frc2::cmd::RunOnce([this] {
         m_setpointAngle = kClimberStartAngle;
     });
 }
 
+//Sets the climber to the stow position if we happen to start the climb when we don't want to
 frc2::CommandPtr Climber::Stow() {
     return frc2::cmd::RunOnce([this] {
         m_setpointAngle = kClimberStowAngle;
     });
 }
 
+//Sets the motor voltage based on profiled PID calculations
 void Climber::SetMotorVoltage() {
-    units::turn_t targetTurns = m_setpointAngle * (kClimberGearRatio * 1_tr / 1_deg);
-    frc::SmartDashboard::PutNumber("Climber Setpoint Turns", targetTurns.value());
+    units::turn_t targetAngle = m_setpointAngle;
 
-    double value = m_elevatorPID.Calculate(CurrentTurns(), targetTurns);
+    double value = m_climberPID.Calculate(CurrentAngle(), targetAngle);
     frc::SmartDashboard::PutNumber("Climber PID", value);
 
     units::volt_t goalVolts = units::volt_t(value);
     frc::SmartDashboard::PutNumber("Climber PID in Volts", goalVolts.value());
 
-    //m_climberMotor.SetVoltage(goalVolts);
+    //m_climberMotor.SetVoltage(goalVolts); Uncomment this when we know everything works
 }
 
+//Stops the climb motor completely
 frc2::CommandPtr Climber::StopClimbMotor() {
     return frc2::cmd::RunOnce([this] {m_climberMotor.StopMotor();});
 }
