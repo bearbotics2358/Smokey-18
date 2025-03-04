@@ -16,7 +16,16 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
+    AddCommands();
     ConfigureBindings();
+}
+
+void RobotContainer::AddCommands() {
+    pathplanner::NamedCommands::registerCommand("ScoreCoralLevel1", std::move(m_elevatorSubsystem.GoToHeight(kElevatorL1Position)));
+    pathplanner::NamedCommands::registerCommand("ScoreCoralLevel2", std::move(m_elevatorSubsystem.GoToHeight(kElevatorL2Position)));
+    pathplanner::NamedCommands::registerCommand("ScoreCoralLevel3", std::move(m_elevatorSubsystem.GoToHeight(kElevatorL3Position)));
+    pathplanner::NamedCommands::registerCommand("ScoreCoralLevel4", std::move(m_elevatorSubsystem.GoToHeight(kElevatorL4Position)));
+
 }
 
 void RobotContainer::ConfigureBindings() {

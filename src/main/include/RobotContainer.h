@@ -16,6 +16,7 @@
 #include "subsystems/ScoringSuperstructure.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
 
 class RobotContainer {
 private:
@@ -60,4 +61,5 @@ public:
 
 private:
     void ConfigureBindings();
+    void AddCommands();
 };
