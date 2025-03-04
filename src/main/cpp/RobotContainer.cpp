@@ -81,7 +81,16 @@ void RobotContainer::ConfigureBindings() {
         frc2::cmd::Parallel(
             m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
             frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
+                m_coralSubsystem.GoToAngle(50.0);
+            })
+        )
+    );
+
+    m_joystick.POVLeft().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(65.0);
             })
         )
     );
@@ -107,7 +116,7 @@ void RobotContainer::ConfigureBindings() {
         frc2::cmd::Parallel(
             m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
             frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(135.0);
+                m_coralSubsystem.GoToAngle(125.0);
             })
         )
     );
