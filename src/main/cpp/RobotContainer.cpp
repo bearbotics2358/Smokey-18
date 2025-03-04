@@ -29,43 +29,96 @@ void RobotContainer::ConfigureBindings() {
             .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
     }));
 
-    m_joystick.LeftBumper()
-        .OnTrue(
-            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.2;})
-        )
-        .OnFalse(
-            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
-        );
+    // @todo Only adding this for testing
+    m_speedMultiplier = 0.2;
+
+    // m_joystick.LeftBumper()
+    //     .OnTrue(
+    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.2;})
+    //     )
+    //     .OnFalse(
+    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+    //     );
 
     (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
-    (m_joystick.Back() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
-    (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
-    (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
-    (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+    // (m_joystick.Back() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
+    // (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
+    // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
+    // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
-    m_joystick.B().OnTrue(
-        frc2::cmd::RunOnce([this] {
-            m_coralSubsystem.GoToAngle(90.0);
-        })
-    );
-    m_joystick.A().OnTrue(
-        frc2::cmd::RunOnce([this] {
-            m_coralSubsystem.GoToAngle(135.0);
-        })
+    // m_joystick.LeftBumper().OnTrue(
+    //     frc2::cmd::RunOnce([this] {
+    //         m_coralSubsystem.GoToAngle(150.0);
+    //     })
+    // );
+
+    m_joystick.RightBumper().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(55.0);
+            })
+        )
     );
 
-    m_joystick.X().OnTrue(
+    m_joystick.LeftBumper().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(55.0);
+            })
+        )
+    );
+
+    m_joystick.POVUp().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(50.0);
+            })
+        )
+    );
+
+    m_joystick.POVLeft().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(65.0);
+            })
+        )
+    );
+
+    m_joystick.RightTrigger().OnTrue(
+        m_coralSubsystem.dispenseCoral()
+    );
+
+    m_joystick.LeftTrigger().OnTrue(
         m_coralSubsystem.collectCoral()
     );
-    m_joystick.Y().OnTrue(
-        m_coralSubsystem.dispenseCoral()
+
+    m_joystick.A().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(0_in),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(160.0);
+            })
+        )
+    );
+
+    m_joystick.B().OnTrue(
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
+            frc2::cmd::RunOnce([this] {
+                m_coralSubsystem.GoToAngle(125.0);
+            })
+        )
     );
 }
 

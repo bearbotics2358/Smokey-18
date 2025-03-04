@@ -8,27 +8,18 @@ m_elevatorMotor1(kElevatorMotor1Id),
 m_elevatorMotor2(kElevatorMotor2Id),
 m_elevatorLimitSwitch(kLimitSwitchId)
 {
-    ctre::phoenix6::configs::Slot0Configs slot0Configs{};
-    // slot0Configs.kV = .12;
-    slot0Configs.kP = 7.0;
-    slot0Configs.kI = 0.0;
-    slot0Configs.kD = 0.0;
-    m_elevatorMotor1.GetConfigurator().Apply(slot0Configs);
-    m_elevatorMotor2.GetConfigurator().Apply(slot0Configs);
-
     ctre::phoenix6::configs::MotorOutputConfigs motorConfigs;
     motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
-        // Limit the forward and reverse duty cycle while getting the elevator working.
-        .WithPeakForwardDutyCycle(kSlowElevator)
-        .WithPeakReverseDutyCycle(kSlowElevator);
+        .WithInverted(true);
 
     m_elevatorMotor1.GetConfigurator().Apply(motorConfigs);
+
+    // Motor 2 has the same configuration as Motor 1 except that it runs in the opposite direction
+    motorConfigs.WithInverted(false);
     m_elevatorMotor2.GetConfigurator().Apply(motorConfigs);
-
-    ctre::phoenix6::controls::Follower follower(kElevatorMotor1Id, true);
-    m_elevatorMotor2.SetControl(follower);
-
+    
     m_elevatorMotor1.SetPosition(0_tr);
+    m_elevatorMotor2.SetPosition(0_tr);
     /*
      * This method blocks the current robot loop until the signal is retrieved or the timeout is activated.
      * The CTRE docs state that this API can ensure that set operations are completed before continuing control flow.
@@ -36,12 +27,21 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
      */ 
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
+    m_elevatorMotor2.GetPosition().WaitForUpdate(20_ms);
 };
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
 
-    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", !m_elevatorLimitSwitch.Get());
+    frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
+
+    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
+
+    if (IsMagneticLimitSwitchActive()) {
+        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
+    }
+
+    SetMotorVoltage();
 }
 
 /*
@@ -61,49 +61,37 @@ void ElevatorSubsystem::PlotElevatorPosition() {
     frc::SmartDashboard::PutNumber("Elevator Height", CurrentHeight().value());
 };
 
-units::turn_t ElevatorSubsystem::HeightToTurns(units::inch_t height) {
-    return units::turn_t(
-        -(height.value() * GEAR_RATIO) / (2 * M_PI * WHEEL_RADIUS.value())
-    );
-}
-
-frc2::CommandPtr ElevatorSubsystem::SetPositionCommand(units::inch_t position) {
-    return frc2::cmd::RunOnce([this, position] {
-        units::turn_t desiredTurns = HeightToTurns(position);
-        frc::SmartDashboard::PutNumber("Desired Turns", desiredTurns.value());
-        m_elevatorMotor1.SetControl(
-            m_positionVoltage.WithPosition(desiredTurns)
-        );
-    });
-}
-
-frc2::CommandPtr ElevatorSubsystem::Lower() {
-    return frc2::cmd::RunOnce([this] {
-        // Test command to slowly lower the elevator
-        m_elevatorMotor1.SetControl(ctre::phoenix6::controls::DutyCycleOut(kSlowElevator));
-    });
-}
-
-frc2::CommandPtr ElevatorSubsystem::Raise() {
-    return frc2::cmd::RunOnce([this] {
-        // Test command to slowly raise the elevator
-        m_elevatorMotor1.SetControl(ctre::phoenix6::controls::DutyCycleOut(-kSlowElevator));
-    });
-}
-
-frc2::CommandPtr ElevatorSubsystem::Stop() {
-    return frc2::cmd::RunOnce([this] {
-        m_elevatorMotor1.StopMotor();
-    });
-}
-
 units::inch_t ElevatorSubsystem::CurrentHeight() {
     return units::inch_t(
-        -(m_elevatorMotor1.GetPosition().GetValueAsDouble() * 2 * M_PI * WHEEL_RADIUS) / GEAR_RATIO
+        (m_elevatorMotor1.GetPosition().GetValueAsDouble() * 2 * M_PI * WHEEL_RADIUS) / GEAR_RATIO
     );
 }
 
 bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
     // The REV magnetic limit switch is Active-low so a false from the Get() call means the elevator is at the bottom
     return !m_elevatorLimitSwitch.Get();
+}
+
+void ElevatorSubsystem::SetMotorVoltage() {
+    double value = m_elevatorPID.Calculate(CurrentHeight(), m_setpointHeight);
+    frc::SmartDashboard::PutNumber("Elevator PID", value);
+
+    units::volt_t goalVolts = units::volt_t(value) + m_feedforward.Calculate(m_elevatorPID.GetSetpoint().velocity);
+    frc::SmartDashboard::PutNumber("Elevator PID with feedforward", goalVolts.value());
+
+    double current_difference = fabs(m_setpointHeight.value() - CurrentHeight().value());
+    if (current_difference >= TOLERANCE) {
+        m_elevatorMotor1.SetVoltage(goalVolts);
+        m_elevatorMotor2.SetVoltage(goalVolts);
+    } else {
+        m_elevatorMotor1.SetVoltage(0.4_V);
+        m_elevatorMotor2.SetVoltage(0.4_V);
+    }
+    frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
+}
+
+frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
+    return frc2::cmd::RunOnce([this, height] {
+        m_setpointHeight = height;
+    });
 }
