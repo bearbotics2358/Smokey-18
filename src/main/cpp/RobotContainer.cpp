@@ -103,26 +103,26 @@ void RobotContainer::ConfigureBindings() {
         })
     );
 
-        m_joystick.Y().OnTrue(
-            frc2::cmd::RunOnce([this]{
+    m_joystick.Y().OnTrue(
+        frc2::cmd::RunOnce([this]{
             m_elevatorSubsystem.IncreaseMotorVelocity();
         })
     );
 
-        m_joystick.X().OnTrue(
-            frc2::cmd::RunOnce([this]{
+    m_joystick.X().OnTrue(
+        frc2::cmd::RunOnce([this]{
             m_elevatorSubsystem.DecreaseMotorVelocity();
         })
     );
 
-        m_joystick.RightTrigger().OnTrue(
-            frc2::cmd::RunOnce([this]{
+    m_joystick.RightTrigger().OnTrue(
+        frc2::cmd::RunOnce([this]{
             m_elevatorSubsystem.DecreaseMotorAccel();
         })
     );
 
-        m_joystick.LeftTrigger().OnTrue(
-            frc2::cmd::RunOnce([this]{
+    m_joystick.LeftTrigger().OnTrue(
+        frc2::cmd::RunOnce([this]{
             m_elevatorSubsystem.IncreaseMotorAccel();
         })
     );
