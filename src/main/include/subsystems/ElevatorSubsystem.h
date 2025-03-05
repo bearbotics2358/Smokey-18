@@ -3,8 +3,6 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
-#include <string>
-#include <iostream>
 #include <frc/DigitalInput.h>
 #include <units/length.h>
 #include <frc/controller/ProfiledPIDController.h>
