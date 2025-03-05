@@ -24,7 +24,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
 
     private:
         ElevatorSubsystem& m_elevator;
-        CoralSubsystem& m_coralMech;
+        CoralSubsystem& m_coral;
         AlgaeSubsystem& m_algae;
 };
 
