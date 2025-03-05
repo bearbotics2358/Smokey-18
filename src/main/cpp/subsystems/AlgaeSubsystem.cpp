@@ -20,15 +20,20 @@ m_algaePivotMotor(kAlgaePivot)
     m_algaeLeftMotor.Configure(followerConfig, resetMode, persistMode);
 }
 
+void AlgaeSubsystem::Periodic() {
+    SetAlgaeVoltage();
+}
+
 frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
     return frc2::cmd::RunOnce([this, speed] {
-        
+        m_algaeLeftMotor.Set(speed);
+        m_algaeRightMotor.Set(speed);
     });
 }
 
 frc2::CommandPtr AlgaeSubsystem::GoToAngle(double angle) {
     return frc2::cmd::RunOnce([this, angle] {
-
+        m_setpointAngle = units::turn_t(angle);
     });
 }
 

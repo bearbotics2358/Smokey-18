@@ -16,9 +16,9 @@
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem();
+  void Periodic();
 
   frc2::CommandPtr SetSpeed(double speed);
-
   frc2::CommandPtr GoToAngle(double angle);
 
   void SetAlgaeVoltage();
