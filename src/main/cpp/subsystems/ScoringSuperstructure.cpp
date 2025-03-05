@@ -57,7 +57,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreCoralL4() {
 frc2::CommandPtr ScoringSuperstructure::SetCoralAngle() {
     return frc2::cmd::RunOnce([this] {
         m_algae.SetGoalAngle(90.0);}
-    ).WithName("Intake");
+    ).WithName("CoralAngle");
 }
 
 frc2::CommandPtr ScoringSuperstructure::SetAlgaeAngle() {
@@ -66,5 +66,5 @@ frc2::CommandPtr ScoringSuperstructure::SetAlgaeAngle() {
         frc2::cmd::RunOnce([this] {
             m_coral.GoToAngle(125.0);
         })
-    ).WithName("Intake");
+    ).WithName("AlgaeAngle");
 }
