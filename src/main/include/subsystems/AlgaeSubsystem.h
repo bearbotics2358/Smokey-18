@@ -31,11 +31,11 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     // TODO: change ids later
     const int kAlgaeMotorLeft = 0;
     const int kAlgaeMotorRight = 1;
+    const int kAlgaePivot = 2;
 
     rev::spark::SparkMax m_algaeLeftMotor;
     rev::spark::SparkMax m_algaeRightMotor;
 
-    const int kAlgaePivot = 2;
 
     // TODO: tune these values
     static constexpr units::turns_per_second_t kMaxVelocity = 0.25_tps;
