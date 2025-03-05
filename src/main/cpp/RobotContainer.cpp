@@ -11,7 +11,7 @@
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     m_featherCanDecoder(featherCanDecoder),
     m_coralSubsystem(m_featherCanDecoder),
-    m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
+    m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
@@ -60,39 +60,27 @@ void RobotContainer::ConfigureBindings() {
     // );
 
     m_joystick.RightBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL2Command();
+        })
     );
 
     m_joystick.LeftBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL3Command();
+        })
     );
 
     m_joystick.POVUp().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(50.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL4Command();
+        })
     );
 
     m_joystick.POVLeft().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(65.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL1Command();
+        })
     );
 
     // m_joystick.RightTrigger().OnTrue(
@@ -104,22 +92,17 @@ void RobotContainer::ConfigureBindings() {
     // );
 
     m_joystick.A().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(0_in),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(160.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.StowCommand();
+        })
     );
 
     m_joystick.B().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(125.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.IntakePosCommand();
+        })
     );
+
         m_joystick.Y().OnTrue(
             frc2::cmd::RunOnce([this]{
             m_elevatorSubsystem.IncreaseMotorVelocity();
