@@ -18,7 +18,7 @@ frc2::CommandPtr ScoringSuperstructure::StowCommand() {
     ).WithName("Stow");
 }
 
-frc2::CommandPtr ScoringSuperstructure::ScoreCoralL1Command() {
+frc2::CommandPtr ScoringSuperstructure::ScoreCoralL1() {
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL1Position),
         frc2::cmd::RunOnce([this] {
@@ -27,7 +27,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreCoralL1Command() {
     ).WithName("ScoreL1");
 }
 
-frc2::CommandPtr ScoringSuperstructure::ScoreCoralL2Command() {
+frc2::CommandPtr ScoringSuperstructure::ScoreCoralL2() {
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL2Position),
             frc2::cmd::RunOnce([this] {
@@ -36,7 +36,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreCoralL2Command() {
     ).WithName("ScoreL2");
 }
 
-frc2::CommandPtr ScoringSuperstructure::ScoreCoralL3Command() {
+frc2::CommandPtr ScoringSuperstructure::ScoreCoralL3() {
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL3Position),
         frc2::cmd::RunOnce([this] {
@@ -45,7 +45,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreCoralL3Command() {
     ).WithName("ScoreL3");
 }
 
-frc2::CommandPtr ScoringSuperstructure::ScoreCoralL4Command() {
+frc2::CommandPtr ScoringSuperstructure::ScoreCoralL4() {
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL4Position),
         frc2::cmd::RunOnce([this] {
@@ -54,13 +54,13 @@ frc2::CommandPtr ScoringSuperstructure::ScoreCoralL4Command() {
     ).WithName("ScoreL4");
 }
 
-frc2::CommandPtr ScoringSuperstructure::IntakePosCommand() {
+frc2::CommandPtr ScoringSuperstructure::SetCoralAngle() {
     return frc2::cmd::RunOnce([this] {
         m_algae.SetGoalAngle(90.0);}
     ).WithName("Intake");
 }
 
-frc2::CommandPtr ScoringSuperstructure::MoveAlgaeCommand() {
+frc2::CommandPtr ScoringSuperstructure::SetAlgaeAngle() {
     return frc2::cmd::Parallel(
         m_algae.SetGoalAngle(90.0),
         frc2::cmd::RunOnce([this] {

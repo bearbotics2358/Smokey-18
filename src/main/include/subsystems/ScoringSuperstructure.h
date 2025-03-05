@@ -15,12 +15,12 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
 
         // Command to return all components to their idle positions
         frc2::CommandPtr StowCommand();
-        frc2::CommandPtr ScoreCoralL1Command();
-        frc2::CommandPtr ScoreCoralL2Command();
-        frc2::CommandPtr ScoreCoralL3Command();
-        frc2::CommandPtr ScoreCoralL4Command();
-        frc2::CommandPtr IntakePosCommand();
-        frc2::CommandPtr MoveAlgaeCommand();
+        frc2::CommandPtr ScoreCoralL1();
+        frc2::CommandPtr ScoreCoralL2();
+        frc2::CommandPtr ScoreCoralL3();
+        frc2::CommandPtr ScoreCoralL4();
+        frc2::CommandPtr SetCoralAngle();
+        frc2::CommandPtr SetAlgaeAngle();
 
     private:
         ElevatorSubsystem& m_elevator;

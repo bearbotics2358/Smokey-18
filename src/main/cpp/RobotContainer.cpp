@@ -61,25 +61,25 @@ void RobotContainer::ConfigureBindings() {
 
     m_joystick.RightBumper().OnTrue(
         frc2::cmd::RunOnce([this] {
-            m_scoringSuperstructure.ScoreCoralL2Command();
+            m_scoringSuperstructure.ScoreCoralL2();
         })
     );
 
     m_joystick.LeftBumper().OnTrue(
         frc2::cmd::RunOnce([this] {
-            m_scoringSuperstructure.ScoreCoralL3Command();
+            m_scoringSuperstructure.ScoreCoralL3();
         })
     );
 
     m_joystick.POVUp().OnTrue(
         frc2::cmd::RunOnce([this] {
-            m_scoringSuperstructure.ScoreCoralL4Command();
+            m_scoringSuperstructure.ScoreCoralL4();
         })
     );
 
     m_joystick.POVLeft().OnTrue(
         frc2::cmd::RunOnce([this] {
-            m_scoringSuperstructure.ScoreCoralL1Command();
+            m_scoringSuperstructure.ScoreCoralL1();
         })
     );
 
@@ -99,7 +99,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_joystick.B().OnTrue(
         frc2::cmd::RunOnce([this] {
-            m_scoringSuperstructure.IntakePosCommand();
+            m_scoringSuperstructure.SetCoralAngle();
         })
     );
 
