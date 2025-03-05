@@ -40,7 +40,7 @@ void RobotContainer::ConfigureBindings() {
     //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
     //     );
 
-    (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
+    // (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
@@ -95,13 +95,13 @@ void RobotContainer::ConfigureBindings() {
         )
     );
 
-    m_joystick.RightTrigger().OnTrue(
-        m_coralSubsystem.dispenseCoral()
-    );
+    // m_joystick.RightTrigger().OnTrue(
+    //     m_coralSubsystem.dispenseCoral()
+    // );
 
-    m_joystick.LeftTrigger().OnTrue(
-        m_coralSubsystem.collectCoral()
-    );
+    // m_joystick.LeftTrigger().OnTrue(
+    //     m_coralSubsystem.collectCoral()
+    // );
 
     m_joystick.A().OnTrue(
         frc2::cmd::Parallel(
@@ -119,6 +119,29 @@ void RobotContainer::ConfigureBindings() {
                 m_coralSubsystem.GoToAngle(125.0);
             })
         )
+    );
+        m_joystick.Y().OnTrue(
+            frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.IncreaseMotorVelocity();
+        })
+    );
+
+        m_joystick.X().OnTrue(
+            frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.DecreaseMotorVelocity();
+        })
+    );
+
+        m_joystick.RightTrigger().OnTrue(
+            frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.DecreaseMotorAccel();
+        })
+    );
+
+        m_joystick.LeftTrigger().OnTrue(
+            frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.IncreaseMotorAccel();
+        })
     );
 }
 

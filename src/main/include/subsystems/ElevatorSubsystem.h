@@ -30,6 +30,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         void Periodic() override;
         void PlotElevatorPosition();
+        void IncreaseMotorVelocity();
+        void DecreaseMotorVelocity();
+        void IncreaseMotorAccel();
+        void DecreaseMotorAccel();
 
         units::inch_t CurrentHeight();
 
@@ -50,9 +54,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         static constexpr double TOLERANCE = 0.35;
 
-
-        static constexpr units::meters_per_second_t kMaxVelocity = 3.0_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 3.0_mps_sq;
+        // Temp. removed static constexpr
+        units::meters_per_second_t kMaxVelocity = 0.25_mps;
+        units::meters_per_second_squared_t kMaxAcceleration = 0.25_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 2.0; // 1.0
         static constexpr double kD = 0.0;

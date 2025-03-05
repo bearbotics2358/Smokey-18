@@ -15,7 +15,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     m_elevatorMotor1.GetConfigurator().Apply(motorConfigs);
 
     // Motor 2 has the same configuration as Motor 1 except that it runs in the opposite direction
-    motorConfigs.WithInverted(false);
+    motorConfigs.WithInverted(true);
     m_elevatorMotor2.GetConfigurator().Apply(motorConfigs);
     
     m_elevatorMotor1.SetPosition(0_tr);
@@ -94,4 +94,21 @@ frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
         m_setpointHeight = height;
     });
-}
+};
+
+
+void ElevatorSubsystem::IncreaseMotorVelocity() {
+    kMaxVelocity += 0.25_mps;
+};
+
+void ElevatorSubsystem::DecreaseMotorVelocity() {
+    kMaxVelocity -= 0.25_mps;
+};
+
+void ElevatorSubsystem::IncreaseMotorAccel() {
+    kMaxAcceleration += 0.25_mps_sq;
+};
+
+void ElevatorSubsystem::DecreaseMotorAccel() {
+    kMaxAcceleration -= 0.25_mps_sq;
+};
