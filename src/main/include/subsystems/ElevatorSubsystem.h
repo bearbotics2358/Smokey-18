@@ -35,7 +35,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         units::inch_t CurrentHeight();
 
+        void PrepareElevator(units::inch_t newPosition);
         frc2::CommandPtr GoToHeight(units::inch_t height);
+        frc2::CommandPtr GoToSavedPosition();
 
         const units::inch_t WHEEL_RADIUS = 1.375_in;
         // 9 to 1
@@ -71,5 +73,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         };
         
         frc::ElevatorFeedforward m_feedforward{kS, kG, kV};
+
+        // Changing m_setpointHeight will send the elevator to that position immediately
         units::inch_t m_setpointHeight = 0_in;
+
+        // Use m_desiredElevatorPosition when preparing the elevator for a call to GoToSavedPosition()
+        units::inch_t m_desiredElevatorPosition;
 };

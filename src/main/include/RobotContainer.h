@@ -7,6 +7,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/button/CommandGenericHID.h>
 #include "io/FeatherCanDecoder.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/CameraSubsystem.h"
@@ -38,6 +39,7 @@ private:
     Telemetry logger{m_maxSpeed};
 
     frc2::CommandXboxController m_joystick{0};
+    frc2::CommandGenericHID m_gamepad{4};
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
