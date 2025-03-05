@@ -95,3 +95,11 @@ frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
         m_setpointHeight = height;
     });
 }
+
+void ElevatorSubsystem::PrepareElevator(units::inch_t newPosition) {
+    m_desiredElevatorPosition = newPosition;
+}
+
+frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
+    return GoToHeight(m_desiredElevatorPosition);
+}
