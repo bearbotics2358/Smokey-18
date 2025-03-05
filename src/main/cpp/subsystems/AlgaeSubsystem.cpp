@@ -27,7 +27,6 @@ void AlgaeSubsystem::Periodic() {
 frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
     return frc2::cmd::RunOnce([this, speed] {
         m_algaeLeftMotor.Set(speed);
-        m_algaeRightMotor.Set(speed);
     });
 }
 
@@ -49,11 +48,8 @@ void AlgaeSubsystem::SetAlgaeVoltage () {
     frc::SmartDashboard::PutNumber("Algae PID with feedforward", goalVolts.value());
 
     double current_difference = fabs(m_setpointAngle.value() - CurrentAngle().value());
-    if (current_difference >= TOLERANCE) {
-        m_algaePivotMotor.SetVoltage(goalVolts);
-    } else {
-        m_algaePivotMotor.SetVoltage(0.0_V);
-    }
+    // TODO: Uncomment
+    // m_algaePivotMotor.SetVoltage(current_difference >= TOLERANCE  ? goalVolts : 0.0_V);
 
     frc::SmartDashboard::PutNumber("Algae diff", current_difference);
 }
