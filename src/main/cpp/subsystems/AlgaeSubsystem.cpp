@@ -21,7 +21,7 @@ m_algaePivotMotor(kAlgaePivot)
 }
 
 void AlgaeSubsystem::Periodic() {
-    SetAlgaeVoltage();
+    GoToAngle();
 }
 
 frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
@@ -30,7 +30,7 @@ frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
     });
 }
 
-frc2::CommandPtr AlgaeSubsystem::GoToAngle(double angle) {
+frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(double angle) {
     return frc2::cmd::RunOnce([this, angle] {
         m_setpointAngle = units::turn_t(angle);
     });
@@ -40,7 +40,7 @@ units::turn_t AlgaeSubsystem::CurrentAngle() {
     return m_algaePivotMotor.GetPosition().GetValue();
 };
 
-void AlgaeSubsystem::SetAlgaeVoltage () {
+void AlgaeSubsystem::GoToAngle() {
     double value = m_algaePID.Calculate(CurrentAngle(), m_setpointAngle);
     frc::SmartDashboard::PutNumber("Algae PID", value);
 

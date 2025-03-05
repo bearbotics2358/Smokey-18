@@ -19,13 +19,13 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   void Periodic();
 
   frc2::CommandPtr SetSpeed(double speed);
-  frc2::CommandPtr GoToAngle(double angle);
-
-  void SetAlgaeVoltage();
+  frc2::CommandPtr SetGoalAngle(double angle);
 
   units::turn_t CurrentAngle();
 
  private:
+    void GoToAngle();
+
     ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
 
     // TODO: change ids later
