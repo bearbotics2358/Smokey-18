@@ -11,7 +11,7 @@
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     m_featherCanDecoder(featherCanDecoder),
     m_coralSubsystem(m_featherCanDecoder),
-    m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
+    m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
@@ -40,7 +40,7 @@ void RobotContainer::ConfigureBindings() {
     //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
     //     );
 
-    (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
+    // (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
@@ -60,65 +60,71 @@ void RobotContainer::ConfigureBindings() {
     // );
 
     m_joystick.RightBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL2();
+        })
     );
 
     m_joystick.LeftBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL3();
+        })
     );
 
     m_joystick.POVUp().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(50.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL4();
+        })
     );
 
     m_joystick.POVLeft().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(65.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.ScoreCoralL1();
+        })
     );
 
-    m_joystick.RightTrigger().OnTrue(
-        m_coralSubsystem.dispenseCoral()
-    );
+    // m_joystick.RightTrigger().OnTrue(
+    //     m_coralSubsystem.dispenseCoral()
+    // );
 
-    m_joystick.LeftTrigger().OnTrue(
-        m_coralSubsystem.collectCoral()
-    );
+    // m_joystick.LeftTrigger().OnTrue(
+    //     m_coralSubsystem.collectCoral()
+    // );
 
     m_joystick.A().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(0_in),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(160.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.StowCommand();
+        })
     );
 
     m_joystick.B().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(125.0);
-            })
-        )
+        frc2::cmd::RunOnce([this] {
+            m_scoringSuperstructure.SetCoralAngle();
+        })
+    );
+
+    m_joystick.Y().OnTrue(
+        frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.IncreaseMotorVelocity();
+        })
+    );
+
+    m_joystick.X().OnTrue(
+        frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.DecreaseMotorVelocity();
+        })
+    );
+
+    m_joystick.RightTrigger().OnTrue(
+        frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.DecreaseMotorAccel();
+        })
+    );
+
+    m_joystick.LeftTrigger().OnTrue(
+        frc2::cmd::RunOnce([this]{
+            m_elevatorSubsystem.IncreaseMotorAccel();
+        })
     );
 }
 

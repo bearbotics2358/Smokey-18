@@ -13,7 +13,11 @@ m_algaePivotMotor(kAlgaePivot)
     rev::spark::SparkBaseConfig followerConfig;
     followerConfig.Follow(kAlgaeMotorRight, true);
 
-    // TODO: Configure these variables later.
+    /*
+     * ResetMode resets the safe writable parameters to their default values
+     * PersistMode saves all parameters to the SPARK's non-volatile memory post-configuration
+     * Safe Writable Parameters Examples: CAN ID, Motor Type, Idle Mode, PWM Input Deadband, Duty Cycle Offset
+     */ 
     rev::spark::SparkBase::ResetMode resetMode;
     rev::spark::SparkBase::PersistMode persistMode;
 

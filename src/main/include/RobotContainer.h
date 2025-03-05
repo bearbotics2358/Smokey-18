@@ -16,6 +16,7 @@
 #include "subsystems/ScoringSuperstructure.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include <subsystems/AlgaeSubsystem.h>
 
 class RobotContainer {
 private:
@@ -45,6 +46,7 @@ private:
     CoralSubsystem m_coralSubsystem;
     Climber m_climberSubsystem;
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
+    AlgaeSubsystem m_algaeSubsystem;
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
