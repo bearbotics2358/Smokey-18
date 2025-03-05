@@ -14,6 +14,7 @@
 #include "subsystems/CoralSubsystem.h"
 #include "subsystems/Climber.h"
 #include "subsystems/ScoringSuperstructure.h"
+#include "subsystems/LED.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
 
@@ -40,6 +41,7 @@ private:
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
+    LED m_LED;
     CameraSubsystem m_cameraSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
