@@ -4,6 +4,8 @@
 
 #include "RobotContainer.h"
 
+#include <subsystems/LED.h>
+#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -15,6 +17,8 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
+
+    m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
 }
