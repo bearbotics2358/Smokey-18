@@ -15,7 +15,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     m_elevatorMotor1.GetConfigurator().Apply(motorConfigs);
 
     // Motor 2 has the same configuration as Motor 1 except that it runs in the opposite direction
-    motorConfigs.WithInverted(true);
+    motorConfigs.WithInverted(false);
     m_elevatorMotor2.GetConfigurator().Apply(motorConfigs);
     
     m_elevatorMotor1.SetPosition(0_tr);
