@@ -28,10 +28,9 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
     ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
 
-    // TODO: change ids later
-    const int kAlgaeMotorLeft = 0;
-    const int kAlgaeMotorRight = 1;
-    const int kAlgaePivot = 2;
+    const int kAlgaeMotorLeft = 49;
+    const int kAlgaeMotorRight = 50;
+    const int kAlgaePivot = 35;
 
     rev::spark::SparkMax m_algaeLeftMotor;
     rev::spark::SparkMax m_algaeRightMotor;
@@ -49,7 +48,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     };
 
     frc::ProfiledPIDController<units::turns> m_algaePID {
-        kP, kI, kD, m_constraints 
+        kP, kI, kD, m_constraints
     };
 
     units::turn_t m_setpointAngle = 0.0_tr;
