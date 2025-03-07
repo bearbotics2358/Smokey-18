@@ -43,6 +43,32 @@ double CameraSubsystem::getYDistance() {
     }
 }
 
+// meters 
+double CameraSubsystem::getDistance() {
+    CameraSubsystem::updateData();
+    if (result.HasTargets()) {
+        return sqrt(pow(transformation.Y().value(), 2) + pow(transformation.X().value(), 2));
+    } else {
+        return 0;
+    }
+}
+
+//meters
+double CameraSubsystem::getHorizontalTransformation() {
+    CameraSubsystem::updateData();
+    double distance = CameraSubsystem::getDistance();
+    double zAngle = fabs(getZRotation() - 180) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
+    return cos(zAngle) * distance;
+}
+
+//meters
+double CameraSubsystem::getVerticalTransformation() {
+    CameraSubsystem::updateData();
+    double distance = CameraSubsystem::getDistance();
+    double zAngle = fabs(getZRotation() - 180) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
+    return sin(zAngle) * distance;
+}
+
 void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
     // photon::PhotonPipelineResult result = limelightCamera.GetLatestResult();

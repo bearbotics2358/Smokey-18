@@ -16,7 +16,9 @@ class CameraSubsystem : public frc2::SubsystemBase {
 
   void updateData();
   bool visibleTargets();
-  double gethorizontalTransformation();
+  double getHorizontalTransformation();
+  double getVerticalTransformation();
+  double getDistance();
   double getZRotation();
   double getYDistance();
 
