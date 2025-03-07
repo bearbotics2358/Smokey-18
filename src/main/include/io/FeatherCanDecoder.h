@@ -3,6 +3,7 @@
 #include "subsystems/ICoralIntakeDataProvider.h"
 #include "subsystems/IAlgaeDataProvider.h"
 #include "subsystems/IClimberDataProvider.h"
+#include "subsystems/IAlgaeDataProvider.h"
 
 #include <frc/CAN.h>
 
