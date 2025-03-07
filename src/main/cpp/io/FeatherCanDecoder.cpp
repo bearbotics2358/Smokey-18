@@ -5,13 +5,16 @@
 FeatherCanDecoder::FeatherCanDecoder():
 m_coralCAN(kCoralDeviceID),
 m_climberCAN(kClimberDeviceID),
-m_bellyPanCAN(kBellyPanDeviceID)
+m_bellyPanCAN(kBellyPanDeviceID),
+m_algaeCAN(kAlgaeDeviceID)
 {
     m_coralIntakeAngleDegrees = 0.0;
     m_coralCollected = false;
 
+    m_algaeAngleDegrees = 0.0;
+    m_algaeCollected = false;
+
     m_climberAngleDegrees = 0.0;
-    // m_climberCollected = false;
 }
 
 void FeatherCanDecoder::Update() {
@@ -20,6 +23,8 @@ void FeatherCanDecoder::Update() {
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", GetCoralIntakeAngleDegrees());
     frc::SmartDashboard::PutBoolean("Coral Collected?", m_coralCollected);
+
+    UnpackAlgaeCANData();
 
     UnpackClimberCANData();
 
@@ -34,6 +39,7 @@ void FeatherCanDecoder::Update() {
     frc::SmartDashboard::PutBoolean("BellyPan Left Proximity?", m_leftBellyPanProximity);
 }
 
+// **** ICoralIntakeDataProvider interface functions **** //
 float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
     return m_coralIntakeAngleDegrees - kCoralAngleOffsetDegrees;
 }
@@ -46,7 +52,20 @@ bool FeatherCanDecoder::IsCoralCollected() {
     return m_coralCollected;
 }
 
+// **** IAlgaeDataProvider interface functions **** //
+float FeatherCanDecoder::GetAlgaeAngleDegrees() {
+    return m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees;
+}
 
+float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
+    return m_algaeAngleDegrees;
+}
+
+bool FeatherCanDecoder::IsAlgaeCollected() {
+    return m_algaeCollected;
+}
+
+// **** IClimberDataProvider interface functions **** //
 float FeatherCanDecoder::GetClimberAngleDegrees() {
     return m_climberAngleDegrees - kClimberAngleOffsetDegrees;
 }
@@ -63,6 +82,7 @@ bool FeatherCanDecoder::IsRightCageHooked() {
     return m_rightProximity;
 }
 
+// **** IBellyPanDataProvider interface functions **** //
 bool FeatherCanDecoder::IsLeftProximity() {
     return m_leftBellyPanProximity;
 }
@@ -83,6 +103,21 @@ void FeatherCanDecoder::UnpackCoralCANData() {
         int proximity = (data.data[2] << 8) | data.data[3];
         frc::SmartDashboard::PutNumber("Coral Collected Value", proximity);
         m_coralCollected = proximity > kCoralProximityThreshold;
+    }
+}
+
+void FeatherCanDecoder::UnpackAlgaeCANData() {
+    frc::CANData data;
+
+    bool isAlgaeDataValid = m_algaeCAN.ReadPacketNew(kAlgaeAPIId, &data);
+
+    if (isAlgaeDataValid) {
+        int angleX10 = (data.data[0] << 8) | data.data[1];
+        m_algaeAngleDegrees = -angleX10 / 10.0;
+
+        int proximity = (data.data[2] << 8) | data.data[3];
+        frc::SmartDashboard::PutNumber("Algae Collected Value", proximity);
+        m_algaeCollected = proximity > kAlgaeProximityThreshold;
     }
 }
 
