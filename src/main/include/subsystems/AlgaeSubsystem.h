@@ -14,6 +14,10 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
+constexpr int kAlgaeMotorLeft = 49;
+constexpr int kAlgaeMotorRight = 50;
+constexpr int kAlgaePivot = 35;
+
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);
@@ -28,10 +32,6 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     void GoToAngle();
 
     ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
-
-    const int kAlgaeMotorLeft = 49;
-    const int kAlgaeMotorRight = 50;
-    const int kAlgaePivot = 35;
 
     rev::spark::SparkMax m_algaeLeftMotor;
     rev::spark::SparkMax m_algaeRightMotor;
