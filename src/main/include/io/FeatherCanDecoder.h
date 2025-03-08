@@ -5,7 +5,6 @@
 
 #include <frc/CAN.h>
 
-
 class FeatherCanDecoder: public ICoralIntakeDataProvider, public IClimberDataProvider, public IBellyPanDataProvider {
 public:
     const int kCoralDeviceID = 1;
