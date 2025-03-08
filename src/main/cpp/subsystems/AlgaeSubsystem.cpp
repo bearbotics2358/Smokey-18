@@ -6,19 +6,19 @@
 #include <frc2/command/Commands.h>
 
 AlgaeSubsystem::AlgaeSubsystem(IAlgaeDataProvider* dataProvider):
+m_algaePivotMotor(kAlgaePivot),
 m_algaeLeftMotor{kAlgaeMotorLeft, rev::spark::SparkLowLevel::MotorType::kBrushless},
 m_algaeRightMotor{kAlgaeMotorRight, rev::spark::SparkLowLevel::MotorType::kBrushless},
-m_algaePivotMotor(kAlgaePivot), 
 m_algaeDataProvider(dataProvider)
 {
-    rev::spark::SparkBaseConfig followerConfig;
-    followerConfig.Follow(kAlgaeMotorRight, true);
+    rev::spark::SparkBaseConfig config;
+    config.Follow(kAlgaeMotorRight, true);
+    config.Inverted(true);
 
-    // TODO: Configure these variables later.
-    rev::spark::SparkBase::ResetMode resetMode;
-    rev::spark::SparkBase::PersistMode persistMode;
-
-    m_algaeLeftMotor.Configure(followerConfig, resetMode, persistMode);
+    m_algaeLeftMotor.Configure(config,
+        rev::spark::SparkBase::ResetMode::kResetSafeParameters,
+        rev::spark::SparkBase::PersistMode::kPersistParameters
+    );
 }
 
 void AlgaeSubsystem::Periodic() {
@@ -28,7 +28,7 @@ void AlgaeSubsystem::Periodic() {
 
 frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
     return frc2::cmd::RunOnce([this, speed] {
-        m_algaeLeftMotor.Set(speed);
+        m_algaeRightMotor.Set(speed);
     });
 }
 
