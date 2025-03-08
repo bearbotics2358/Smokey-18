@@ -43,17 +43,6 @@ void RobotContainer::ConfigureBindings() {
             ); // Drive counterclockwise with negative X (left)
     }));
 
-    // @todo Only adding this for testing
-    m_speedMultiplier = 0.2;
-
-    // m_joystick.LeftBumper()
-    //     .OnTrue(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.2;})
-    //     )
-    //     .OnFalse(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
-    //     );
-
     m_gamepad.Button(12).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
         //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK); 
@@ -82,7 +71,9 @@ void RobotContainer::ConfigureBindings() {
         m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); 
     })); //button below 8 on universal Driver Station for stow position
 
-    (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
+    (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {
+        frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());
+    }));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
