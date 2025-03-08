@@ -13,12 +13,13 @@
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     m_featherCanDecoder(featherCanDecoder),
     m_coralSubsystem(m_featherCanDecoder),
+    m_algaeSubsystem(m_featherCanDecoder), 
     m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
-    m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+    //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
 }
@@ -46,22 +47,22 @@ void RobotContainer::ConfigureBindings() {
 
     m_gamepad.Button(12).OnChange(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK); 
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK); 
         }));
     m_gamepad.Button(11).OnChange(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
         }));
     m_gamepad.Button(10).OnChange(frc2::cmd::RunOnce([this] { 
         m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); 
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
         }));
     m_gamepad.Button(9).OnChange(frc2::cmd::RunOnce([this] {
-         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
         }));
     m_gamepad.Button(8).OnChange(frc2::cmd::RunOnce([this] { 
         m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); 
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
         }));
     m_gamepad.Button(17).OnChange(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
 
@@ -73,6 +74,10 @@ void RobotContainer::ConfigureBindings() {
     // (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
     // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+
+    m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));
+    m_joystick.Y().OnTrue(m_algaeSubsystem.SetSpeed(-0.4));
+    (m_joystick.X() && m_joystick.Y()).OnTrue(m_algaeSubsystem.SetSpeed(0.0));
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 

@@ -5,6 +5,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <rev/SparkMax.h>
+#include "subsystems/IAlgaeDataProvider.h"
 
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/controller/ElevatorFeedforward.h>
@@ -13,34 +14,32 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
+constexpr int kAlgaeMotorLeft = 49;
+constexpr int kAlgaeMotorRight = 50;
+constexpr int kAlgaePivot = 35;
+
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
-  AlgaeSubsystem();
+  AlgaeSubsystem(IAlgaeDataProvider* dataProvider);
   void Periodic();
 
   frc2::CommandPtr SetSpeed(double speed);
   frc2::CommandPtr SetGoalAngle(double angle);
 
-  units::turn_t CurrentAngle();
+  units::degree_t CurrentAngle();
 
  private:
     void GoToAngle();
 
     ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
 
-    // TODO: change ids later
-    const int kAlgaeMotorLeft = 0;
-    const int kAlgaeMotorRight = 1;
-    const int kAlgaePivot = 2;
-
     rev::spark::SparkMax m_algaeLeftMotor;
     rev::spark::SparkMax m_algaeRightMotor;
 
-
     // TODO: tune these values
-    static constexpr units::turns_per_second_t kMaxVelocity = 0.25_tps;
+    static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
-    static constexpr double kP = 1.0;
+    static constexpr double kP = 10;
     static constexpr double kI = 1.0;
     static constexpr double kD = 0.0;
 
@@ -52,7 +51,9 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
         kP, kI, kD, m_constraints 
     };
 
-    units::turn_t m_setpointAngle = 0.0_tr;
+    units::degree_t m_setpointAngle = 90.0_deg;
 
     static constexpr double TOLERANCE = 1.0;
+
+    IAlgaeDataProvider* m_algaeDataProvider;
 };
