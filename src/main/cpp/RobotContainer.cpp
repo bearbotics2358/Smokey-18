@@ -154,6 +154,14 @@ void RobotContainer::ConfigureBindings() {
             })
         )
     );
+
+    m_elevatorSubsystem.IsHeightAboveThreshold
+        .OnTrue(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
+        )
+        .OnFalse(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+        );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
