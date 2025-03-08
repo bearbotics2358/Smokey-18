@@ -22,6 +22,8 @@ m_climberSubsystem(m_featherCanDecoder)
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
+
+    m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
 }
 
 void RobotContainer::ConfigureBindings() {
