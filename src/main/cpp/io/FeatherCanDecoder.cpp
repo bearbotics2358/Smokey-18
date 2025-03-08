@@ -19,8 +19,6 @@ m_algaeCAN(kAlgaeDeviceID)
 
 void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
-    UnpackAlgaeCANData();
-
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", GetCoralIntakeAngleDegrees());
     frc::SmartDashboard::PutBoolean("Coral Collected?", m_coralCollected);
@@ -28,14 +26,12 @@ void FeatherCanDecoder::Update() {
     UnpackAlgaeCANData();
 
     UnpackClimberCANData();
-
     frc::SmartDashboard::PutNumber("Raw Angle of Climber FeatherCan", GetClimberRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Climber FeatherCan", GetClimberAngleDegrees());
     frc::SmartDashboard::PutBoolean("Climber Collected?", m_rightProximity);
     frc::SmartDashboard::PutBoolean("Climber Collected?", m_leftProximity);
 
     UnpackBellyPanCANData();
-
     frc::SmartDashboard::PutBoolean("BellyPan Right Proximity?", m_rightBellyPanProximity);
     frc::SmartDashboard::PutBoolean("BellyPan Left Proximity?", m_leftBellyPanProximity);
 }
@@ -55,7 +51,7 @@ bool FeatherCanDecoder::IsCoralCollected() {
 
 // **** IAlgaeDataProvider interface functions **** //
 float FeatherCanDecoder::GetAlgaeAngleDegrees() {
-    return -1 * (m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
+    return -(m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
 }
 
 float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
