@@ -108,10 +108,12 @@ void FeatherCanDecoder::UnpackAlgaeCANData() {
 
     bool isAlgaeDataValid = m_algaeCAN.ReadPacketNew(kAlgaeAPIId, &data);
     frc::SmartDashboard::PutBoolean("is algae data valid", isAlgaeDataValid);
+    frc::SmartDashboard::PutBoolean("is algae data valid", isAlgaeDataValid);
 
     if (isAlgaeDataValid) {
         int angleX10 = (data.data[0] << 8) | data.data[1];
         m_algaeAngleDegrees = -angleX10 / 10.0;
+        frc::SmartDashboard::PutNumber("Algae Raw Angle", m_algaeAngleDegrees);
         frc::SmartDashboard::PutNumber("Algae Raw Angle", m_algaeAngleDegrees);
 
         int proximity = (data.data[2] << 8) | data.data[3];

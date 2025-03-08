@@ -3,8 +3,11 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+
 #include <ctre/phoenix6/TalonFX.hpp>
+
 #include <rev/SparkMax.h>
+
 #include "subsystems/IAlgaeDataProvider.h"
 
 #include <frc/controller/ProfiledPIDController.h>
@@ -27,7 +30,6 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr SetGoalAngle(double angle);
 
   units::degree_t CurrentAngle();
-
  private:
     void GoToAngle();
 
