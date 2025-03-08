@@ -2,13 +2,19 @@
 
 #include <frc2/command/Commands.h>
 #include <frc2/command/SubsystemBase.h>
+
 #include <ctre/phoenix6/TalonFX.hpp>
+
 #include <frc/DigitalInput.h>
+#include <frc/Encoder.h>
+
 #include <units/length.h>
+
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/controller/ElevatorFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <frc/Encoder.h>
+
+#include <frc2/command/button/Trigger.h>
 
 constexpr int kElevatorMotor1Id = 36;
 constexpr int kElevatorMotor2Id = 37;
@@ -23,6 +29,9 @@ constexpr units::inch_t kElevatorL3Position = 28_in;
 constexpr units::inch_t kElevatorL4Position = 57_in;
 
 constexpr float kSlowElevator = 0.6;
+
+// TODO: Tune later
+constexpr units::inch_t kHeightThreshold = 20_in;
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
@@ -43,7 +52,12 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         void SetMotorVoltage();
 
+        frc2::Trigger IsHeightAboveThreshold = frc2::Trigger([this] {
+            return GetElevatorHeightAboveThreshold();
+        });
     private:
+        bool GetElevatorHeightAboveThreshold();
+
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
         frc::DigitalInput m_elevatorLimitSwitch;
