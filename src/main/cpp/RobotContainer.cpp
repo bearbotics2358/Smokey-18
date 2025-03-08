@@ -32,9 +32,15 @@ void RobotContainer::ConfigureBindings() {
     // and Y is defined as to the left according to WPILib convention.
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
+        return drive.WithVelocityX(
+                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier * m_elevatorHeightSpeedMultiplier
+            ) // Drive forward with negative Y (forward)
+            .WithVelocityY(
+                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier * m_elevatorHeightSpeedMultiplier
+            ) // Drive left with negative X (left)
+            .WithRotationalRate(
+                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier * m_elevatorHeightSpeedMultiplier
+            ); // Drive counterclockwise with negative X (left)
     }));
 
     // @todo Only adding this for testing
@@ -157,10 +163,10 @@ void RobotContainer::ConfigureBindings() {
 
     m_elevatorSubsystem.IsHeightAboveThreshold
         .OnTrue(
-            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
+            frc2::cmd::RunOnce([this] {m_elevatorHeightSpeedMultiplier = 0.1;})
         )
         .OnFalse(
-            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+            frc2::cmd::RunOnce([this] {m_elevatorHeightSpeedMultiplier = 1.0;})
         );
 }
 
