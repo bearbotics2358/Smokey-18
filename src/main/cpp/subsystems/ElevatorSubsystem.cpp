@@ -17,7 +17,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     // Motor 2 has the same configuration as Motor 1 except that it runs in the opposite direction
     motorConfigs.WithInverted(false);
     m_elevatorMotor2.GetConfigurator().Apply(motorConfigs);
-    
+
     m_elevatorMotor1.SetPosition(0_tr);
     m_elevatorMotor2.SetPosition(0_tr);
     /*
@@ -25,7 +25,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The CTRE docs state that this API can ensure that set operations are completed before continuing control flow.
      * This method reports an error to the DriverStation.
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
-     */ 
+     */
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
     m_elevatorMotor2.GetPosition().WaitForUpdate(20_ms);
 };
@@ -41,7 +41,7 @@ void ElevatorSubsystem::Periodic() {
         m_elevatorMotor1.SetPosition(0_tr, 13_ms);
     }
 
-    // SetMotorVoltage();
+    SetMotorVoltage();
 }
 
 /*
@@ -52,7 +52,7 @@ void ElevatorSubsystem::Periodic() {
  * Alternatively, use the search widget to find `Elevator Motor Position`.
  * Drag the Elevator widget onto the screen into a empty position. You should see a green highlight.
  * Right click on the widget -> `Show As` -> `Graph`.
- * To resize the graph, drag on the outlines of the widget. 
+ * To resize the graph, drag on the outlines of the widget.
  */
 void ElevatorSubsystem::PlotElevatorPosition() {
     ctre::phoenix6::StatusSignal<units::turn_t> position = m_elevatorMotor1.GetPosition();
