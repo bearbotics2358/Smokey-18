@@ -33,13 +33,13 @@ void RobotContainer::ConfigureBindings() {
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
         return drive.WithVelocityX(
-                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier * m_elevatorHeightSpeedMultiplier
+                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier
             ) // Drive forward with negative Y (forward)
             .WithVelocityY(
-                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier * m_elevatorHeightSpeedMultiplier
+                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier
             ) // Drive left with negative X (left)
             .WithRotationalRate(
-                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier * m_elevatorHeightSpeedMultiplier
+                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier
             ); // Drive counterclockwise with negative X (left)
     }));
 
@@ -80,7 +80,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { 
         m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); 
-    })); //button below 8 on universal driverstation for stow position
+    })); //button below 8 on universal Driver Station for stow position
 
     (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
@@ -161,12 +161,12 @@ void RobotContainer::ConfigureBindings() {
         )
     );
 
-    m_elevatorSubsystem.IsHeightAboveThreshold
+    (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
         .OnTrue(
-            frc2::cmd::RunOnce([this] {m_elevatorHeightSpeedMultiplier = 0.1;})
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
         )
         .OnFalse(
-            frc2::cmd::RunOnce([this] {m_elevatorHeightSpeedMultiplier = 1.0;})
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
 }
 
