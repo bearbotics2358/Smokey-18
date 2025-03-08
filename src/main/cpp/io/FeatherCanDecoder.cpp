@@ -19,6 +19,7 @@ m_algaeCAN(kAlgaeDeviceID)
 
 void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
+    UnpackAlgaeCANData();
 
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", GetCoralIntakeAngleDegrees());
@@ -54,7 +55,7 @@ bool FeatherCanDecoder::IsCoralCollected() {
 
 // **** IAlgaeDataProvider interface functions **** //
 float FeatherCanDecoder::GetAlgaeAngleDegrees() {
-    return m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees;
+    return -1 * (m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
 }
 
 float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
@@ -110,10 +111,12 @@ void FeatherCanDecoder::UnpackAlgaeCANData() {
     frc::CANData data;
 
     bool isAlgaeDataValid = m_algaeCAN.ReadPacketNew(kAlgaeAPIId, &data);
+    frc::SmartDashboard::PutBoolean("is algae data valid", isAlgaeDataValid);
 
     if (isAlgaeDataValid) {
         int angleX10 = (data.data[0] << 8) | data.data[1];
         m_algaeAngleDegrees = -angleX10 / 10.0;
+        frc::SmartDashboard::PutNumber("Algae Raw Angle", m_algaeAngleDegrees);
 
         int proximity = (data.data[2] << 8) | data.data[3];
         frc::SmartDashboard::PutNumber("Algae Collected Value", proximity);

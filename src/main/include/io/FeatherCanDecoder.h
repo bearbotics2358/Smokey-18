@@ -27,10 +27,10 @@ public:
     const int kBellyPanProximityThreshold = 1500;//todo:add the threshold here
 
     // All algae values are copied over from the coral values: modify algae values accordingly
-    const int kAlgaeDeviceID = 1;
-    const int kAlgaeAPIId = 1;
+    const int kAlgaeDeviceID = 2;
+    const int kAlgaeAPIId = 2;
     const int kAlgaeProximityThreshold = 1500;
-    const double kAlgaeAngleOffsetDegrees = -262.6;
+    const double kAlgaeAngleOffsetDegrees = -75.9;
 
     FeatherCanDecoder();
 
