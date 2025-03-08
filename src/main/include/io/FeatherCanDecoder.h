@@ -13,11 +13,11 @@ public:
     const int kCoralProximityThreshold = 1500;
     const double kCoralAngleOffsetDegrees = -262.6;
 
-
     const int kClimberDeviceID = 3;
     const int kClimberAPIId = 3;
     // const int kClimberProximityThreshold = 1500;
     const double kClimberAngleOffsetDegrees = 0;
+    const int kClimberProximityThreshold = 0;
 
     FeatherCanDecoder();
 
@@ -30,7 +30,7 @@ public:
 
     float GetClimberAngleDegrees() override;
     float GetClimberRawAngleDegrees() override;
-    // bool IsClimberCollected() override;
+    bool IsCageHooked() override;
 
 private:
     float m_coralIntakeAngleDegrees;

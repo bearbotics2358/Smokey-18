@@ -9,5 +9,5 @@ public:
     virtual float GetClimberRawAngleDegrees() = 0;
 
     // Return a simple boolean to indicate whether a piece of climber has collected the cage
-    // virtual bool IsClimberCollected() = 0;
+    virtual bool IsCageHooked() = 0;
 };
