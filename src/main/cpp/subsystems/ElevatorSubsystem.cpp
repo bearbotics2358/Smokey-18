@@ -41,7 +41,7 @@ void ElevatorSubsystem::Periodic() {
         m_elevatorMotor1.SetPosition(0_tr, 13_ms);
     }
 
-    SetMotorVoltage();
+    // SetMotorVoltage();
 }
 
 /*
