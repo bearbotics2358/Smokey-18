@@ -62,7 +62,7 @@ double CameraSubsystem::getHorizontalTransformation() {
 }
 
 //meters
-double CameraSubsystem::getVerticalTransformation() {
+double CameraSubsystem::getForwardTransformation() {
     CameraSubsystem::updateData();
     double distance = CameraSubsystem::getDistance();
     double zAngle = fabs(getZRotation() - 180) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
