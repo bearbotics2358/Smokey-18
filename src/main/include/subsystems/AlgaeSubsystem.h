@@ -37,9 +37,9 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     rev::spark::SparkMax m_algaeRightMotor;
 
     // TODO: tune these values
-    static constexpr units::turns_per_second_t kMaxVelocity = 0.25_tps;
+    static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
-    static constexpr double kP = 1.0;
+    static constexpr double kP = 10;
     static constexpr double kI = 1.0;
     static constexpr double kD = 0.0;
 
@@ -51,7 +51,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
         kP, kI, kD, m_constraints 
     };
 
-    units::degree_t m_setpointAngle = 0.0_tr;
+    units::degree_t m_setpointAngle = 90.0_deg;
 
     static constexpr double TOLERANCE = 1.0;
 
