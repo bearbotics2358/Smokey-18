@@ -2,13 +2,18 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Commands.h>
+
 #include <ctre/phoenix6/TalonFX.hpp>
+
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/acceleration.h>
 #include <units/angle.h>
+
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/trajectory/TrapezoidProfile.h>
+
+#include <subsystems/IClimberDataProvider.h>
 
 // @todo All constants here are TEMPORARY - change them as needed
 constexpr int kClimberMotor1Id = 50;
@@ -23,18 +28,19 @@ const double kClimberGearRatio = 1.0;
 
 class Climber : public frc2::SubsystemBase {
 public:
-    Climber();
+    Climber(IClimberDataProvider* dataProvider);
     void Periodic() override;
 
-    frc2::CommandPtr Climb();
-    frc2::CommandPtr CancelClimb();
-    frc2::CommandPtr Stow();
-    void SetMotorVoltage();
-    units::degree_t CurrentAngle();
+    frc2::CommandPtr GoToAngle(units::degree_t desiredAngle);
+    double CurrentAngle();
 
-    frc2::CommandPtr StopClimbMotor();
+    frc2::CommandPtr StopClimber();
 
 private:
+    void SetMotorVoltage();
+
+    IClimberDataProvider* m_climberDataProvider;
+
     ctre::phoenix6::hardware::TalonFX m_climberMotor;
 
     static constexpr units::turns_per_second_t kMaxVelocity = 0.25_tps;
@@ -44,9 +50,10 @@ private:
     static constexpr double kD = 0.0;
 
     frc::TrapezoidProfile<units::turns>::Constraints m_constraints {
-        kMaxVelocity, kMaxAcceleration};
+        kMaxVelocity, kMaxAcceleration
+    };
 
-    frc::ProfiledPIDController<units::turns> m_climberPID{
+    frc::ProfiledPIDController<units::turns> m_climberPID {
         kP, kI, kD, m_constraints
     };
 

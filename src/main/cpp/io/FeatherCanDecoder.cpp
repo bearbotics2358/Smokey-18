@@ -2,10 +2,15 @@
 
 #include "frc/smartdashboard/SmartDashboard.h"
 
-FeatherCanDecoder::FeatherCanDecoder():m_coralCAN(kCoralDeviceID)
+FeatherCanDecoder::FeatherCanDecoder():
+m_coralCAN(kCoralDeviceID),
+m_climberCAN(kClimberDeviceID)
 {
     m_coralIntakeAngleDegrees = 0.0;
     m_coralCollected = false;
+
+    m_climberAngleDegrees = 0.0;
+    // m_climberCollected = false;
 }
 
 void FeatherCanDecoder::Update() {
@@ -14,6 +19,12 @@ void FeatherCanDecoder::Update() {
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", GetCoralIntakeAngleDegrees());
     frc::SmartDashboard::PutBoolean("Coral Collected?", m_coralCollected);
+
+    UnpackClimberCANData();
+
+    frc::SmartDashboard::PutNumber("Raw Angle of Climber FeatherCan", GetClimberRawAngleDegrees());
+    frc::SmartDashboard::PutNumber("Angle of Climber FeatherCan", GetClimberAngleDegrees());
+    frc::SmartDashboard::PutBoolean("Climber Collected?", m_climberCollected);
 }
 
 float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
@@ -28,6 +39,19 @@ bool FeatherCanDecoder::IsCoralCollected() {
     return m_coralCollected;
 }
 
+
+float FeatherCanDecoder::GetClimberAngleDegrees() {
+    return m_climberAngleDegrees - kClimberAngleOffsetDegrees;
+}
+
+float FeatherCanDecoder::GetClimberRawAngleDegrees() {
+    return m_climberAngleDegrees;
+}
+
+// bool FeatherCanDecoder::IsClimberCollected() {
+//     return m_climberCollected;
+// }
+
 void FeatherCanDecoder::UnpackCoralCANData() {
     frc::CANData data;
 
@@ -40,5 +64,20 @@ void FeatherCanDecoder::UnpackCoralCANData() {
         int proximity = (data.data[2] << 8) | data.data[3];
         frc::SmartDashboard::PutNumber("Coral Collected Value", proximity);
         m_coralCollected = proximity > kCoralProximityThreshold;
+    }
+}
+
+void FeatherCanDecoder::UnpackClimberCANData() {
+    frc::CANData data;
+
+    bool isClimberDataValid = m_climberCAN.ReadPacketNew(kClimberAPIId, &data);
+
+    if (isClimberDataValid) {
+        int angleX10 = (data.data[0] << 8) | data.data[1];
+        m_climberAngleDegrees = -angleX10 / 10.0;
+
+        // int proximity = (data.data[2] << 8) | data.data[3];
+        // frc::SmartDashboard::PutNumber("Climber Collected Value", proximity);
+        //m_climberCollected = proximity > kClimberProximityThreshold;
     }
 }
