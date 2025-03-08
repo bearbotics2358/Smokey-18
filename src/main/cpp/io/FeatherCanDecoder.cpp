@@ -4,6 +4,7 @@
 
 FeatherCanDecoder::FeatherCanDecoder():
 m_coralCAN(kCoralDeviceID),
+m_algaeCAN(kAlgaeDeviceID),
 m_climberCAN(kClimberDeviceID),
 m_bellyPanCAN(kBellyPanDeviceID)
 {
@@ -12,10 +13,14 @@ m_bellyPanCAN(kBellyPanDeviceID)
 
     m_climberAngleDegrees = 0.0;
     // m_climberCollected = false;
+    m_algaeAngleDegrees = 0.0;
+    m_algaeCollected = false;
 }
 
 void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
+
+    UnpackAlgaeCANData();
 
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Coral FeatherCan", GetCoralIntakeAngleDegrees());
@@ -71,6 +76,18 @@ bool FeatherCanDecoder::IsRightProximity() {
     return m_rightBellyPanProximity;
 }
 
+float FeatherCanDecoder::GetAlgaeAngleDegrees() {
+    return -1 * (m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
+}
+
+float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
+    return m_algaeAngleDegrees;
+}
+
+bool FeatherCanDecoder::IsAlgaeCollected() {
+    return m_algaeCollected;
+}
+
 void FeatherCanDecoder::UnpackCoralCANData() {
     frc::CANData data;
 
@@ -119,5 +136,21 @@ void FeatherCanDecoder::UnpackBellyPanCANData() {
         int proximityleft = (data.data[2] << 8) | data.data[3]; 
         frc::SmartDashboard::PutNumber("Is the BellyPan in proximity?", proximityleft);
         m_leftBellyPanProximity = proximityleft > kBellyPanProximityThreshold;
+    }
+}
+void FeatherCanDecoder::UnpackAlgaeCANData() {
+    frc::CANData data;
+
+    bool isAlgaeDataValid = m_algaeCAN.ReadPacketNew(kAlgaeAPIId, &data);
+    frc::SmartDashboard::PutBoolean("is algae data valid", isAlgaeDataValid);
+
+    if (isAlgaeDataValid) {
+        int angleX10 = (data.data[0] << 8) | data.data[1];
+        m_algaeAngleDegrees = -angleX10 / 10.0;
+        frc::SmartDashboard::PutNumber("Algae Raw Angle", m_algaeAngleDegrees);
+
+        int proximity = (data.data[2] << 8) | data.data[3];
+        frc::SmartDashboard::PutNumber("Algae Collected Value", proximity);
+        m_algaeCollected = proximity > kAlgaeProximityThreshold;
     }
 }

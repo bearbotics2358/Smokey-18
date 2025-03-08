@@ -18,6 +18,7 @@
 #include "subsystems/LED.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include "subsystems/AlgaeSubsystem.h"
 
 class RobotContainer {
 private:
@@ -43,10 +44,12 @@ private:
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
-    LED m_LED;
+    //LED m_LED;
     CameraSubsystem m_cameraSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
+    AlgaeSubsystem m_algaeSubsystem;
+    
     Climber m_climberSubsystem;
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
 

@@ -13,13 +13,14 @@
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
 m_coralSubsystem(m_featherCanDecoder),
+    m_algaeSubsystem(m_featherCanDecoder), 
 m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem),
 m_climberSubsystem(m_featherCanDecoder)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
-    m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+    //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
 
@@ -31,21 +32,16 @@ void RobotContainer::ConfigureBindings() {
     // and Y is defined as to the left according to WPILib convention.
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
+        return drive.WithVelocityX(
+                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier
+            ) // Drive forward with negative Y (forward)
+            .WithVelocityY(
+                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier
+            ) // Drive left with negative X (left)
+            .WithRotationalRate(
+                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier
+            ); // Drive counterclockwise with negative X (left)
     }));
-
-    // @todo Only adding this for testing
-    m_speedMultiplier = 0.2;
-
-    // m_joystick.LeftBumper()
-    //     .OnTrue(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.2;})
-    //     )
-    //     .OnFalse(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
-    //     );
 
      m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
@@ -91,6 +87,10 @@ void RobotContainer::ConfigureBindings() {
     // (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
     // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+
+    m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));
+    m_joystick.Y().OnTrue(m_algaeSubsystem.SetSpeed(-0.4));
+    (m_joystick.X() && m_joystick.Y()).OnTrue(m_algaeSubsystem.SetSpeed(0.0));
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
@@ -157,6 +157,14 @@ void RobotContainer::ConfigureBindings() {
             })
         )
     );
+
+    (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
+        .OnTrue(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
+        )
+        .OnFalse(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+        );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

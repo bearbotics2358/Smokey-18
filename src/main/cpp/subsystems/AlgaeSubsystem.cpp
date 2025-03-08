@@ -5,28 +5,30 @@
 
 #include <frc2/command/Commands.h>
 
-AlgaeSubsystem::AlgaeSubsystem():
+AlgaeSubsystem::AlgaeSubsystem(IAlgaeDataProvider* dataProvider):
+m_algaePivotMotor(kAlgaePivot),
 m_algaeLeftMotor{kAlgaeMotorLeft, rev::spark::SparkLowLevel::MotorType::kBrushless},
 m_algaeRightMotor{kAlgaeMotorRight, rev::spark::SparkLowLevel::MotorType::kBrushless},
-m_algaePivotMotor(kAlgaePivot)
+m_algaeDataProvider(dataProvider)
 {
-    rev::spark::SparkBaseConfig followerConfig;
-    followerConfig.Follow(kAlgaeMotorRight, true);
+    rev::spark::SparkBaseConfig config;
+    config.Follow(kAlgaeMotorRight, true);
+    config.Inverted(true);
 
-    // TODO: Configure these variables later.
-    rev::spark::SparkBase::ResetMode resetMode;
-    rev::spark::SparkBase::PersistMode persistMode;
-
-    m_algaeLeftMotor.Configure(followerConfig, resetMode, persistMode);
+    m_algaeLeftMotor.Configure(config,
+        rev::spark::SparkBase::ResetMode::kResetSafeParameters,
+        rev::spark::SparkBase::PersistMode::kPersistParameters
+    );
 }
 
 void AlgaeSubsystem::Periodic() {
     GoToAngle();
+    frc::SmartDashboard::PutNumber("Algae Angle", CurrentAngle().value());
 }
 
 frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
     return frc2::cmd::RunOnce([this, speed] {
-        m_algaeLeftMotor.Set(speed);
+        m_algaeRightMotor.Set(speed);
     });
 }
 
@@ -36,8 +38,8 @@ frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(double angle) {
     });
 }
 
-units::turn_t AlgaeSubsystem::CurrentAngle() {
-    return m_algaePivotMotor.GetPosition().GetValue();
+units::degree_t AlgaeSubsystem::CurrentAngle() {
+    return units::degree_t(m_algaeDataProvider->GetAlgaeAngleDegrees());
 };
 
 void AlgaeSubsystem::GoToAngle() {
@@ -45,11 +47,10 @@ void AlgaeSubsystem::GoToAngle() {
     frc::SmartDashboard::PutNumber("Algae PID", value);
 
     units::volt_t goalVolts = units::volt_t(value);
-    frc::SmartDashboard::PutNumber("Algae PID with feedforward", goalVolts.value());
+    frc::SmartDashboard::PutNumber("Algae PID in Volts", goalVolts.value());
 
     double current_difference = fabs(m_setpointAngle.value() - CurrentAngle().value());
-    // TODO: Uncomment
-    // m_algaePivotMotor.SetVoltage(current_difference >= TOLERANCE  ? goalVolts : 0.0_V);
+    m_algaePivotMotor.SetVoltage(goalVolts); //current_difference >= TOLERANCE  ?
 
     frc::SmartDashboard::PutNumber("Algae diff", current_difference);
 }
