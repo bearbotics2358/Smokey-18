@@ -103,3 +103,7 @@ void ElevatorSubsystem::PrepareElevator(units::inch_t newPosition) {
 frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
     return GoToHeight(m_desiredElevatorPosition);
 }
+
+bool ElevatorSubsystem::GetElevatorHeightAboveThreshold() {
+    return CurrentHeight() >= kHeightThreshold;
+}

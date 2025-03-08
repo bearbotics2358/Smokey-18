@@ -29,21 +29,16 @@ void RobotContainer::ConfigureBindings() {
     // and Y is defined as to the left according to WPILib convention.
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
+        return drive.WithVelocityX(
+                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier
+            ) // Drive forward with negative Y (forward)
+            .WithVelocityY(
+                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier
+            ) // Drive left with negative X (left)
+            .WithRotationalRate(
+                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier
+            ); // Drive counterclockwise with negative X (left)
     }));
-
-    // @todo Only adding this for testing
-    m_speedMultiplier = 0.2;
-
-    // m_joystick.LeftBumper()
-    //     .OnTrue(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.2;})
-    //     )
-    //     .OnFalse(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
-    //     );
 
     m_gamepad.Button(12).OnChange(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
@@ -144,6 +139,14 @@ void RobotContainer::ConfigureBindings() {
             })
         )
     );
+
+    (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
+        .OnTrue(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
+        )
+        .OnFalse(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+        );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
