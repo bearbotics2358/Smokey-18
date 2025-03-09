@@ -84,6 +84,7 @@ frc2::CommandPtr CommandSwerveDrivetrain::GoToAutoStart(std::string autoName) {
     using namespace pathplanner;
     frc::Pose2d autoStartingPose = PathPlannerAuto(autoName).getStartingPose();
 
+    // Poses should apparently be in field centric, which autoStartingPose is in.
     std::vector<frc::Pose2d> poses {
         autoStartingPose
     };
