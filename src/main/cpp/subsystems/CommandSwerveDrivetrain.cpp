@@ -74,3 +74,12 @@ void CommandSwerveDrivetrain::StartSimThread()
     });
     m_simNotifier->StartPeriodic(kSimLoopPeriod);
 }
+
+void CommandSwerveDrivetrain::SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue value) {
+    ctre::phoenix6::configs::MotorOutputConfigs neutralModeConfigs;
+    neutralModeConfigs.WithNeutralMode(value);
+
+    for (auto& module : SwerveDrivetrain::GetModules()) {
+        module->GetDriveMotor().GetConfigurator().Apply(neutralModeConfigs);
+    }
+}

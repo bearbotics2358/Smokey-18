@@ -11,10 +11,11 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
-    m_featherCanDecoder(featherCanDecoder),
-    m_coralSubsystem(m_featherCanDecoder),
-    m_algaeSubsystem(m_featherCanDecoder), 
-    m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
+m_featherCanDecoder(featherCanDecoder),
+m_coralSubsystem(m_featherCanDecoder),
+m_algaeSubsystem(m_featherCanDecoder), 
+m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem),
+m_climberSubsystem(m_featherCanDecoder)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
@@ -22,6 +23,8 @@ RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
+
+    m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -40,26 +43,40 @@ void RobotContainer::ConfigureBindings() {
             ); // Drive counterclockwise with negative X (left)
     }));
 
+    m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {
+            m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
+        }),
+        m_climberSubsystem.Climb()
+    ));
+
     m_gamepad.Button(12).OnChange(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
         //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK); 
-        }));
+    }));
+
     m_gamepad.Button(11).OnChange(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
         //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
-        }));
+    }));
+    
     m_gamepad.Button(10).OnChange(frc2::cmd::RunOnce([this] { 
         m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); 
         //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
-        }));
+    }));
+
     m_gamepad.Button(9).OnChange(frc2::cmd::RunOnce([this] {
         //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
-        }));
+    }));
+
     m_gamepad.Button(8).OnChange(frc2::cmd::RunOnce([this] { 
         m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); 
         //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
-        }));
-    m_gamepad.Button(17).OnChange(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
+    }));
+
+    m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] { 
+        m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); 
+    }));
 
     (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
