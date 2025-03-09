@@ -14,11 +14,11 @@ class CameraSubsystem : public frc2::SubsystemBase {
  public:
   CameraSubsystem();
 
-  void updateData();
-  bool visibleTargets();
+  void UpdateData();
+  bool VisibleTargets();
   double gethorizontalTransformation();
-  double getZRotation();
-  double getYDistance();
+  double GetZRotation();
+  double GetYDistance();
 
   void Periodic() override;
 
@@ -33,5 +33,4 @@ class CameraSubsystem : public frc2::SubsystemBase {
   frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025Reefscape);
   #define CAMERA_NAME "limelight3"
   photon::PhotonCamera limelightCamera{CAMERA_NAME};
-  
 };

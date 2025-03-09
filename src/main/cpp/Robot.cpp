@@ -7,7 +7,7 @@
 #include <frc2/command/CommandScheduler.h>
 
 Robot::Robot():
-  m_container(&m_featherCanDecoder)
+m_container(&m_featherCanDecoder)
 {}
 
 void Robot::RobotPeriodic() {
@@ -26,6 +26,10 @@ void Robot::AutonomousInit() {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand) {
+    frc2::CommandScheduler::GetInstance().Schedule(
+      m_container.m_drivetrain.GoToAutoStart(m_autonomousCommand->GetName())
+    );
+
     m_autonomousCommand->Schedule();
   }
 }

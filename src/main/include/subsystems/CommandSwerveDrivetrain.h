@@ -254,6 +254,7 @@ public:
         return m_sysIdRoutineToApply->Dynamic(direction);
     }
 
+    frc2::CommandPtr GoToAutoStart(std::string autoName);
 private:
     void ConfigureAutoBuilder();
     void StartSimThread();

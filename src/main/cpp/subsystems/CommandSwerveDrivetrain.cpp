@@ -2,6 +2,8 @@
 #include <frc/RobotController.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace subsystems;
 
@@ -73,4 +75,45 @@ void CommandSwerveDrivetrain::StartSimThread()
         UpdateSimState(deltaTime, frc::RobotController::GetBatteryVoltage());
     });
     m_simNotifier->StartPeriodic(kSimLoopPeriod);
+}
+
+frc2::CommandPtr CommandSwerveDrivetrain::GoToAutoStart(std::string autoName) {
+    frc::SmartDashboard::PutString("Auto name", autoName);
+    
+    using namespace pathplanner;
+    frc::Pose2d autoStartingPose = PathPlannerAuto(autoName).getStartingPose();
+
+    std::vector<frc::Pose2d> poses {
+        autoStartingPose
+    };
+    std::vector<Waypoint> waypoints = PathPlannerPath::waypointsFromPoses(poses);
+
+    frc::SmartDashboard::PutNumber("Auto X", waypoints.at(0).anchor.X().value());
+    frc::SmartDashboard::PutNumber("Auto X", waypoints.at(0).anchor.Y().value());
+
+    // // TODO: implement the correct constraints
+    PathConstraints constraints(
+        1_mps, // Max Velocity
+        1_mps_sq, // Max Acceleration
+        1_rad_per_s, // Max Angular Velocity
+        1_rad_per_s_sq, // Max Angular Acceleration
+        12_V, // OPTIONAL PARAMETER: Nominal Voltage
+        false // OPTIONAL PARAMETER: should the constraints be unlimited
+    );
+
+    std::shared_ptr<PathPlannerPath> path = std::make_shared<PathPlannerPath>(
+        waypoints,
+        constraints,
+        std::nullopt, // To indicate that we're generating a path on the play
+        GoalEndState(0.0_mps, frc::Rotation2d(0_deg)) // TODO: implement the correct GoalEndState
+    );
+
+    // /* This following line of code is for preventing the path from being flipped if the coordinates 
+    //  * are already correct; I believe that the path should be flipped based on whether you are in the red alliance
+    //  * or not.
+    //  * TODO: Is this correct?
+    //  */
+    path->preventFlipping = true;
+
+    return AutoBuilder::followPath(path);
 }

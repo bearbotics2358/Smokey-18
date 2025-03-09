@@ -6,7 +6,7 @@ CameraSubsystem::CameraSubsystem() {
 }
 
 //updates local variables related to the limelight result
-void CameraSubsystem::updateData() {
+void CameraSubsystem::UpdateData() {
     result = limelightCamera.GetLatestResult();
     if (result.HasTargets()) {
         bestTarget = result.GetBestTarget();
@@ -18,14 +18,14 @@ void CameraSubsystem::updateData() {
 }
 
 //Returns true if targets are visible to limelight. Otherwise returns false
-bool CameraSubsystem::visibleTargets() {
-    CameraSubsystem::updateData();
+bool CameraSubsystem::VisibleTargets() {
+    UpdateData();
     return result.HasTargets();
 }
 
 //returns the Z rotation needed to get to the best target as a double
-double CameraSubsystem::getZRotation() {
-    CameraSubsystem::updateData();
+double CameraSubsystem::GetZRotation() {
+    UpdateData();
     if (result.HasTargets()) {
         return transformation.Rotation().Z().value();
     } else {
@@ -34,8 +34,8 @@ double CameraSubsystem::getZRotation() {
 }
 
 //returns the Y translation needed to get to the best target as a double
-double CameraSubsystem::getYDistance() {
-    CameraSubsystem::updateData();
+double CameraSubsystem::GetYDistance() {
+    UpdateData();
     if (result.HasTargets()) {
         return transformation.Y().value();
     } else {
