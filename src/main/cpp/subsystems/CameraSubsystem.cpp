@@ -27,7 +27,7 @@ bool CameraSubsystem::visibleTargets() {
 double CameraSubsystem::getZRotation() {
     CameraSubsystem::updateData();
     if (result.HasTargets()) {
-        return fabs((transformation.Rotation().Z().value()) - M_PI) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
+        return (-fabs((transformation.Rotation().Z().value())) + M_PI) * (getZRotation()/fabs(getZRotation()));
     } else {
         return 0;
     }
