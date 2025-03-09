@@ -9,8 +9,8 @@
 
 
 class FeatherCanDecoder:
-public ICoralIntakeDataProvider, 
-public IClimberDataProvider, 
+public ICoralIntakeDataProvider,
+public IClimberDataProvider,
 public IBellyPanDataProvider,
 public IAlgaeDataProvider
 {
@@ -25,11 +25,11 @@ public:
     const int kAlgaeDeviceID = 2;
     const int kAlgaeAPIId = 2;
     const int kAlgaeProximityThreshold = 1500;
-    const double kAlgaeAngleOffsetDegrees = -75.9;
+    const double kAlgaeAngleOffsetDegrees = 47.5;
 
     const int kClimberDeviceID = 3;
     const int kClimberAPIId = 3;
-    const double kClimberAngleOffsetDegrees = 0;
+    const double kClimberAngleOffsetDegrees = -374.4;
     const int kClimberProximityThreshold = 1500;//todo:add the threshold here
 
     const int kBellyPanDeviceID = 4;

@@ -24,6 +24,8 @@ void FeatherCanDecoder::Update() {
     frc::SmartDashboard::PutBoolean("Coral Collected?", m_coralCollected);
 
     UnpackAlgaeCANData();
+    frc::SmartDashboard::PutNumber("Algae Raw Angle", GetAlgaeRawAngleDegrees());
+    frc::SmartDashboard::PutNumber("Algae Angle", GetAlgaeAngleDegrees());
 
     UnpackClimberCANData();
     frc::SmartDashboard::PutNumber("Raw Angle of Climber FeatherCan", GetClimberRawAngleDegrees());
@@ -49,7 +51,7 @@ bool FeatherCanDecoder::IsCoralCollected() {
 }
 
 float FeatherCanDecoder::GetAlgaeAngleDegrees() {
-    return -1 * (m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
+    return -(m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
 }
 
 float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
@@ -146,7 +148,7 @@ void FeatherCanDecoder::UnpackBellyPanCANData() {
         frc::SmartDashboard::PutNumber("Is the BellyPan in proximity?", proximityright);
         m_rightBellyPanProximity = proximityright > kBellyPanProximityThreshold;
 
-        int proximityleft = (data.data[2] << 8) | data.data[3]; 
+        int proximityleft = (data.data[2] << 8) | data.data[3];
         frc::SmartDashboard::PutNumber("Is the BellyPan in proximity?", proximityleft);
         m_leftBellyPanProximity = proximityleft > kBellyPanProximityThreshold;
     }
