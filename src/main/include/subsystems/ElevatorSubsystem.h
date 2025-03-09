@@ -2,13 +2,19 @@
 
 #include <frc2/command/Commands.h>
 #include <frc2/command/SubsystemBase.h>
+
 #include <ctre/phoenix6/TalonFX.hpp>
+
 #include <frc/DigitalInput.h>
+#include <frc/Encoder.h>
+
 #include <units/length.h>
+
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/controller/ElevatorFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <frc/Encoder.h>
+
+#include <frc2/command/button/Trigger.h>
 
 constexpr int kElevatorMotor1Id = 36;
 constexpr int kElevatorMotor2Id = 37;
@@ -24,6 +30,9 @@ constexpr units::inch_t kElevatorL4Position = 57_in;
 
 constexpr float kSlowElevator = 0.6;
 
+// TODO: Tune later
+constexpr units::inch_t kHeightThreshold = 20_in;
+
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
@@ -33,7 +42,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         units::inch_t CurrentHeight();
 
+        void PrepareElevator(units::inch_t newPosition);
         frc2::CommandPtr GoToHeight(units::inch_t height);
+        frc2::CommandPtr GoToSavedPosition();
 
         const units::inch_t WHEEL_RADIUS = 1.375_in;
         // 9 to 1
@@ -41,7 +52,12 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         void SetMotorVoltage();
 
+        frc2::Trigger IsHeightAboveThreshold = frc2::Trigger([this] {
+            return GetElevatorHeightAboveThreshold();
+        });
     private:
+        bool GetElevatorHeightAboveThreshold();
+
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
         frc::DigitalInput m_elevatorLimitSwitch;
@@ -69,5 +85,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         };
         
         frc::ElevatorFeedforward m_feedforward{kS, kG, kV};
+
+        // Changing m_setpointHeight will send the elevator to that position immediately
         units::inch_t m_setpointHeight = 0_in;
+
+        // Use m_desiredElevatorPosition when preparing the elevator for a call to GoToSavedPosition()
+        units::inch_t m_desiredElevatorPosition;
 };

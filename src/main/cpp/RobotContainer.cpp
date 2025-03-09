@@ -4,6 +4,8 @@
 
 #include "RobotContainer.h"
 
+#include <subsystems/LED.h>
+#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -11,10 +13,13 @@
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
     m_featherCanDecoder(featherCanDecoder),
     m_coralSubsystem(m_featherCanDecoder),
+    m_algaeSubsystem(m_featherCanDecoder), 
     m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
+
+    //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
 }
@@ -24,21 +29,37 @@ void RobotContainer::ConfigureBindings() {
     // and Y is defined as to the left according to WPILib convention.
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
-        return drive.WithVelocityX(-m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier) // Drive forward with negative Y (forward)
-            .WithVelocityY(-m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier) // Drive left with negative X (left)
-            .WithRotationalRate(-m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier); // Drive counterclockwise with negative X (left)
+        return drive.WithVelocityX(
+                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier
+            ) // Drive forward with negative Y (forward)
+            .WithVelocityY(
+                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier
+            ) // Drive left with negative X (left)
+            .WithRotationalRate(
+                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier
+            ); // Drive counterclockwise with negative X (left)
     }));
 
-    // @todo Only adding this for testing
-    m_speedMultiplier = 0.2;
-
-    // m_joystick.LeftBumper()
-    //     .OnTrue(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.2;})
-    //     )
-    //     .OnFalse(
-    //         frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
-    //     );
+    m_gamepad.Button(12).OnChange(frc2::cmd::RunOnce([this] {
+        m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK); 
+        }));
+    m_gamepad.Button(11).OnChange(frc2::cmd::RunOnce([this] {
+        m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+        }));
+    m_gamepad.Button(10).OnChange(frc2::cmd::RunOnce([this] { 
+        m_elevatorSubsystem.PrepareElevator(kElevatorL2Position); 
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+        }));
+    m_gamepad.Button(9).OnChange(frc2::cmd::RunOnce([this] {
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
+        }));
+    m_gamepad.Button(8).OnChange(frc2::cmd::RunOnce([this] { 
+        m_elevatorSubsystem.PrepareElevator(kElevatorL1Position); 
+        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+        }));
+    m_gamepad.Button(17).OnChange(frc2::cmd::RunOnce([this] { m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition); }));    //button below 8 on universal driverstation for stow position
 
     (m_joystick.X() && m_joystick.Y()).WhileTrue(m_cameraSubsystem.RunOnce([this] {frc::SmartDashboard::PutNumber("YDistance", m_cameraSubsystem.getYDistance());} ));
 
@@ -49,15 +70,13 @@ void RobotContainer::ConfigureBindings() {
     // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
+    m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));
+    m_joystick.Y().OnTrue(m_algaeSubsystem.SetSpeed(-0.4));
+    (m_joystick.X() && m_joystick.Y()).OnTrue(m_algaeSubsystem.SetSpeed(0.0));
+
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
-
-    // m_joystick.LeftBumper().OnTrue(
-    //     frc2::cmd::RunOnce([this] {
-    //         m_coralSubsystem.GoToAngle(150.0);
-    //     })
-    // );
 
     m_joystick.RightBumper().OnTrue(
         frc2::cmd::Parallel(
@@ -120,6 +139,14 @@ void RobotContainer::ConfigureBindings() {
             })
         )
     );
+
+    (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
+        .OnTrue(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
+        )
+        .OnFalse(
+            frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+        );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
