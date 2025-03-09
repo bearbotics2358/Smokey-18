@@ -3,6 +3,7 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
+
 #include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace subsystems;
@@ -89,7 +90,7 @@ frc2::CommandPtr CommandSwerveDrivetrain::GoToAutoStart(std::string autoName) {
     std::vector<Waypoint> waypoints = PathPlannerPath::waypointsFromPoses(poses);
 
     frc::SmartDashboard::PutNumber("Auto X", waypoints.at(0).anchor.X().value());
-    frc::SmartDashboard::PutNumber("Auto X", waypoints.at(0).anchor.Y().value());
+    frc::SmartDashboard::PutNumber("Auto Y", waypoints.at(0).anchor.Y().value());
 
     // // TODO: implement the correct constraints
     PathConstraints constraints(
@@ -98,14 +99,15 @@ frc2::CommandPtr CommandSwerveDrivetrain::GoToAutoStart(std::string autoName) {
         1_rad_per_s, // Max Angular Velocity
         1_rad_per_s_sq, // Max Angular Acceleration
         12_V, // OPTIONAL PARAMETER: Nominal Voltage
-        false // OPTIONAL PARAMETER: should the constraints be unlimited
+        false // OPTIONAL PARAMETER: whether the constraints be unlimited
     );
 
     std::shared_ptr<PathPlannerPath> path = std::make_shared<PathPlannerPath>(
         waypoints,
         constraints,
         std::nullopt, // To indicate that we're generating a path on the play
-        GoalEndState(0.0_mps, frc::Rotation2d(0_deg)) // TODO: implement the correct GoalEndState
+        // TODO: implement the correct GoalEndState
+        GoalEndState(0.0_mps, frc::Rotation2d(0_deg))
     );
 
     // /* This following line of code is for preventing the path from being flipped if the coordinates 
