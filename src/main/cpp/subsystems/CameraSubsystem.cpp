@@ -27,7 +27,7 @@ bool CameraSubsystem::visibleTargets() {
 double CameraSubsystem::getZRotation() {
     CameraSubsystem::updateData();
     if (result.HasTargets()) {
-        return fabs((transformation.Rotation().Z().value()) - 180) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
+        return fabs((transformation.Rotation().Z().value()) - M_PI) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
     } else {
         return 0;
     }
@@ -64,8 +64,7 @@ double CameraSubsystem::getHorizontalTransformation() {
 double CameraSubsystem::getForwardTransformation() {
     CameraSubsystem::updateData();
     double distance = CameraSubsystem::getDistance();
-    double zAngle = fabs(getZRotation() - 180) * (bestTarget.GetYaw() / fabs(bestTarget.GetYaw()));
-    return sin(zAngle) * distance;
+    return sin(getZRotation()) * distance;
 }
 
 void CameraSubsystem::Periodic() {
