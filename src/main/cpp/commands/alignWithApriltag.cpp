@@ -14,7 +14,7 @@ alignWithApriltag::alignWithApriltag(CameraSubsystem* camera, subsystems::Comman
 }
 
 void alignWithApriltag::Initialize() {
-    while (fabs(m_camera->getYDistance()) > 0.05) {
+    while (fabs(m_camera->GetYDistance()) > 0.05) {
         m_drivetrain->ApplyRequest([this]() -> auto&& {
             return forwardStraight.WithVelocityX(1_mps).WithRotationalRate(0.5_rad_per_s);
         });
