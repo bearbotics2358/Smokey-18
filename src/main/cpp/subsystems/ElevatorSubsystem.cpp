@@ -37,9 +37,9 @@ void ElevatorSubsystem::Periodic() {
 
     frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
 
-    if (IsMagneticLimitSwitchActive()) {
-        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
-    }
+    // if (IsMagneticLimitSwitchActive()) {
+    //     m_elevatorMotor1.SetPosition(0_tr, 13_ms);
+    // }
 
     SetMotorVoltage();
 }
@@ -84,8 +84,8 @@ void ElevatorSubsystem::SetMotorVoltage() {
         m_elevatorMotor1.SetVoltage(goalVolts);
         m_elevatorMotor2.SetVoltage(goalVolts);
     } else {
-        m_elevatorMotor1.SetVoltage(0.4_V);
-        m_elevatorMotor2.SetVoltage(0.4_V);
+        m_elevatorMotor1.SetVoltage(0.3_V);
+        m_elevatorMotor2.SetVoltage(0.3_V);
     }
     frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
 }
