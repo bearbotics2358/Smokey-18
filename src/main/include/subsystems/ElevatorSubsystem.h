@@ -83,7 +83,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc::ProfiledPIDController<units::meters> m_elevatorPID{
             kP, kI, kD, m_constraints
         };
-        
+
         frc::ElevatorFeedforward m_feedforward{kS, kG, kV};
 
         // Changing m_setpointHeight will send the elevator to that position immediately
