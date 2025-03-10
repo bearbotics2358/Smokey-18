@@ -14,8 +14,6 @@ AlignWithReef::AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveD
 }
 
 void AlignWithReef::Initialize() {
-    // m_XAlignmentPID.SetGoal(m_distanceFromReefSetpoint);
-
     double forwardPID = m_XAlignmentPID.Calculate(m_distanceFromReefSetpoint.value(), m_camera->getForwardTransformation().value());
     frc::SmartDashboard::PutNumber("Forward PID", forwardPID);
 
@@ -24,38 +22,27 @@ void AlignWithReef::Initialize() {
 }
 
 void AlignWithReef::Execute() {
-    frc::SmartDashboard::PutBoolean("Align started", true);
     double horizontalPID = m_YAlignmentPID.Calculate(m_lateralSetpoint.value(), m_camera->getHorizontalTransformation().value());
     double forwardPID = m_XAlignmentPID.Calculate(m_distanceFromReefSetpoint.value(), m_camera->getForwardTransformation().value());
     double rotationPID = m_angularAlignmentPID.Calculate(m_rotationalSetpoint, units::radian_t(m_camera->getZRotation()));
 
-    // if (fabs(units::inch_t(m_distanceFromReefSetpoint - m_camera->getForwardTransformation()).value()) < 4.0) {
-    //     forwardPID = 0.0;
-    // }
-
     frc::SmartDashboard::PutNumber("Horizontal PID", horizontalPID);
     frc::SmartDashboard::PutNumber("Forward PID", forwardPID);
     frc::SmartDashboard::PutNumber("Rotation PID", rotationPID);
-
     m_drivetrain->SetControl(robotOriented.WithVelocityX(units::meters_per_second_t(forwardPID))
                                           .WithVelocityY(units::meters_per_second_t(horizontalPID))
-                                          .WithRotationalRate(0_rad_per_s));
+                                          .WithRotationalRate(-units::radians_per_second_t(rotationPID)));
 }
 
 bool AlignWithReef::IsFinished() {
-    // double horizontalPID = m_linearAlignmentPID.Calculate(m_lateralSetpoint, units::meter_t(m_camera->getHorizontalTransformation()));
-    // double forwardPID = m_linearAlignmentPID.Calculate(m_distanceFromReefSetpoint, units::meter_t(m_camera->getForwardTransformation()));
-    // double rotationPID = m_angularAlignmentPID.Calculate(m_rotationalSetpoint, units::radian_t(m_camera->getZRotation()));
+    double lateral_diff = fabs(units::inch_t(m_lateralSetpoint - m_camera->getHorizontalTransformation()).value());
+    double forward_diff = fabs(units::inch_t(m_distanceFromReefSetpoint - m_camera->getForwardTransformation()).value());
+    double rotational_diff = fabs(units::radian_t(m_rotationalSetpoint - m_camera->getZRotation()).value());
 
-    // double lateral_diff = fabs(m_lateralSetpoint.value() - m_camera->getHorizontalTransformation());
-    // double forward_diff = fabs(m_distanceFromReefSetpoint.value() - m_camera->getForwardTransformation());
-    // double rotational_diff = fabs(m_rotationalSetpoint.value() - m_camera->getZRotation());
+    bool isFinished = (lateral_diff < units::inch_t(kLateralTolerance).value() && forward_diff < units::inch_t(kLateralTolerance).value()) ||
+        m_camera->visibleTargets() == false;
 
-    // bool isFinished = (lateral_diff < kLateralTolerance.value() && forward_diff < kLateralTolerance.value() && rotational_diff < kRotationTolerance.value());
+    frc::SmartDashboard::PutBoolean("Align Finished", isFinished);
 
-    // frc::SmartDashboard::PutBoolean("Align Finished", isFinished);
-
-    // return isFinished;
-
-    return false;
+    return isFinished;
 }
