@@ -4,39 +4,56 @@
 
 #include "commands/AlignWithReef.h"
 
-AlignWithReef::AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain)
+AlignWithReef::AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool useOffsetAlignment)
     : m_camera{camera},
     m_drivetrain{drivetrain} {
     // Register that this command requires the subsystem.
     AddRequirements(m_drivetrain);
     AddRequirements(m_camera);
+
+    if (useOffsetAlignment) {
+        m_alignmentTransform = kOffsetAlignedTransform;
+    } else {
+        m_alignmentTransform = kCenterAlignedTransform;
+    }
 }
 
 void AlignWithReef::Initialize() {
+    // To get the final pose lined up with the AprilTag
+    //  1. Start with the pose of the AprilTag (field centric)
+    //  2. Apply the transformation to get the pose we want the robot to achieve
+    std::optional<frc::Pose3d> targetPose = m_camera->GetBestTargetPose();
+    if (targetPose) {
+        m_targetPose = targetPose.value().ToPose2d();
+        m_targetPose.value().TransformBy(m_alignmentTransform);
+    } else {
+        m_targetPose = std::nullopt;
+    }
 }
 
 void AlignWithReef::Execute() {
-    double forward = m_XAlignmentPID.Calculate(m_distanceFromReefSetpoint.value(), m_camera->getForwardTransformation().value());
-    double strafe = m_YAlignmentPID.Calculate(m_strafeSetpoint.value(), m_camera->getStrafeTransformation().value());
-    double rotation = m_angularAlignmentPID.Calculate(m_rotationalSetpoint, units::radian_t(m_camera->getZRotation()));
+    if (m_targetPose) {
+        const frc::Pose2d currentPose = m_drivetrain->GetState().Pose;
+        const frc::Rotation2d desiredHeading = frc::Rotation2d{m_camera->getZRotation()};
+        const frc::ChassisSpeeds pidSpeeds = m_holonomicPID.Calculate(currentPose, m_targetPose.value(), kMaxLinearVelocity, desiredHeading);
 
-    frc::SmartDashboard::PutNumber("Strafe PID", strafe);
-    frc::SmartDashboard::PutNumber("Forward PID", forward);
-    frc::SmartDashboard::PutNumber("Rotation PID", rotation);
-    m_drivetrain->SetControl(robotOriented.WithVelocityX(units::meters_per_second_t(forward))
-                                          .WithVelocityY(units::meters_per_second_t(strafe))
-                                          .WithRotationalRate(-units::radians_per_second_t(rotation)));
+        m_drivetrain->SetControl(m_fieldSpeedRequest.WithSpeeds(pidSpeeds));
+    }
 }
 
 bool AlignWithReef::IsFinished() {
-    units::meter_t forward_diff = units::math::abs(m_distanceFromReefSetpoint - m_camera->getForwardTransformation());
-    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
-    units::radian_t rotational_diff = units::math::abs(m_rotationalSetpoint - m_camera->getZRotation());
+    // If no target pose was generated, end the command right away
+    if (!m_targetPose) {
+        return true;
+    }
+
+    const frc::Pose2d currentPose = m_drivetrain->GetState().Pose;
+    units::meter_t forward_diff = units::math::abs(currentPose.X() - m_targetPose.value().X());
+    units::meter_t strafe_diff = units::math::abs(currentPose.Y() - m_targetPose.value().Y());
+    units::radian_t rotational_diff = units::math::abs(currentPose.Rotation().Radians() - m_targetPose.value().Rotation().Radians());
 
     // If the bot is within tolerance for X, Y and rotational position, then we consider the command finished.
-    // If we lose the ability to see the tag, also end the command.
-    return ((strafe_diff < kStrafeTolerance
-                && forward_diff < kForwardTolerance
-                && rotational_diff < units::radian_t(kRotationTolerance))
-            || m_camera->visibleTargets() == false);
+    return (strafe_diff < kStrafeTolerance
+            && forward_diff < kForwardTolerance
+            && rotational_diff < units::radian_t(kRotationTolerance));
 }

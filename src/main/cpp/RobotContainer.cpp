@@ -13,6 +13,7 @@
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
+m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
@@ -86,7 +87,7 @@ void RobotContainer::ConfigureBindings() {
     // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
     // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
-    m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
+    m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr());
 
     // Temporarily disabling algae to use X for alignment testing
     // m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));

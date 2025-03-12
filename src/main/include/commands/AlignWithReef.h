@@ -10,8 +10,10 @@
 #include "subsystems/CameraSubsystem.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
 
+#include <frc/controller/HolonomicDriveController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
+#include <frc/geometry/Transform2d.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <units/velocity.h>
 #include <units/acceleration.h>
@@ -25,18 +27,22 @@ public:
      * @param camera The subsystem used by this command.
      * @param drivetrain
      */
-    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain);
+    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool useOffsetAlignment);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
+    swerve::requests::ApplyFieldSpeeds m_fieldSpeedRequest = swerve::requests::ApplyFieldSpeeds{}
+        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
 
 private:
 
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
+    frc::Transform2d m_alignmentTransform;
+    std::optional<frc::Pose2d> m_targetPose;
 
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.1;
@@ -62,7 +68,20 @@ private:
     const units::meter_t kStrafeTolerance = units::meter_t(2_in);
     const units::degree_t kRotationTolerance = 3_deg;
 
-    units::meter_t m_distanceFromReefSetpoint = units::meter_t(48_in);
-    units::meter_t m_strafeSetpoint = units::meter_t(0_in);
-    units::radian_t m_rotationalSetpoint = 0_rad;
+    frc::HolonomicDriveController m_holonomicPID {
+        frc::PIDController {1, 0, 0},
+        frc::PIDController {1, 0, 0},
+        frc::ProfiledPIDController<units::radian>{
+            1, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
+            6.28_rad_per_s, 3.14_rad_per_s / 1_s}}};
+
+    const units::meters_per_second_t kMaxLinearVelocity = 0.5_mps;
+
+    // Transforms relative to any AprilTag. These are used to generate the target robot pose based
+    // on the AprilTag we see on the reef.
+    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(48_in);
+    const units::meter_t kStrafeSetpoint = units::meter_t(0_in);
+    const units::radian_t kRotationalSetpoint = units::radian_t(180_deg);
+    const frc::Transform2d kCenterAlignedTransform{kDistanceFromReefSetpoint, kStrafeSetpoint, kRotationalSetpoint};
+    const frc::Transform2d kOffsetAlignedTransform{kDistanceFromReefSetpoint, kStrafeSetpoint + 13_in, kRotationalSetpoint};
 };

@@ -1,7 +1,13 @@
 
 #include <subsystems/CameraSubsystem.h>
 
-CameraSubsystem::CameraSubsystem() {
+CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain): m_drivetrain(drivetrain) {
+    // Camera is mounted facing forward, -2.5625 inches behind the center, 12.5 inches up from center
+    frc::Transform3d robotToCam =
+        frc::Transform3d(frc::Translation3d(-2.5625_in, 0_in, 12.5_in),
+                         frc::Rotation3d(0_rad, 0_rad, 0_rad));
+
+    m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(photon::PhotonPoseEstimator(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam));
 }
 
 //updates local variables related to the limelight result
@@ -16,6 +22,11 @@ void CameraSubsystem::updateData() {
         frc::SmartDashboard::PutNumber("Rotation", bestTarget.GetYaw());
         frc::SmartDashboard::PutNumber("Strafe Distance", units::inch_t(getStrafeTransformation()).value());
         frc::SmartDashboard::PutNumber("Forward Distance", units::inch_t(getForwardTransformation()).value());
+
+        std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(result);
+        if (estimatedPose) {
+            m_drivetrain->AddVisionMeasurement((estimatedPose->estimatedPose).ToPose2d(), estimatedPose->timestamp);
+        }
     } else {
         frc::SmartDashboard::PutBoolean("Has Targets", false);
     }
@@ -24,6 +35,14 @@ void CameraSubsystem::updateData() {
 //Returns true if targets are visible to limelight. Otherwise returns false
 bool CameraSubsystem::visibleTargets() {
     return result.HasTargets();
+}
+
+std::optional<frc::Pose3d> CameraSubsystem::GetBestTargetPose() {
+    if (visibleTargets()) {
+        return m_poseEstimator->GetFieldLayout().GetTagPose(bestTarget.GetFiducialId());
+    } else {
+        return std::nullopt;
+    }
 }
 
 //returns the Z rotation needed to get to the best target as a double
