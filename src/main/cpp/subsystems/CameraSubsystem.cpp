@@ -2,7 +2,6 @@
 #include <subsystems/CameraSubsystem.h>
 
 CameraSubsystem::CameraSubsystem() {
-  // Implementation of subsystem constructor goes here.
 }
 
 //updates local variables related to the limelight result
@@ -11,7 +10,12 @@ void CameraSubsystem::updateData() {
     if (result.HasTargets()) {
         bestTarget = result.GetBestTarget();
         transformation = bestTarget.GetBestCameraToTarget();
+
         frc::SmartDashboard::PutBoolean("Has Targets", true);
+
+        frc::SmartDashboard::PutNumber("Rotation", bestTarget.GetYaw());
+        frc::SmartDashboard::PutNumber("Strafe Distance", units::inch_t(getStrafeTransformation()).value());
+        frc::SmartDashboard::PutNumber("Forward Distance", units::inch_t(getForwardTransformation()).value());
     } else {
         frc::SmartDashboard::PutBoolean("Has Targets", false);
     }
@@ -19,32 +23,39 @@ void CameraSubsystem::updateData() {
 
 //Returns true if targets are visible to limelight. Otherwise returns false
 bool CameraSubsystem::visibleTargets() {
-    CameraSubsystem::updateData();
     return result.HasTargets();
 }
 
 //returns the Z rotation needed to get to the best target as a double
-double CameraSubsystem::getZRotation() {
-    CameraSubsystem::updateData();
+units::degree_t CameraSubsystem::getZRotation() {
     if (result.HasTargets()) {
-        return transformation.Rotation().Z().value();
+        return units::degree_t(bestTarget.GetYaw());
+    } else {
+        return 0_deg;
+    }
+}
+
+// meters
+double CameraSubsystem::getDistance() {
+    if (result.HasTargets()) {
+        return sqrt(pow(transformation.Y().value(), 2) + pow(transformation.X().value(), 2));
     } else {
         return 0;
     }
 }
 
-//returns the Y translation needed to get to the best target as a double
-double CameraSubsystem::getYDistance() {
-    CameraSubsystem::updateData();
-    if (result.HasTargets()) {
-        return transformation.Y().value();
-    } else {
-        return 0;
-    }
+units::meter_t CameraSubsystem::getStrafeTransformation() {
+    return transformation.Y();
+}
+
+units::meter_t CameraSubsystem::getForwardTransformation() {
+    return transformation.X();
 }
 
 void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
+
+    updateData();
     // photon::PhotonPipelineResult result = limelightCamera.GetLatestResult();
     // if (result.HasTargets()) {
     //     photon::PhotonTrackedTarget bestTarget = result.GetBestTarget();
