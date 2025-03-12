@@ -65,6 +65,7 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
+    frc::Pose2d GetRobotPose();
 private:
     void ConfigureBindings();
 };

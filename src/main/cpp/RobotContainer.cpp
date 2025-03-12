@@ -153,3 +153,7 @@ frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
 }
+
+frc::Pose2d RobotContainer::GetRobotPose() {
+    return m_cameraSubsystem.GetRobotPosition();
+}

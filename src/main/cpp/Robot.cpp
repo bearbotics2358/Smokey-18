@@ -27,7 +27,10 @@ void Robot::AutonomousInit() {
 
   if (m_autonomousCommand) {
     frc2::CommandScheduler::GetInstance().Schedule(
-      m_container.m_drivetrain.GoToAutoStart(m_autonomousCommand->GetName())
+      m_container.m_drivetrain.GoToAutoStart(
+        m_autonomousCommand->GetName(), 
+        m_container.GetRobotPose()
+      )
     );
 
     m_autonomousCommand->Schedule();

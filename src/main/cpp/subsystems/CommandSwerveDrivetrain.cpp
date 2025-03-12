@@ -78,10 +78,14 @@ void CommandSwerveDrivetrain::StartSimThread()
     m_simNotifier->StartPeriodic(kSimLoopPeriod);
 }
 
-frc2::CommandPtr CommandSwerveDrivetrain::GoToAutoStart(std::string autoName) {
+frc2::CommandPtr CommandSwerveDrivetrain::GoToAutoStart(std::string autoName, frc::Pose2d currentPose) {
+    using namespace pathplanner;
+
+    // Setting the origin point.
+    AutoBuilder::resetOdom(currentPose);
+
     frc::SmartDashboard::PutString("Auto name", autoName);
     
-    using namespace pathplanner;
     frc::Pose2d autoStartingPose = PathPlannerAuto(autoName).getStartingPose();
 
     // Poses should apparently be in field centric, which autoStartingPose is in.
