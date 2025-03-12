@@ -13,19 +13,18 @@
 class CameraSubsystem : public frc2::SubsystemBase {
  public:
   CameraSubsystem();
+  void Periodic() override;
 
   void UpdateData();
   bool VisibleTargets();
-  double gethorizontalTransformation();
+
+  double GetHorizontalTransformation();
   double GetZRotation();
   double GetYDistance();
 
-  void Periodic() override;
+  frc::Pose2d GetRobotPosition();
 
  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-
   photon::PhotonPipelineResult result;
   photon::PhotonTrackedTarget bestTarget;
   frc::Transform3d transformation;
