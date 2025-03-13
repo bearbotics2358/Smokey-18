@@ -44,7 +44,7 @@ private:
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
-    //LED m_LED;
+    LED m_LED;
     CameraSubsystem m_cameraSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;

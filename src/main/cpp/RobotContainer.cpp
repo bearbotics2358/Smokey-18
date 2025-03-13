@@ -21,7 +21,7 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
-    //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+    m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     ConfigureBindings();
 
@@ -51,31 +51,31 @@ void RobotContainer::ConfigureBindings() {
         m_climberSubsystem.Climb()
     ));
 
-    m_gamepad.Button(12).OnChange(frc2::cmd::RunOnce([this] {
+    m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
-        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
     }));
 
-    m_gamepad.Button(11).OnChange(frc2::cmd::RunOnce([this] {
+    m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
-        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
     }));
 
-    m_gamepad.Button(10).OnChange(frc2::cmd::RunOnce([this] {
+    m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL2Position);
-        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
     }));
 
-    m_gamepad.Button(9).OnChange(frc2::cmd::RunOnce([this] {
-        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
+    m_gamepad.Button(3).OnTrue(frc2::cmd::RunOnce([this] {
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
     }));
 
-    m_gamepad.Button(8).OnChange(frc2::cmd::RunOnce([this] {
+    m_gamepad.Button(1).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL1Position);
-        //m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
     }));
 
-    m_gamepad.Button(17).OnTrue(frc2::cmd::RunOnce([this] {
+    m_gamepad.Button(2).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition);
     }));
 
