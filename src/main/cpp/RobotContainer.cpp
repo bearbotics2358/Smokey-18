@@ -26,7 +26,7 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
 
     ConfigureBindings();
 
-    m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    // m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -46,9 +46,9 @@ void RobotContainer::ConfigureBindings() {
     }));
 
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
-        frc2::cmd::RunOnce([this] {
-            m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
-        }),
+        // frc2::cmd::RunOnce([this] {
+        //     m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
+        // }),
         m_climberSubsystem.Climb()
     ));
 
@@ -167,6 +167,8 @@ void RobotContainer::ConfigureBindings() {
         .OnFalse(
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
+
+    m_speedMultiplier = 0.2;
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

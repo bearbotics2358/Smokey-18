@@ -22,7 +22,7 @@ m_algaeDataProvider(dataProvider)
 }
 
 void AlgaeSubsystem::Periodic() {
-    GoToAngle();
+    // GoToAngle();
     frc::SmartDashboard::PutNumber("Algae Angle", CurrentAngle().value());
 }
 

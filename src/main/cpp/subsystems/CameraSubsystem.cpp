@@ -1,5 +1,6 @@
 
 #include <subsystems/CameraSubsystem.h>
+#include <ctre/phoenix6/Utils.hpp>
 
 CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain): m_drivetrain(drivetrain) {
     // Camera is mounted facing forward, -2.5625 inches behind the center, 12.5 inches up from center
@@ -25,7 +26,12 @@ void CameraSubsystem::updateData() {
 
         std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(result);
         if (estimatedPose) {
-            m_drivetrain->AddVisionMeasurement((estimatedPose->estimatedPose).ToPose2d(), estimatedPose->timestamp);
+            frc::SmartDashboard::PutNumber("Estimated X (ft)", units::foot_t(estimatedPose->estimatedPose.X()).value());
+            frc::SmartDashboard::PutNumber("Estimated Y (ft)", units::foot_t(estimatedPose->estimatedPose.Y()).value());
+            m_drivetrain->AddVisionMeasurement((estimatedPose->estimatedPose).ToPose2d(),
+                    ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose->timestamp));
+        } else {
+            std::cout << ">>>> no pose" << std::endl;
         }
     } else {
         frc::SmartDashboard::PutBoolean("Has Targets", false);
@@ -73,6 +79,10 @@ units::meter_t CameraSubsystem::getForwardTransformation() {
 
 void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
+
+    const frc::Pose2d currentPose = m_drivetrain->GetState().Pose;
+    frc::SmartDashboard::PutNumber("Robot X (ft)", units::foot_t(currentPose.X()).value());
+    frc::SmartDashboard::PutNumber("Robot Y (ft)", units::foot_t(currentPose.Y()).value());
 
     updateData();
     // photon::PhotonPipelineResult result = limelightCamera.GetLatestResult();

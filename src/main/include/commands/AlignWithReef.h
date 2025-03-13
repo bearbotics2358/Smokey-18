@@ -13,7 +13,7 @@
 #include <frc/controller/HolonomicDriveController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
-#include <frc/geometry/Transform2d.h>
+#include <frc/geometry/Transform3d.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <units/velocity.h>
 #include <units/acceleration.h>
@@ -41,8 +41,8 @@ private:
 
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
-    frc::Transform2d m_alignmentTransform;
-    std::optional<frc::Pose2d> m_targetPose;
+    frc::Transform3d m_alignmentTransform;
+    std::optional<frc::Pose3d> m_targetPose;
 
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.1;
@@ -75,13 +75,14 @@ private:
             1, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
             6.28_rad_per_s, 3.14_rad_per_s / 1_s}}};
 
-    const units::meters_per_second_t kMaxLinearVelocity = 0.5_mps;
+    const units::meters_per_second_t kMaxLinearVelocity = 0.15_mps;
 
     // Transforms relative to any AprilTag. These are used to generate the target robot pose based
     // on the AprilTag we see on the reef.
-    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(48_in);
+    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(25.2_in);
     const units::meter_t kStrafeSetpoint = units::meter_t(0_in);
-    const units::radian_t kRotationalSetpoint = units::radian_t(180_deg);
-    const frc::Transform2d kCenterAlignedTransform{kDistanceFromReefSetpoint, kStrafeSetpoint, kRotationalSetpoint};
-    const frc::Transform2d kOffsetAlignedTransform{kDistanceFromReefSetpoint, kStrafeSetpoint + 13_in, kRotationalSetpoint};
+    const units::radian_t kRotationalSetpoint = units::radian_t(0_deg);
+
+    const frc::Transform3d kCenterAlignedTransform{kDistanceFromReefSetpoint, kStrafeSetpoint, 0_in, frc::Rotation3d{0_rad, 0_rad, 0_rad}};
+    // const frc::Transform2d kOffsetAlignedTransform{kDistanceFromReefSetpoint, kStrafeSetpoint + 13_in, kRotationalSetpoint};
 };
