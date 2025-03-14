@@ -48,8 +48,8 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
     static constexpr double kP = 12;
-    static constexpr double kI = 0.5;
-    static constexpr double kD = 0.3;
+    static constexpr double kI = 0.0;
+    static constexpr double kD = 1.0;
 
     static constexpr units::volt_t kS = 0.25_V;
     static constexpr units::volt_t kG = 0.0_V;

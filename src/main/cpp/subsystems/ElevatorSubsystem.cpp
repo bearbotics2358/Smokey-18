@@ -85,8 +85,8 @@ void ElevatorSubsystem::SetMotorVoltage() {
         m_elevatorMotor2.SetVoltage(goalVolts);
         elevatorAtHeight = false;
     } else {
-        m_elevatorMotor1.SetVoltage(0.19_V);
-        m_elevatorMotor2.SetVoltage(0.19_V);
+        m_elevatorMotor1.SetVoltage(kG);
+        m_elevatorMotor2.SetVoltage(kG);
         elevatorAtHeight = true;
     }
     frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
