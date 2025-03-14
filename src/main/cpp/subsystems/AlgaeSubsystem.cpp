@@ -34,7 +34,7 @@ frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
 
 frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(double angle) {
     return frc2::cmd::RunOnce([this, angle] {
-        m_setpointAngle = units::turn_t(angle);
+        m_setpointAngle = units::degree_t(angle);
     });
 }
 
@@ -46,8 +46,8 @@ void AlgaeSubsystem::GoToAngle() {
     double value = m_algaePID.Calculate(CurrentAngle(), m_setpointAngle);
     frc::SmartDashboard::PutNumber("Algae PID", value);
 
-    units::volt_t goalVolts = units::volt_t(value);
-    frc::SmartDashboard::PutNumber("Algae PID in Volts", goalVolts.value());
+    units::volt_t goalVolts = units::volt_t(value) + m_algaeFeedForward.Calculate(units::radian_t(m_algaePID.GetSetpoint().position), m_algaePID.GetSetpoint().velocity, 0_rad_per_s_sq);
+    frc::SmartDashboard::PutNumber("Algae PID with FeedForward", goalVolts.value());
 
     double current_difference = fabs(m_setpointAngle.value() - CurrentAngle().value());
     m_algaePivotMotor.SetVoltage(goalVolts); //current_difference >= TOLERANCE  ?
