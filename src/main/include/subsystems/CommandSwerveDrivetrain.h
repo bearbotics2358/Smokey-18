@@ -254,7 +254,6 @@ public:
         return m_sysIdRoutineToApply->Dynamic(direction);
     }
 
-    void SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue value);
 private:
     void ConfigureAutoBuilder();
     void StartSimThread();

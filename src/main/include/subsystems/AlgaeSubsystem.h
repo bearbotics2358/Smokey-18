@@ -19,9 +19,8 @@ constexpr int kAlgaeMotorLeft = 49;
 constexpr int kAlgaeMotorRight = 50;
 constexpr int kAlgaePivot = 35;
 
-constexpr double kAlgaeStow = 150.0;
-constexpr double kAlgaeCollect = 90.0;
-constexpr double kAlgaeDispense = 90.0;
+constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
+constexpr units::degree_t kAlgaeExtendedAngle = 90.0_deg;
 
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
@@ -44,7 +43,6 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     rev::spark::SparkMax m_algaeLeftMotor;
     rev::spark::SparkMax m_algaeRightMotor;
 
-    // TODO: tune these values
     static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
     static constexpr double kP = 12;
@@ -65,7 +63,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
     frc::ArmFeedforward m_algaeFeedForward{kS, kG, kV};
 
-    units::degree_t m_setpointAngle = 100.0_deg;
+    units::degree_t m_setpointAngle = kAlgaeStowAngle;
 
     static constexpr double TOLERANCE = 1.0;
 
