@@ -60,7 +60,7 @@ frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
     });
 }
 
-//Start the intake motor and stop it when the coral is collected
+// Start the intake motor and stop it either when the coral is collected or after three seconds
 frc2::CommandPtr CoralSubsystem::collectCoral() {
     return frc2::cmd::StartEnd(
         [this] {
@@ -70,10 +70,10 @@ frc2::CommandPtr CoralSubsystem::collectCoral() {
             m_intakeMotor.StopMotor();
         }, 
         {this}
-    ).WithTimeout(3_s).Until(([this] {return CoralPresent();})).WithName("collectCoral");
+    ).WithTimeout(3_s).Until(([this] { return CoralPresent(); })).WithName("collectCoral");
 }   
 
-//Run the intake motor backwards for 1 second to dispense held coral
+// Run the intake motor backwards for one second to dispense held coral
 frc2::CommandPtr CoralSubsystem::dispenseCoral() {
     return frc2::cmd::StartEnd(
         [this] {
