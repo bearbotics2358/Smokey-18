@@ -44,6 +44,18 @@ void RobotContainer::ConfigureBindings() {
             ); // Drive counterclockwise with negative X (left)
     }));
 
+    m_joystick.POVRight().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(-0.25_mps);
+        })
+    );
+
+    m_joystick.POVLeft().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(0.25_mps);
+        })
+    );
+
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
@@ -123,14 +135,14 @@ void RobotContainer::ConfigureBindings() {
         )
     );
 
-    m_joystick.POVLeft().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(65.0);
-            })
-        )
-    );
+    // m_joystick.POVLeft().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(65.0);
+    //         })
+    //     )
+    // );
 
     m_joystick.RightTrigger().OnTrue(
         m_coralSubsystem.dispenseCoral()
