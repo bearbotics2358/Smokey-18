@@ -16,9 +16,9 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         // @todo This will also need to include the CoralSubsystem and AlgaeSubsystem when they are ready
         ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech);
 
-        frc2::CommandPtr PrepareElevator(units::inch_t desiredPosition);
+        frc2::CommandPtr PrepareElevator(units::inch_t desiredPosition, bool removeAlgae);
 
-        frc2::CommandPtr ScoreIntoReef(bool removeAlgae);
+        frc2::CommandPtr ScoreIntoReef();
         frc2::CommandPtr ScoreIntoProcessor();
         frc2::CommandPtr PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae);
 
@@ -30,6 +30,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         AlgaeSubsystem& m_algae;
 
         units::inch_t m_elevatorSetpointHeight;
+        bool m_collectAlgae;
 
         // Values for the tuple go from coral to algae angles to the name of the command.
         std::map<units::inch_t, std::tuple<double, double>> m_elevatorMap = {

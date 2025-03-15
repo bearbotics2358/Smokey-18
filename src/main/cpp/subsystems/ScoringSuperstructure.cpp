@@ -12,13 +12,14 @@ m_coral(coralMech),
 m_algae(algaeMech)
 {}
 
-frc2::CommandPtr ScoringSuperstructure::PrepareElevator(units::inch_t desiredPosition) {
-    return frc2::cmd::RunOnce([this, desiredPosition] {
+frc2::CommandPtr ScoringSuperstructure::PrepareElevator(units::inch_t desiredPosition, bool removeAlgae) {
+    return frc2::cmd::RunOnce([this, desiredPosition, removeAlgae] {
         m_elevatorSetpointHeight = desiredPosition;
+        m_collectAlgae = removeAlgae;
     });
 }
 
-frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef(bool removeAlgae) {
+frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {
     auto [coralAngle, algaeAngle] = m_elevatorMap[m_elevatorSetpointHeight];
 
     return frc2::cmd::Parallel(
@@ -30,7 +31,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef(bool removeAlgae) {
                 m_algae.Intake()
             ),
             m_algae.SetGoalAngle(algaeAngle),
-            [removeAlgae] { return removeAlgae; }
+            [this] { return m_collectAlgae; }
         ),
         m_elevator.WaitUntilElevatorAtHeight().AndThen(m_coral.dispenseCoral())
     );
@@ -52,7 +53,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
 }
 
 frc2::CommandPtr ScoringSuperstructure::PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae) {
-    return PrepareElevator(desiredPosition).AndThen(ScoreIntoReef(removeAlgae));
+    return PrepareElevator(desiredPosition, removeAlgae).AndThen(ScoreIntoReef());
 }
 
 frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
