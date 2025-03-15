@@ -64,15 +64,15 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         bool IsMagneticLimitSwitchActive();
 
-        static constexpr double TOLERANCE = 0.30;
+        static constexpr double TOLERANCE = 0.5;
 
-        static constexpr units::meters_per_second_t kMaxVelocity = 3.0_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 3.0_mps_sq;
-        static constexpr double kP = 19.0;
-        static constexpr double kI = 1.5;
-        static constexpr double kD = 0.0;
-        static constexpr units::volt_t kS = 0.30_V;
-        static constexpr units::volt_t kG = 0.25_V;
+        static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
+        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
+        static constexpr double kP = 20.0;
+        static constexpr double kI = 0.5;
+        static constexpr double kD = 2.0;
+        static constexpr units::volt_t kS = 0.325_V;
+        static constexpr units::volt_t kG = 0.40_V;
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
