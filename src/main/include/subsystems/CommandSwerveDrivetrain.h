@@ -255,6 +255,8 @@ public:
     }
 
     void SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue value);
+
+    frc2::CommandPtr GoToAutoStart(std::string autoName, frc::Pose2d currentPose);
 private:
     void ConfigureAutoBuilder();
     void StartSimThread();
