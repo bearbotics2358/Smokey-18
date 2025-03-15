@@ -27,6 +27,8 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
     m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
     ConfigureBindings();
+
+    AddPathPlannerCommands();
 }
 
 void RobotContainer::ConfigureBindings() {
