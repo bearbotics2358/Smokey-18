@@ -54,8 +54,10 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
  * @param targetAngle The desired angle of the mechanism in degrees
  */
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
-void CoralSubsystem::GoToAngle(double targetAngle) {
-    m_setpointAngle = targetAngle;
+frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
+    return frc2::cmd::RunOnce([this, targetAngle] {
+        m_setpointAngle = targetAngle;
+    });
 }
 
 //Start the intake motor and stop it when the coral is collected

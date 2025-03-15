@@ -84,8 +84,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         frc::ElevatorFeedforward m_feedforward{kS, kG, kV};
 
-        // Changing m_setpointHeight will send the elevator to that position immediately
-        units::inch_t m_setpointHeight = 0_in;
+        // Changing m_elevatorSetpointHeight will send the elevator to that position immediately
+        units::inch_t m_elevatorSetpointHeight = 0_in;
 
         // Use m_desiredElevatorPosition when preparing the elevator for a call to GoToSavedPosition()
         units::inch_t m_desiredElevatorPosition;
