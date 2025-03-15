@@ -15,14 +15,11 @@
 
 #include <subsystems/IClimberDataProvider.h>
 
-// @todo All constants here are TEMPORARY - change them as needed
-constexpr int kClimberMotor1Id = 50;
+constexpr int kClimberMotor1Id = 32;
 
-constexpr float kSlowClimber = 0.5;
-
-constexpr units::degree_t kClimberStartAngle = 150.0_deg;
+constexpr units::degree_t kClimberStartAngle = 168.0_deg;
 constexpr units::degree_t kClimberEndAngle = 90.0_deg;
-constexpr units::degree_t kClimberStowAngle = 0.0_deg;
+constexpr units::degree_t kClimberStowAngle = 10.0_deg;
 
 const double kClimberGearRatio = 1.0;
 
@@ -32,7 +29,7 @@ public:
     void Periodic() override;
 
     frc2::CommandPtr Climb();
-    frc2::CommandPtr CancelClimb();
+    frc2::CommandPtr Extend();
     frc2::CommandPtr Stow();
 
     units::degree_t CurrentAngle();
@@ -46,10 +43,10 @@ private:
 
     ctre::phoenix6::hardware::TalonFX m_climberMotor;
 
-    static constexpr units::turns_per_second_t kMaxVelocity = 0.25_tps;
-    static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
-    static constexpr double kP = 1.0;
-    static constexpr double kI = 1.0;
+    static constexpr units::turns_per_second_t kMaxVelocity = 10_tps;
+    static constexpr units::turns_per_second_squared_t kMaxAcceleration = 100_tr_per_s_sq;
+    static constexpr double kP = 60.0;
+    static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
 
     frc::TrapezoidProfile<units::turns>::Constraints m_constraints {
@@ -60,5 +57,5 @@ private:
         kP, kI, kD, m_constraints
     };
 
-    units::degree_t m_setpointAngle = 0.0_deg;
+    units::degree_t m_setpointAngle = kClimberStowAngle;
 };

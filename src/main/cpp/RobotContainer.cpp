@@ -97,66 +97,78 @@ void RobotContainer::ConfigureBindings() {
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
-    m_joystick.RightBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
-    );
+    // m_joystick.RightBumper().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(55.0);
+    //         })
+    //     )
+    // );
 
-    m_joystick.LeftBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
+    // m_joystick.LeftBumper().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(55.0);
+    //         })
+    //     )
+    // );
+
+    // m_joystick.POVUp().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(50.0);
+    //         })
+    //     )
+    // );
+
+    // m_joystick.POVLeft().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(65.0);
+    //         })
+    //     )
+    // );
+
+    // m_joystick.RightTrigger().OnTrue(
+    //     m_coralSubsystem.dispenseCoral()
+    // );
+
+    // m_joystick.LeftTrigger().OnTrue(
+    //     m_coralSubsystem.collectCoral()
+    // );
+
+    // m_joystick.A().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(0_in),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(160.0);
+    //         })
+    //     )
+    // );
+
+    // m_joystick.B().OnTrue(
+    //     frc2::cmd::Parallel(
+    //         m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
+    //         frc2::cmd::RunOnce([this] {
+    //             m_coralSubsystem.GoToAngle(125.0);
+    //         })
+    //     )
+    // );
+
+    m_joystick.POVLeft().OnTrue(
+        m_climberSubsystem.Extend()
     );
 
     m_joystick.POVUp().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(50.0);
-            })
-        )
+        m_climberSubsystem.Climb()
     );
 
-    m_joystick.POVLeft().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(65.0);
-            })
-        )
-    );
-
-    m_joystick.RightTrigger().OnTrue(
-        m_coralSubsystem.dispenseCoral()
-    );
-
-    m_joystick.LeftTrigger().OnTrue(
-        m_coralSubsystem.collectCoral()
-    );
-
-    m_joystick.A().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(0_in),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(160.0);
-            })
-        )
-    );
-
-    m_joystick.B().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(125.0);
-            })
-        )
+    m_joystick.POVRight().OnTrue(
+        m_climberSubsystem.Stow()
     );
 
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
