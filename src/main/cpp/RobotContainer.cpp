@@ -10,6 +10,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
@@ -151,6 +152,38 @@ void RobotContainer::ConfigureBindings() {
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
+}
+
+void RobotContainer::AddPathPlannerCommands() {
+    using namespace pathplanner;
+    NamedCommands::registerCommand(
+        "Stow", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorStowPosition, false))
+    );
+    NamedCommands::registerCommand(
+        "Collect", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorCollectPosition, false))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL1", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorL1Position, false))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL2", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorL2Position, false))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL3", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorL3Position, false))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL4", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorL4Position, false))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL3AndRemoveAlgae", 
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorL3Position, true))
+    );
 }
 
 frc::Pose2d RobotContainer::GetRobotPose() {

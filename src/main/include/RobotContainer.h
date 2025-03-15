@@ -68,4 +68,5 @@ public:
     frc::Pose2d GetRobotPose();
 private:
     void ConfigureBindings();
+    void AddPathPlannerCommands();
 };
