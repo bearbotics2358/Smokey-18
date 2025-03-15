@@ -33,7 +33,7 @@ void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
 
-    // **** Drivetrain Buttons **** //
+    // **** Xbox Drivetrain Buttons **** //
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
         return drive.WithVelocityX(
@@ -58,27 +58,29 @@ void RobotContainer::ConfigureBindings() {
     ));
     
     m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] {
-        m_scoringSuperstructure.PrepareElevator(kElevatorL4Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL4Position, false);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
     }));
 
     m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] {
-        m_scoringSuperstructure.PrepareElevator(kElevatorL3Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL3Position, true);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
-    }));
-
-    m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
-        m_scoringSuperstructure.PrepareElevator(kElevatorL2Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
     }));
 
     // TODO: change the name of ALGAE_HELD
     m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {
+        m_scoringSuperstructure.PrepareElevator(kElevatorL3Position, true);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
     }));
 
+    m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
+        m_scoringSuperstructure.PrepareElevator(kElevatorL2Position, false);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+    }));
+
+
     m_gamepad.Button(1).OnTrue(frc2::cmd::RunOnce([this] {
-        m_scoringSuperstructure.PrepareElevator(kElevatorL1Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL1Position, false);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
     }));
 
@@ -99,7 +101,7 @@ void RobotContainer::ConfigureBindings() {
     // **** Xbox Trigger & Bumper Buttons **** //
     m_joystick.RightTrigger()
         .OnTrue(
-            m_scoringSuperstructure.ScoreIntoReef(false)
+            m_scoringSuperstructure.ScoreIntoReef()
         )
         .OnFalse(
             m_elevatorSubsystem.GoToHeight(m_elevatorSubsystem.CurrentHeight())
