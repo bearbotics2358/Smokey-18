@@ -21,6 +21,9 @@ constexpr int kAlgaePivot = 35;
 
 constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
 constexpr units::degree_t kAlgaeExtendedAngle = 90.0_deg;
+constexpr double kAlgaeCollect = 90.0;
+constexpr double kAlgaeCollectSpeed = -0.4;
+constexpr double kAlgaeDispenseSpeed = 0.4;
 
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:

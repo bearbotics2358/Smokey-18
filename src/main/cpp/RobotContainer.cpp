@@ -98,7 +98,7 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
     // m_joystick.RightBumper().OnTrue(
-    //     m_scoringSuperstructure.Score()
+    //     m_scoringSuperstructure.ScoreIntoReef()
     // );
 
     // m_joystick.LeftBumper().OnTrue(
