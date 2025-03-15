@@ -89,9 +89,8 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
     // Temporarily disabling algae to use X for alignment testing
-    // m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));
-    // m_joystick.Y().OnTrue(m_algaeSubsystem.SetSpeed(-0.4));
-    // (m_joystick.X() && m_joystick.Y()).OnTrue(m_algaeSubsystem.SetSpeed(0.0));
+    // m_joystick.X().OnTrue(m_algaeSubsystem.Intake());
+    // m_joystick.Y().OnTrue(m_algaeSubsystem.Dispense());
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
