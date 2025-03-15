@@ -22,7 +22,9 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
-
+    if(m_elevatorSubsystem.CurrentHeight() == kElevatorStowPosition){
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+    }
     ConfigureBindings();
 
     //m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -44,12 +46,6 @@ void RobotContainer::ConfigureBindings() {
             ); // Drive counterclockwise with negative X (left)
     }));
 
-    m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
-        frc2::cmd::RunOnce([this] {
-            m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
-        }),
-        m_climberSubsystem.Climb()
-    ));
 
     m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
@@ -60,6 +56,31 @@ void RobotContainer::ConfigureBindings() {
         m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
     }));
+
+
+
+    m_gamepad.Button(7).OnTrue(frc2::cmd::RunOnce([this] {
+        m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
+        m_climberSubsystem.CancelClimb();
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
+        if (m_climberSubsystem.IsLeftOnCage()){
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTTRUE);
+        }
+        else{
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
+        }
+        if(m_climberSubsystem.IsRightOnCage()){
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTTRUE);
+        }
+        else{
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
+        }}))
+    .OnFalse(frc2::cmd::RunOnce([this] {
+        m_climberSubsystem.CancelClimb();
+
+    }));
+    
 
     m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
         m_elevatorSubsystem.PrepareElevator(kElevatorL2Position);
@@ -165,6 +186,13 @@ void RobotContainer::ConfigureBindings() {
         )
         .OnFalse(
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
+        );
+    (m_climberSubsystem.IsReadyToClimb && m_gamepad.Button(7))
+        .OnTrue(
+            frc2::cmd::RunOnce([this] {m_climberSubsystem.Climb();})
+        )
+        .OnFalse(
+            frc2::cmd::RunOnce([this] {m_climberSubsystem.CancelClimb();})
         );
 }
 
