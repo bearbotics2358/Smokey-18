@@ -74,3 +74,7 @@ void AlgaeSubsystem::GoToAngle() {
 
     frc::SmartDashboard::PutNumber("Algae diff", current_difference);
 }
+
+bool AlgaeSubsystem::IsAlgaeStored() {
+    return m_algaeDataProvider->IsAlgaeCollected();
+}

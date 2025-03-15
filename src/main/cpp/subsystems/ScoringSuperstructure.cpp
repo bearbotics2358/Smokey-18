@@ -36,6 +36,21 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef(bool removeAlgae) {
     ).WithName(commandName);
 }
 
+frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
+    return frc2::cmd::Either(
+        frc2::cmd::Sequence(
+            frc2::cmd::Parallel(
+                m_elevator.GoToHeight(kElevatorProcessorPosition),
+                m_algae.SetGoalAngle(kAlgaeDispense)
+            ),
+            m_elevator.WaitUntilElevatorAtHeight(),
+            m_algae.Dispense()
+        ),
+        frc2::cmd::None(),
+        [this] { return m_algae.IsAlgaeStored(); }
+    );
+}
+
 frc2::CommandPtr ScoringSuperstructure::PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae) {
     return PrepareElevator(desiredPosition).AndThen(ScoreIntoReef(removeAlgae));
 }
