@@ -27,9 +27,18 @@ void AlgaeSubsystem::Periodic() {
 }
 
 frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
-    return frc2::cmd::RunOnce([this, speed] {
-        m_algaeRightMotor.Set(speed);
-    });
+    return frc2::cmd::StartEnd(
+        [this, speed] {
+            m_algaeRightMotor.Set(speed);
+        },
+        [this] {
+            m_algaeRightMotor.Set(0.0);
+        }
+    ).Until(
+        [this] {
+            return m_algaeDataProvider->IsAlgaeCollected();
+        }
+    );
 }
 
 frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(double angle) {
