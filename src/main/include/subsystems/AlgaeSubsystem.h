@@ -19,6 +19,8 @@ constexpr int kAlgaeMotorLeft = 49;
 constexpr int kAlgaeMotorRight = 50;
 constexpr int kAlgaePivot = 35;
 
+constexpr double kAlgaeStow = 150.0;
+
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);

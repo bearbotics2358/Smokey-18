@@ -2,11 +2,15 @@
 
 using namespace subsystems;
 
-ScoringSuperstructure::ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech):
-    m_elevator(elevator),
-    m_coralMech(coralMech)
-{
-}
+ScoringSuperstructure::ScoringSuperstructure(
+    ElevatorSubsystem& elevator, 
+    CoralSubsystem& coralMech, 
+    AlgaeSubsystem& algaeMech
+):
+m_elevator(elevator),
+m_coral(coralMech),
+m_algae(algaeMech)
+{}
 
 frc2::CommandPtr ScoringSuperstructure::StowCommand() {
     return frc2::cmd::Parallel(
@@ -45,4 +49,18 @@ frc2::CommandPtr ScoringSuperstructure::ScoreCoralL4Command() {
 
         // @todo Add other commands to position the coral and algae subsystems
     ).WithName("ScoreL4");
+}
+
+frc2::CommandPtr ScoringSuperstructure::PrepareElevator(units::inch_t desiredPosition) {
+    return frc2::cmd::RunOnce([this, desiredPosition] {
+        m_elevatorSetpointHeight = desiredPosition;
+    })
+}
+
+frc2::CommandPtr Score(bool removeAlgae) {
+    return frc2::cmd::Parallel(
+        m_elevator.GoToHeight(m_elevatorSetpointHeight),
+        m_coral.GoToAngle(std::get<0>(m_elevatorMap[m_elevatorSetpointHeight])),
+        m_algae.SetGoalAngle(std::get<1>(m_elevatorMap[m_elevatorSetpointHeight]))
+    )
 }

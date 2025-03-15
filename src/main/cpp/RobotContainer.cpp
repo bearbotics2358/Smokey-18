@@ -16,7 +16,7 @@ m_featherCanDecoder(featherCanDecoder),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
-m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
+m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
@@ -97,41 +97,21 @@ void RobotContainer::ConfigureBindings() {
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
-    m_joystick.RightBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
-    );
+    // m_joystick.RightBumper().OnTrue(
+    //     m_scoringSuperstructure.Score()
+    // );
 
-    m_joystick.LeftBumper().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(55.0);
-            })
-        )
-    );
+    // m_joystick.LeftBumper().OnTrue(
+    //     m_scoringSuperstructure.ScoreCoralL3Command()
+    // );
 
-    m_joystick.POVUp().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(50.0);
-            })
-        )
-    );
+    // m_joystick.POVUp().OnTrue(
+    //     m_scoringSuperstructure.ScoreCoralL4Command()
+    // );
 
-    m_joystick.POVLeft().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(65.0);
-            })
-        )
-    );
+    // m_joystick.POVLeft().OnTrue(
+    //     m_scoringSuperstructure.ScoreCoralL1Command()
+    // );
 
     m_joystick.RightTrigger().OnTrue(
         m_coralSubsystem.dispenseCoral()
