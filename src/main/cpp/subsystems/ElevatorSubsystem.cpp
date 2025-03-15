@@ -33,7 +33,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
 
-    frc::SmartDashboard::PutNumber("Elevator Set Point", m_elevatorSetpointHeight.value());
+    frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
 
     frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
 
@@ -73,16 +73,20 @@ bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
 }
 
 void ElevatorSubsystem::SetMotorVoltage() {
-    double value = m_elevatorPID.Calculate(CurrentHeight(), m_elevatorSetpointHeight);
+    double value = m_elevatorPID.Calculate(CurrentHeight(), m_setpointHeight);
     frc::SmartDashboard::PutNumber("Elevator PID", value);
 
     units::volt_t goalVolts = units::volt_t(value) + m_feedforward.Calculate(m_elevatorPID.GetSetpoint().velocity);
     frc::SmartDashboard::PutNumber("Elevator PID with feedforward", goalVolts.value());
 
-    double current_difference = fabs(m_elevatorSetpointHeight.value() - CurrentHeight().value());
+    double current_difference = fabs(m_setpointHeight.value() - CurrentHeight().value());
     if (current_difference >= TOLERANCE) {
         m_elevatorMotor1.SetVoltage(goalVolts);
         m_elevatorMotor2.SetVoltage(goalVolts);
+        elevatorAtHeight = false;
+    } else if (m_setpointHeight == 0.0_in) {
+        m_elevatorMotor1.SetVoltage(0_V);
+        m_elevatorMotor2.SetVoltage(0_V);
         elevatorAtHeight = false;
     } else {
         m_elevatorMotor1.SetVoltage(kG);
@@ -94,7 +98,7 @@ void ElevatorSubsystem::SetMotorVoltage() {
 
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
-        m_elevatorSetpointHeight = height;
+        m_setpointHeight = height;
     });
 }
 
