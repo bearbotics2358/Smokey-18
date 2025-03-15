@@ -39,6 +39,7 @@ frc2::CommandPtr AlgaeSubsystem::Intake() {
             return m_algaeDataProvider->IsAlgaeCollected();
         }
     ).WithTimeout(3_s);
+
 }
 
 frc2::CommandPtr AlgaeSubsystem::Dispense() {
