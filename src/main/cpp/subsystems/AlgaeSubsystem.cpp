@@ -70,7 +70,7 @@ void AlgaeSubsystem::GoToAngle() {
     frc::SmartDashboard::PutNumber("Algae PID with FeedForward", goalVolts.value());
 
     double current_difference = fabs(m_setpointAngle.value() - CurrentAngle().value());
-    m_algaePivotMotor.SetVoltage(goalVolts); //current_difference >= TOLERANCE  ?
+    m_algaePivotMotor.SetVoltage(goalVolts);
 
     frc::SmartDashboard::PutNumber("Algae diff", current_difference);
 }
