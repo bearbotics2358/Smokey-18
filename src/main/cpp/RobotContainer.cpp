@@ -26,7 +26,7 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
 
     ConfigureBindings();
 
-    m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    //m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
 }
 
 void RobotContainer::ConfigureBindings() {
