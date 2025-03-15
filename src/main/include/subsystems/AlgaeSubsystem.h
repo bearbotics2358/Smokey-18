@@ -20,6 +20,9 @@ constexpr int kAlgaeMotorRight = 50;
 constexpr int kAlgaePivot = 35;
 
 constexpr double kAlgaeStow = 150.0;
+constexpr double kAlgaeCollect = 90.0;
+constexpr double kAlgaeCollectSpeed = -0.4;
+constexpr double kAlgaeDispenseSpeed = 0.4;
 
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
