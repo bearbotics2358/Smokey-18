@@ -126,6 +126,18 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
+
+    m_joystick.POVRight().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(-0.25_mps);
+        })
+    );
+
+    m_joystick.POVLeft().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(0.25_mps);
+        })
+    );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
