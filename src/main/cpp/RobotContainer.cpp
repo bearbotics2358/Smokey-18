@@ -32,6 +32,8 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
+
+    // **** Drivetrain Buttons **** //
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
         return drive.WithVelocityX(
@@ -45,6 +47,9 @@ void RobotContainer::ConfigureBindings() {
             ); // Drive counterclockwise with negative X (left)
     }));
 
+    m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+
+    // **** Driver Station Buttons **** //
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
@@ -67,6 +72,7 @@ void RobotContainer::ConfigureBindings() {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
     }));
 
+    // TODO: change the name of ALGAE_HELD
     m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
     }));
@@ -85,44 +91,22 @@ void RobotContainer::ConfigureBindings() {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
     }));
 
-    m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
+    // **** Xbox A, B, X, & Y Button functions **** //
+    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
-    // Temporarily disabling algae to use X for alignment testing
-    // m_joystick.X().OnTrue(m_algaeSubsystem.Intake());
-    // m_joystick.Y().OnTrue(m_algaeSubsystem.Dispense());
+    m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
-    m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
-
-    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
-
-    // m_joystick.RightBumper().OnTrue(
-    //     m_scoringSuperstructure.ScoreIntoReef()
-    // );
-
-    m_joystick.RightTrigger().OnTrue(
-        m_coralSubsystem.dispenseCoral()
-    );
+    // **** Xbox Trigger & Bumper Buttons **** //
+    m_joystick.RightTrigger()
+        .OnTrue(
+            m_scoringSuperstructure.ScoreIntoReef(false)
+        )
+        .OnFalse(
+            m_elevatorSubsystem.GoToHeight(m_elevatorSubsystem.CurrentHeight())
+        );
 
     m_joystick.LeftTrigger().OnTrue(
         m_coralSubsystem.collectCoral()
-    );
-
-    m_joystick.A().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(0_in),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(160.0);
-            })
-        )
-    );
-
-    m_joystick.B().OnTrue(
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
-            frc2::cmd::RunOnce([this] {
-                m_coralSubsystem.GoToAngle(125.0);
-            })
-        )
     );
 
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
@@ -132,6 +116,11 @@ void RobotContainer::ConfigureBindings() {
         .OnFalse(
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
+
+    // **** Xbox Dpad Buttons **** //
+    m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
+
+    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
