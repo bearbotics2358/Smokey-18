@@ -27,7 +27,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {
         m_coral.GoToAngle(coralAngle),
         frc2::cmd::Either(
             frc2::cmd::Sequence(
-                m_algae.SetGoalAngle(kAlgaeCollect),
+                m_algae.SetGoalAngle(kAlgaeExtendedAngle),
                 m_algae.Intake()
             ),
             m_algae.SetGoalAngle(algaeAngle),
@@ -42,7 +42,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
         frc2::cmd::Sequence(
             frc2::cmd::Parallel(
                 m_elevator.GoToHeight(kElevatorProcessorPosition),
-                m_algae.SetGoalAngle(kAlgaeDispense)
+                m_algae.SetGoalAngle(kAlgaeExtendedAngle)
             ),
             m_elevator.WaitUntilElevatorAtHeight(),
             m_algae.Dispense()

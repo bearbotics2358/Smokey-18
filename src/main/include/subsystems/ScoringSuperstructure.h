@@ -33,13 +33,13 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         bool m_collectAlgae;
 
         // Values for the tuple go from coral to algae angles to the name of the command.
-        std::map<units::inch_t, std::tuple<double, double>> m_elevatorMap = {
-            {kElevatorStowPosition, std::make_tuple(kCoralStow, kAlgaeStow)},
-            {kElevatorCollectPosition, std::make_tuple(kCoralStow, kAlgaeStow)},
-            {kElevatorL1Position, std::make_tuple(kCoralL1, kAlgaeStow)},
-            {kElevatorL2Position, std::make_tuple(kCoralL2, kAlgaeStow)},
-            {kElevatorL3Position, std::make_tuple(kCoralL3, kAlgaeStow)},
-            {kElevatorL4Position, std::make_tuple(kCoralL4, kAlgaeStow)},
+        std::map<units::inch_t, std::tuple<units::degree_t, units::degree_t>> m_elevatorMap = {
+            {kElevatorStowPosition, std::make_tuple(kCoralStow, kAlgaeStowAngle)},
+            {kElevatorCollectPosition, std::make_tuple(kCoralStow, kAlgaeStowAngle)},
+            {kElevatorL1Position, std::make_tuple(kCoralL1, kAlgaeStowAngle)},
+            {kElevatorL2Position, std::make_tuple(kCoralL2, kAlgaeStowAngle)},
+            {kElevatorL3Position, std::make_tuple(kCoralL3, kAlgaeStowAngle)},
+            {kElevatorL4Position, std::make_tuple(kCoralL4, kAlgaeStowAngle)},
         };
 };
 
