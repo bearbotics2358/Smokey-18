@@ -21,6 +21,7 @@ constexpr int kAlgaePivot = 35;
 
 constexpr double kAlgaeStow = 150.0;
 constexpr double kAlgaeCollect = 90.0;
+constexpr double kAlgaeDispense = 90.0;
 
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
@@ -29,9 +30,10 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
   frc2::CommandPtr Intake();
   frc2::CommandPtr Dispense();
+
+  bool IsAlgaeStored();
   
   frc2::CommandPtr SetGoalAngle(double angle);
-
   units::degree_t CurrentAngle();
 
  private:
