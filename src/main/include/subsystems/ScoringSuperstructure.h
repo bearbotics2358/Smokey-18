@@ -32,7 +32,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         units::inch_t m_elevatorSetpointHeight;
         bool m_collectAlgae;
 
-        // Values for the tuple go from coral to algae angles to the name of the command.
+        // Values for the tuple are coral and algae angles.
         std::map<units::inch_t, std::tuple<units::degree_t, units::degree_t>> m_elevatorMap = {
             {kElevatorStowPosition, std::make_tuple(kCoralStow, kAlgaeStowAngle)},
             {kElevatorCollectPosition, std::make_tuple(kCoralStow, kAlgaeStowAngle)},
