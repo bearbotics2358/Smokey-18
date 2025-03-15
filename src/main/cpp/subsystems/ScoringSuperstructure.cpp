@@ -54,7 +54,3 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
 frc2::CommandPtr ScoringSuperstructure::PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae) {
     return PrepareElevator(desiredPosition).AndThen(ScoreIntoReef(removeAlgae));
 }
-
-frc2::CommandPtr ScoringSuperstructure::PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae) {
-    return PrepareElevator(desiredPosition).AndThen(ScoreIntoReef(removeAlgae));
-}
