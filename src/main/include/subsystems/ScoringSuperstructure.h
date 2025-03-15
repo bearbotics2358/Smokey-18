@@ -21,6 +21,9 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr ScoreIntoReef(bool removeAlgae);
         frc2::CommandPtr ScoreIntoProcessor();
         frc2::CommandPtr PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae);
+
+        frc2::CommandPtr ToCollectPosition();
+        frc2::CommandPtr ToStowPosition();
     private:
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;
