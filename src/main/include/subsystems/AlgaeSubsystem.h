@@ -34,7 +34,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
   bool IsAlgaeStored();
   
-  frc2::CommandPtr SetGoalAngle(double angle);
+  frc2::CommandPtr SetGoalAngle(units::degree_t angle);
   units::degree_t CurrentAngle();
 
  private:

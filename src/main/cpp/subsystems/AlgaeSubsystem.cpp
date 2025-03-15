@@ -52,9 +52,9 @@ frc2::CommandPtr AlgaeSubsystem::Dispense() {
     ).WithTimeout(2_s);
 }
 
-frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(double angle) {
+frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(units::degree_t angle) {
     return frc2::cmd::RunOnce([this, angle] {
-        m_setpointAngle = units::degree_t(angle);
+        m_setpointAngle = angle;
     });
 }
 

@@ -8,11 +8,11 @@
 #include <frc/controller/PIDController.h>
 #include "subsystems/ICoralIntakeDataProvider.h"
 
-constexpr double kCoralStow = 160.0;
-constexpr double kCoralL1 = 65.0;
-constexpr double kCoralL2 = 55.0;
-constexpr double kCoralL3 = 55.0;
-constexpr double kCoralL4 = 50.0;
+constexpr units::degree_t kCoralStow = 160.0_deg;
+constexpr units::degree_t kCoralL1 = 65.0_deg;
+constexpr units::degree_t kCoralL2 = 55.0_deg;
+constexpr units::degree_t kCoralL3 = 55.0_deg;
+constexpr units::degree_t kCoralL4 = 50.0_deg;
 
 class CoralSubsystem : public frc2::SubsystemBase {
  public:
@@ -25,7 +25,7 @@ class CoralSubsystem : public frc2::SubsystemBase {
 
   bool CoralPresent();
 
-  frc2::CommandPtr GoToAngle(double angle);
+  frc2::CommandPtr GoToAngle(units::degree_t angle);
   frc2::CommandPtr collectCoral();
   frc2::CommandPtr dispenseCoral();
 

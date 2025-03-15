@@ -54,9 +54,9 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
  * @param targetAngle The desired angle of the mechanism in degrees
  */
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
-frc2::CommandPtr CoralSubsystem::GoToAngle(double targetAngle) {
+frc2::CommandPtr CoralSubsystem::GoToAngle(units::degree_t targetAngle) {
     return frc2::cmd::RunOnce([this, targetAngle] {
-        m_setpointAngle = targetAngle;
+        m_setpointAngle = targetAngle.value();
     });
 }
 
