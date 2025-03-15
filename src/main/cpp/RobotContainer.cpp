@@ -183,4 +183,8 @@ void RobotContainer::AddPathPlannerCommands() {
         "ScoreL3AndRemoveAlgae", 
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(kElevatorL3Position, true))
     );
+    NamedCommands::registerCommand(
+        "ScoreAlgae", 
+        std::move(m_scoringSuperstructure.ScoreIntoProcessor())
+    );
 }
