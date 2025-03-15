@@ -51,41 +51,39 @@ void RobotContainer::ConfigureBindings() {
         }),
         m_climberSubsystem.Climb()
     ));
-
+    
     m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL4Position);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
     }));
 
     m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL3Position);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
     }));
 
     m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL2Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL2Position);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
     }));
 
-    m_gamepad.Button(3).OnTrue(frc2::cmd::RunOnce([this] {
+    m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
     }));
 
     m_gamepad.Button(1).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL1Position);
+        m_scoringSuperstructure.PrepareElevator(kElevatorL1Position);
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
     }));
 
     m_gamepad.Button(2).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition);
+        m_scoringSuperstructure.ToStowPosition();
     }));
 
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    // (m_joystick.Back() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
-    // (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
-    // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
-    // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+    m_gamepad.Button(3).OnTrue(frc2::cmd::RunOnce([this] {
+        m_scoringSuperstructure.ToCollectPosition();
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+    }));
 
     m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
@@ -99,18 +97,6 @@ void RobotContainer::ConfigureBindings() {
 
     // m_joystick.RightBumper().OnTrue(
     //     m_scoringSuperstructure.ScoreIntoReef()
-    // );
-
-    // m_joystick.LeftBumper().OnTrue(
-    //     m_scoringSuperstructure.ScoreCoralL3Command()
-    // );
-
-    // m_joystick.POVUp().OnTrue(
-    //     m_scoringSuperstructure.ScoreCoralL4Command()
-    // );
-
-    // m_joystick.POVLeft().OnTrue(
-    //     m_scoringSuperstructure.ScoreCoralL1Command()
     // );
 
     m_joystick.RightTrigger().OnTrue(
