@@ -29,7 +29,9 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);
   void Periodic();
 
-  frc2::CommandPtr SetSpeed(double speed);
+  frc2::CommandPtr Intake();
+  frc2::CommandPtr Dispense();
+  
   frc2::CommandPtr SetGoalAngle(double angle);
 
   units::degree_t CurrentAngle();
