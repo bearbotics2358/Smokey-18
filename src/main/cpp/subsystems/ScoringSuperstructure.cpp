@@ -32,13 +32,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef(bool removeAlgae) {
             m_algae.SetGoalAngle(algaeAngle),
             [removeAlgae] { return removeAlgae; }
         ),
-        frc2::cmd::Sequence(
-            m_elevator.WaitUntilElevatorAtHeight(),
-            m_coral.dispenseCoral(),
-            m_elevator.GoToHeight(kElevatorProcessorPosition),
-            m_elevator.WaitUntilElevatorAtHeight(),
-            m_algae.Dispense()
-        )
+        m_elevator.WaitUntilElevatorAtHeight().AndThen(m_coral.dispenseCoral())
     ).WithName(commandName);
 }
 
