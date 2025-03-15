@@ -23,9 +23,9 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
 
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
-    ConfigureBindings();
+    m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-    //m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    ConfigureBindings();
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -46,7 +46,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
-            m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
         }),
         m_climberSubsystem.Climb()
     ));
