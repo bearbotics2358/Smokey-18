@@ -19,21 +19,18 @@ frc2::CommandPtr ScoringSuperstructure::PrepareElevator(units::inch_t desiredPos
 }
 
 frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef(bool removeAlgae) {
-    auto [coralAngle, algaeAngle, commandName] = m_elevatorMap[m_elevatorSetpointHeight];
-
-    if (removeAlgae) {
-        return frc2::cmd::Parallel(
-            m_elevator.GoToHeight(kElevatorL3Position),
-            frc2::cmd::Sequence(
-                m_algae.SetGoalAngle(kAlgaeCollect),
-                m_algae.SetSpeed(kAlgaeCollectSpeed)
-            )
-        ).WithName(commandName);
-    }
+    auto [coralAngle, algaeAngle, commandName] = m_elevatorMap[kElevatorL3Position];
 
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(m_elevatorSetpointHeight),
         m_coral.GoToAngle(coralAngle),
-        m_algae.SetGoalAngle(algaeAngle)
+        frc2::cmd::Either(
+            frc2::cmd::Sequence(
+                m_algae.SetGoalAngle(kAlgaeCollect),
+                m_algae.Intake()
+            ),
+            m_algae.SetGoalAngle(algaeAngle),
+            [this, removeAlgae] { return removeAlgae; }
+        )
     ).WithName(commandName);
 }
