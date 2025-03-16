@@ -13,6 +13,7 @@
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
+m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
@@ -23,9 +24,9 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
 
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
-    ConfigureBindings();
+    m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-    //m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    ConfigureBindings();
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -46,7 +47,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
-            m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
         }),
         m_climberSubsystem.Climb()
     ));
@@ -89,9 +90,8 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
     // Temporarily disabling algae to use X for alignment testing
-    // m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));
-    // m_joystick.Y().OnTrue(m_algaeSubsystem.SetSpeed(-0.4));
-    // (m_joystick.X() && m_joystick.Y()).OnTrue(m_algaeSubsystem.SetSpeed(0.0));
+    // m_joystick.X().OnTrue(m_algaeSubsystem.Intake());
+    // m_joystick.Y().OnTrue(m_algaeSubsystem.Dispense());
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
