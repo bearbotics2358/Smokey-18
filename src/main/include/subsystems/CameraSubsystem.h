@@ -24,8 +24,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   units::degree_t getZRotation();
 
   void Periodic() override;
-
-  frc::Pose2d GetRobotPosition();
+  
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

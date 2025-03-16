@@ -174,5 +174,5 @@ frc2::Command *RobotContainer::GetAutonomousCommand()
 }
 
 frc::Pose2d RobotContainer::GetRobotPose() {
-    return m_cameraSubsystem.GetRobotPosition();
+    return m_drivetrain.GetState().Pose;
 }

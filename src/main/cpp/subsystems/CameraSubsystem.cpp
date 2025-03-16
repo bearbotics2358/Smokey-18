@@ -87,14 +87,3 @@ void CameraSubsystem::Periodic() {
     //     frc::SmartDashboard::PutNumber("Best Tag ID", 0);
     // }
 }
-
-frc::Pose2d CameraSubsystem::GetRobotPosition() {
-    frc::Pose2d aprilTagPose = aprilTagFieldLayout.GetTagPose(bestTarget.GetFiducialId()).value().ToPose2d();
-
-    frc::Transform2d transform = frc::Transform2d(
-        transformation.Translation().ToTranslation2d(),
-        transformation.Rotation().ToRotation2d()
-    );
-
-    return aprilTagPose + transform;
-}
