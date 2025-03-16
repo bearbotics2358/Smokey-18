@@ -95,12 +95,12 @@ void RobotContainer::ConfigureBindings() {
         m_scoringSuperstructure.ToCollectPosition();
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
     }));
-
+  
     // **** Xbox A, B, X, & Y Button functions **** //
     m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
-
+  
     // **** Xbox Trigger & Bumper Buttons **** //
     m_joystick.RightTrigger()
         .OnTrue(

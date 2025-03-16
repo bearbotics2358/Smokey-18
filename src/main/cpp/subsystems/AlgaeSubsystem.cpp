@@ -43,12 +43,8 @@ frc2::CommandPtr AlgaeSubsystem::Intake() {
 
 frc2::CommandPtr AlgaeSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
-        [this] {
-            m_algaeRightMotor.Set(-0.4);
-        },
-        [this] {
-            m_algaeRightMotor.Set(0.0);
-        }
+        [this] { m_algaeRightMotor.Set(-0.4); },
+        [this] { m_algaeRightMotor.Set(0.0); }
     ).WithTimeout(2_s);
 }
 
