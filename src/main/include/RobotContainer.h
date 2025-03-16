@@ -70,4 +70,5 @@ public:
 
 private:
     void ConfigureBindings();
+    void AddPathPlannerCommands();
 };

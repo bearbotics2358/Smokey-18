@@ -23,6 +23,7 @@ constexpr int kLimitSwitchId = 0;
 // @todo Assign these to real values when we know the distances
 constexpr units::inch_t kElevatorCollectPosition = 3.0_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
+constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
 constexpr units::inch_t kElevatorL2Position = 12_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
@@ -55,8 +56,12 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc2::Trigger IsHeightAboveThreshold = frc2::Trigger([this] {
             return GetElevatorHeightAboveThreshold();
         });
+
+        frc2::CommandPtr WaitUntilElevatorAtHeight();
     private:
         bool GetElevatorHeightAboveThreshold();
+
+        bool elevatorAtHeight = false;
 
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;

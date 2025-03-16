@@ -83,12 +83,15 @@ void ElevatorSubsystem::SetMotorVoltage() {
     if (current_difference >= TOLERANCE) {
         m_elevatorMotor1.SetVoltage(goalVolts);
         m_elevatorMotor2.SetVoltage(goalVolts);
+        elevatorAtHeight = false;
     } else if (m_setpointHeight == 0.0_in) {
         m_elevatorMotor1.SetVoltage(0_V);
         m_elevatorMotor2.SetVoltage(0_V);
+        elevatorAtHeight = false;
     } else {
         m_elevatorMotor1.SetVoltage(kG);
         m_elevatorMotor2.SetVoltage(kG);
+        elevatorAtHeight = true;
     }
     frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
 }
@@ -109,4 +112,8 @@ frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
 
 bool ElevatorSubsystem::GetElevatorHeightAboveThreshold() {
     return CurrentHeight() >= kHeightThreshold;
+}
+
+frc2::CommandPtr ElevatorSubsystem::WaitUntilElevatorAtHeight() {
+    return frc2::cmd::WaitUntil([this] { return elevatorAtHeight; });
 }
