@@ -1,7 +1,12 @@
 
 #include <subsystems/CameraSubsystem.h>
 
-CameraSubsystem::CameraSubsystem() {
+CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain) {
+    m_drivetrain = drivetrain;
+    frc::Transform3d robotToCam = 
+        frc::Transform3d(frc::Translation3d(-2.5625_in, 0_in, 12.5_in),
+            frc::Rotation3d(0_rad,0_rad,0_rad));
+    m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 }
 
 //updates local variables related to the limelight result
@@ -10,7 +15,12 @@ void CameraSubsystem::updateData() {
     if (result.HasTargets()) {
         bestTarget = result.GetBestTarget();
         transformation = bestTarget.GetBestCameraToTarget();
+        std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(result);
+        if (estimatedPose){
+            m_drivetrain->AddVisionMeasurement(estimatedPose->estimatedPose.ToPose2d(),ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose->timestamp));
+        }
 
+        
         frc::SmartDashboard::PutBoolean("Has Targets", true);
 
         frc::SmartDashboard::PutNumber("Rotation", bestTarget.GetYaw());

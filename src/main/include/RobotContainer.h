@@ -34,6 +34,9 @@ private:
     swerve::requests::PointWheelsAt point{};
     swerve::requests::RobotCentric forwardStraight = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
+    swerve::requests::RobotCentric strafe = swerve::requests::RobotCentric{}
+        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+        .WithVelocityX(0_mps);
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
@@ -67,4 +70,5 @@ public:
 
 private:
     void ConfigureBindings();
+    void AddPathPlannerCommands();
 };
