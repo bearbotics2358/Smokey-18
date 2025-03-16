@@ -14,6 +14,7 @@
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
+m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
@@ -52,6 +53,19 @@ void RobotContainer::ConfigureBindings() {
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     // **** Driver Station Buttons **** //
+
+    m_joystick.POVRight().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(-0.25_mps);
+        })
+    );
+
+    m_joystick.POVLeft().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(0.25_mps);
+        })
+    );
+
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
@@ -99,7 +113,7 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
-
+  
     // **** Xbox Trigger & Bumper Buttons **** //
     m_joystick.RightTrigger()
         .OnTrue(
