@@ -25,8 +25,9 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem)
 
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
-    if(m_elevatorSubsystem.CurrentHeight() == kElevatorStowPosition){
+    if (m_elevatorSubsystem.CurrentHeight() == kElevatorStowPosition) {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+    }
 
     // Test this.
     m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -87,27 +88,28 @@ void RobotContainer::ConfigureBindings() {
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
     }));
 
-    m_gamepad.Button(7).OnTrue(frc2::cmd::RunOnce([this] {
-        m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
-        m_climberSubsystem.CancelClimb();
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
-        if (m_climberSubsystem.IsLeftOnCage()){
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTTRUE);
-        }
-        else{
+    m_gamepad.Button(7)
+        .OnTrue(frc2::cmd::RunOnce([this] {
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+            m_climberSubsystem.CancelClimb();
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
-        }
-        if(m_climberSubsystem.IsRightOnCage()){
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTTRUE);
-        }
-        else{
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
-        }}))
-    .OnFalse(frc2::cmd::RunOnce([this] {
-        m_climberSubsystem.CancelClimb();
 
-    }));
+            if (m_climberSubsystem.IsLeftOnCage()){
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTTRUE);
+            } else {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
+            }
+
+            if (m_climberSubsystem.IsRightOnCage()) {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTTRUE);
+            } else {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
+            }}))
+        .OnFalse(frc2::cmd::RunOnce([this] {
+            m_climberSubsystem.CancelClimb();
+
+        }));
     
     // TODO: change the name of ALGAE_HELD
     m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {

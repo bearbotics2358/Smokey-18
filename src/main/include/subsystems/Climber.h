@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Commands.h>
+#include <frc2/command/button/Trigger.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -48,8 +49,9 @@ public:
     bool IsRightOnCage();
 
     frc2::Trigger IsReadyToClimb = frc2::Trigger([this] {
-            return m_readyToClimb;
-        });
+        return m_readyToClimb;
+    });
+
 private:
     void SetMotorVoltage();
 
