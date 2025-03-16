@@ -31,6 +31,14 @@ void CameraSubsystem::updateData() {
     }
 }
 
+std::optional<int> CameraSubsystem::GetTargetTagId() {
+    if (visibleTargets()) {
+        return bestTarget.GetFiducialId();
+    } else {
+        return std::nullopt;
+    }
+}
+
 //Returns true if targets are visible to limelight. Otherwise returns false
 bool CameraSubsystem::visibleTargets() {
     return result.HasTargets();
