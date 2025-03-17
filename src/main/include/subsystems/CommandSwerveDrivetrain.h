@@ -254,6 +254,7 @@ public:
         return m_sysIdRoutineToApply->Dynamic(direction);
     }
 
+    frc::Pose2d GetPose();
 private:
     void ConfigureAutoBuilder();
     void StartSimThread();

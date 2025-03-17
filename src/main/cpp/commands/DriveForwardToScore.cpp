@@ -12,11 +12,11 @@ DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* dr
 }
 
 void DriveForwardToScore::Initialize() {
-    m_targetX = kForwardDistance + m_drivetrain->GetState().Pose.X();
+    m_targetX = kForwardDistance + m_drivetrain->GetPose().X();
 }
 
 void DriveForwardToScore::Execute() {
-    units::inch_t currentXDistance = m_drivetrain->GetState().Pose.X();
+    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
     frc::SmartDashboard::PutNumber("Drive Forward Current X", currentXDistance.value());
     double forward = m_XAlignmentPID.Calculate(m_targetX.value(), currentXDistance.value());
     forward = std::clamp(forward, -1.0, 1.0);
@@ -25,6 +25,6 @@ void DriveForwardToScore::Execute() {
 }
 
 bool DriveForwardToScore::IsFinished() {
-    units::inch_t currentXDistance = m_drivetrain->GetState().Pose.X();
+    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
     return units::math::abs(currentXDistance - m_targetX) < kTolerance;
 }

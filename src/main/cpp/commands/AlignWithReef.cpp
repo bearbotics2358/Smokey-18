@@ -48,7 +48,7 @@ void AlignWithReef::Execute() {
         strafe = 0.0;
     }
 
-    units::degree_t currentDegrees = m_drivetrain->GetState().Pose.Rotation().Degrees();
+    units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
     double rotation = m_rotationalPID.Calculate(currentDegrees.value(), m_targetDegrees.value());
     rotation = std::clamp(rotation, -1.0, 1.0);
 
@@ -69,7 +69,7 @@ bool AlignWithReef::IsFinished() {
 
     units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
     units::meter_t strafe_diff = units::math::abs(kStrafeSetpoint - m_camera->getStrafeTransformation());
-    units::degree_t currentDegrees = m_drivetrain->GetState().Pose.Rotation().Degrees();
+    units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
     units::degree_t rotational_diff = units::math::abs(currentDegrees - m_targetDegrees);
 
     // If the bot is within tolerance for X, Y and rotational position, then we consider the command finished.
