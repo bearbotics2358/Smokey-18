@@ -8,6 +8,7 @@
 #include <frc/controller/PIDController.h>
 #include "subsystems/ICoralIntakeDataProvider.h"
 
+constexpr units::degree_t kCoralCollect = 150.0_deg;
 constexpr units::degree_t kCoralStow = 160.0_deg;
 constexpr units::degree_t kCoralL1 = 65.0_deg;
 constexpr units::degree_t kCoralL2 = 55.0_deg;

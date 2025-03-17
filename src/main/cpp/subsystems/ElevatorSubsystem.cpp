@@ -93,21 +93,12 @@ void ElevatorSubsystem::SetMotorVoltage() {
         m_elevatorMotor2.SetVoltage(kG);
         elevatorAtHeight = true;
     }
-    frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
         m_setpointHeight = height;
     });
-}
-
-void ElevatorSubsystem::PrepareElevator(units::inch_t newPosition) {
-    m_desiredElevatorPosition = newPosition;
-}
-
-frc2::CommandPtr ElevatorSubsystem::GoToSavedPosition() {
-    return GoToHeight(m_desiredElevatorPosition);
 }
 
 bool ElevatorSubsystem::GetElevatorHeightAboveThreshold() {

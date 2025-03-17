@@ -45,7 +45,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         void PrepareElevator(units::inch_t newPosition);
         frc2::CommandPtr GoToHeight(units::inch_t height);
-        frc2::CommandPtr GoToSavedPosition();
 
         const units::inch_t WHEEL_RADIUS = 1.325_in;
         // 9 to 1
@@ -71,8 +70,13 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         static constexpr double TOLERANCE = 0.5;
 
-        static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
+        // @todo Re-adjust the elevator speeds. We slowed them down because raising
+        //  lowering wasn't very smooth in recent tests. It's still unclear what
+        //  is causing that.
+        // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
+        // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
+        static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
+        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 2.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 0.5;
         static constexpr double kD = 2.0;
@@ -92,6 +96,4 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         // Changing m_setpointHeight will send the elevator to that position immediately
         units::inch_t m_setpointHeight = 0_in;
 
-        // Use m_desiredElevatorPosition when preparing the elevator for a call to GoToSavedPosition()
-        units::inch_t m_desiredElevatorPosition;
 };
