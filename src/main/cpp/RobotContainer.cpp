@@ -10,27 +10,35 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
+
+using namespace subsystems;
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
+m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
-m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem)
+m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_drivetrain)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
+    m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+
     ConfigureBindings();
 
-    //m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    AddPathPlannerCommands();
 }
 
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
+
+    // **** Xbox Drivetrain Buttons **** //
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
         return drive.WithVelocityX(
@@ -44,131 +52,95 @@ void RobotContainer::ConfigureBindings() {
             ); // Drive counterclockwise with negative X (left)
     }));
 
-    m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
-        frc2::cmd::RunOnce([this] {
-            m_drivetrain.SetSwervesNeutralValue(ctre::phoenix6::signals::NeutralModeValue::Coast);
-        }),
-        m_climberSubsystem.Climb()
-    ));
-
-    m_gamepad.Button(11).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL4Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
-    }));
-
-    m_gamepad.Button(10).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL3Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
-    }));
-
-    m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL2Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
-    }));
-
-    m_gamepad.Button(3).OnTrue(frc2::cmd::RunOnce([this] {
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
-    }));
-
-    m_gamepad.Button(1).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorL1Position);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
-    }));
-
-    m_gamepad.Button(2).OnTrue(frc2::cmd::RunOnce([this] {
-        m_elevatorSubsystem.PrepareElevator(kElevatorStowPosition);
-    }));
-
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    // (m_joystick.Back() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
-    // (m_joystick.Back() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
-    // (m_joystick.Start() && m_joystick.Y()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
-    // (m_joystick.Start() && m_joystick.X()).WhileTrue(m_drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
-
-    m_joystick.X().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
-
-    // Temporarily disabling algae to use X for alignment testing
-    // m_joystick.X().OnTrue(m_algaeSubsystem.SetSpeed(0.4));
-    // m_joystick.Y().OnTrue(m_algaeSubsystem.SetSpeed(-0.4));
-    // (m_joystick.X() && m_joystick.Y()).OnTrue(m_algaeSubsystem.SetSpeed(0.0));
-
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
-
-    // m_joystick.RightBumper().OnTrue(
-    //     frc2::cmd::Parallel(
-    //         m_elevatorSubsystem.GoToHeight(kElevatorL2Position),
-    //         frc2::cmd::RunOnce([this] {
-    //             m_coralSubsystem.GoToAngle(55.0);
-    //         })
-    //     )
-    // );
-
-    // m_joystick.LeftBumper().OnTrue(
-    //     frc2::cmd::Parallel(
-    //         m_elevatorSubsystem.GoToHeight(kElevatorL3Position),
-    //         frc2::cmd::RunOnce([this] {
-    //             m_coralSubsystem.GoToAngle(55.0);
-    //         })
-    //     )
-    // );
-
-    // m_joystick.POVUp().OnTrue(
-    //     frc2::cmd::Parallel(
-    //         m_elevatorSubsystem.GoToHeight(kElevatorL4Position),
-    //         frc2::cmd::RunOnce([this] {
-    //             m_coralSubsystem.GoToAngle(50.0);
-    //         })
-    //     )
-    // );
-
-    // m_joystick.POVLeft().OnTrue(
-    //     frc2::cmd::Parallel(
-    //         m_elevatorSubsystem.GoToHeight(kElevatorL1Position),
-    //         frc2::cmd::RunOnce([this] {
-    //             m_coralSubsystem.GoToAngle(65.0);
-    //         })
-    //     )
-    // );
-
-    // m_joystick.RightTrigger().OnTrue(
-    //     m_coralSubsystem.dispenseCoral()
-    // );
-
-    // m_joystick.LeftTrigger().OnTrue(
-    //     m_coralSubsystem.collectCoral()
-    // );
-
-    // m_joystick.A().OnTrue(
-    //     frc2::cmd::Parallel(
-    //         m_elevatorSubsystem.GoToHeight(0_in),
-    //         frc2::cmd::RunOnce([this] {
-    //             m_coralSubsystem.GoToAngle(160.0);
-    //         })
-    //     )
-    // );
-
-    // m_joystick.B().OnTrue(
-    //     frc2::cmd::Parallel(
-    //         m_elevatorSubsystem.GoToHeight(kElevatorCollectPosition),
-    //         frc2::cmd::RunOnce([this] {
-    //             m_coralSubsystem.GoToAngle(125.0);
-    //         })
-    //     )
-    // );
-
-    m_joystick.POVLeft().OnTrue(
-        m_climberSubsystem.Extend()
+    m_joystick.POVRight().WhileTrue(
+        m_drivetrain.ApplyRequest([this]() -> auto&& {
+            return strafe.WithVelocityY(-0.25_mps);
+        })
     );
 
-    m_joystick.POVUp().OnTrue(
-        m_climberSubsystem.Climb()
+    m_joystick.POVLeft().WhileTrue(
+        m_drivetrain.ApplyRequest([this]() -> auto&& {
+            return strafe.WithVelocityY(0.25_mps);
+        })
     );
 
-    m_joystick.POVRight().OnTrue(
-        m_climberSubsystem.Stow()
+    // **** Driver Station Buttons **** //
+
+    m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+        })
+
+        // @todo Add a command to move the climber to the Ready To Climb position
+    ));
+
+    m_gamepad.Button(11).OnTrue(
+        frc2::cmd::Parallel(
+            m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L4),
+            frc2::cmd::RunOnce([this] {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
+            })
+        ));
+
+    m_gamepad.Button(10).OnTrue(
+        frc2::cmd::Parallel(
+            m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral),
+            frc2::cmd::RunOnce([this] {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+            })
+        ));
+
+    // TODO: change the name of ALGAE_HELD
+    m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
+        frc2::cmd::RunOnce([this] {
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
+        })
+    ));
+
+    m_gamepad.Button(6).OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L2),
+        frc2::cmd::RunOnce([this] {
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+        })
+    ));
+
+    m_gamepad.Button(1).OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L1),
+        frc2::cmd::RunOnce([this] {
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+        })
+    ));
+
+    m_gamepad.Button(2).OnTrue(
+        m_scoringSuperstructure.ToStowPosition()
+    );
+
+    m_gamepad.Button(3).OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.ToCollectPosition(),
+        frc2::cmd::RunOnce([this] {
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+        })
+    ));
+
+    // **** Xbox A, B, X, & Y Button functions **** //
+    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
+
+    m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
+
+    // **** Xbox Trigger & Bumper Buttons **** //
+    m_joystick.RightTrigger()
+        .OnTrue(
+            m_scoringSuperstructure.ScoreIntoReef()
+        );
+        // .OnFalse(
+        //     m_elevatorSubsystem.GoToHeight(m_elevatorSubsystem.CurrentHeight())
+        // );
+
+    m_joystick.LeftTrigger().OnTrue(
+        m_coralSubsystem.collectCoral()
     );
 
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
@@ -178,9 +150,50 @@ void RobotContainer::ConfigureBindings() {
         .OnFalse(
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
+
+    // **** Xbox Dpad Buttons **** //
+    m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
+
+    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
+}
+
+void RobotContainer::AddPathPlannerCommands() {
+    using namespace pathplanner;
+    NamedCommands::registerCommand(
+        "Stow",
+        std::move(m_scoringSuperstructure.ToStowPosition())
+    );
+    NamedCommands::registerCommand(
+        "Collect",
+        std::move(m_scoringSuperstructure.ToCollectPosition())
+    );
+    NamedCommands::registerCommand(
+        "ScoreL1",
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L1))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL2",
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL3",
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL4",
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L4))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL3AndRemoveAlgae",
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
+    );
+    NamedCommands::registerCommand(
+        "ScoreAlgae",
+        std::move(m_scoringSuperstructure.ScoreIntoProcessor())
+    );
 }

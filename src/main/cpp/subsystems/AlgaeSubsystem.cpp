@@ -26,15 +26,36 @@ void AlgaeSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("Algae Angle", CurrentAngle().value());
 }
 
-frc2::CommandPtr AlgaeSubsystem::SetSpeed(double speed) {
-    return frc2::cmd::RunOnce([this, speed] {
-        m_algaeRightMotor.Set(speed);
-    });
+frc2::CommandPtr AlgaeSubsystem::Intake() {
+    return frc2::cmd::StartEnd(
+        [this] {
+            m_algaeRightMotor.Set(0.4);
+        },
+        [this] {
+            m_algaeRightMotor.Set(0.0);
+        }
+    ).Until(
+        [this] {
+            return m_algaeDataProvider->IsAlgaeCollected();
+        }
+    ).WithTimeout(3_s);
+
 }
 
-frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(double angle) {
+frc2::CommandPtr AlgaeSubsystem::Dispense() {
+    return frc2::cmd::StartEnd(
+        [this] {
+            m_algaeRightMotor.Set(-0.4);
+        },
+        [this] {
+            m_algaeRightMotor.Set(0.0);
+        }
+    ).WithTimeout(2_s);
+}
+
+frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(units::degree_t angle) {
     return frc2::cmd::RunOnce([this, angle] {
-        m_setpointAngle = units::degree_t(angle);
+        m_setpointAngle = angle;
     });
 }
 
@@ -50,7 +71,11 @@ void AlgaeSubsystem::GoToAngle() {
     frc::SmartDashboard::PutNumber("Algae PID with FeedForward", goalVolts.value());
 
     double current_difference = fabs(m_setpointAngle.value() - CurrentAngle().value());
-    m_algaePivotMotor.SetVoltage(goalVolts); //current_difference >= TOLERANCE  ?
+    m_algaePivotMotor.SetVoltage(goalVolts);
 
     frc::SmartDashboard::PutNumber("Algae diff", current_difference);
+}
+
+bool AlgaeSubsystem::IsAlgaeStored() {
+    return m_algaeDataProvider->IsAlgaeCollected();
 }

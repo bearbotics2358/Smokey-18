@@ -19,14 +19,20 @@ constexpr int kAlgaeMotorLeft = 49;
 constexpr int kAlgaeMotorRight = 50;
 constexpr int kAlgaePivot = 35;
 
+constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
+constexpr units::degree_t kAlgaeExtendedAngle = 90.0_deg;
+
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);
   void Periodic();
 
-  frc2::CommandPtr SetSpeed(double speed);
-  frc2::CommandPtr SetGoalAngle(double angle);
+  frc2::CommandPtr Intake();
+  frc2::CommandPtr Dispense();
 
+  bool IsAlgaeStored();
+  
+  frc2::CommandPtr SetGoalAngle(units::degree_t angle);
   units::degree_t CurrentAngle();
 
  private:
@@ -37,12 +43,11 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     rev::spark::SparkMax m_algaeLeftMotor;
     rev::spark::SparkMax m_algaeRightMotor;
 
-    // TODO: tune these values
     static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
     static constexpr double kP = 12;
-    static constexpr double kI = 0.5;
-    static constexpr double kD = 0.3;
+    static constexpr double kI = 0.0;
+    static constexpr double kD = 1.0;
 
     static constexpr units::volt_t kS = 0.25_V;
     static constexpr units::volt_t kG = 0.0_V;
@@ -58,7 +63,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
     frc::ArmFeedforward m_algaeFeedForward{kS, kG, kV};
 
-    units::degree_t m_setpointAngle = 100.0_deg;
+    units::degree_t m_setpointAngle = kAlgaeStowAngle;
 
     static constexpr double TOLERANCE = 1.0;
 

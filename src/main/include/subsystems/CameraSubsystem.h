@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
@@ -9,10 +8,13 @@
 
 #include "photon/PhotonCamera.h"
 #include "photon/PhotonUtils.h"
+#include "photon/PhotonPoseEstimator.h"
+
+#include "subsystems/CommandSwerveDrivetrain.h"
 
 class CameraSubsystem : public frc2::SubsystemBase {
  public:
-  CameraSubsystem();
+  CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain);
 
   void updateData();
   bool visibleTargets();
@@ -20,6 +22,8 @@ class CameraSubsystem : public frc2::SubsystemBase {
   units::meter_t getForwardTransformation();
   double getDistance();
   units::degree_t getZRotation();
+
+  std::optional<int> GetTargetTagId();
 
   void Periodic() override;
 
@@ -34,5 +38,8 @@ class CameraSubsystem : public frc2::SubsystemBase {
   frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025Reefscape);
   #define CAMERA_NAME "limelight3"
   photon::PhotonCamera limelightCamera{CAMERA_NAME};
+  std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;
+
+  subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
 };
