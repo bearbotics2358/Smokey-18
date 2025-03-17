@@ -25,7 +25,7 @@ public:
      * @param camera The subsystem used by this command.
      * @param drivetrain
      */
-    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool goToLefts);
+    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool goToLeft);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
