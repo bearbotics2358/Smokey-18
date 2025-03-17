@@ -61,14 +61,17 @@ void LED::Periodic() {
     const char* message = "";
 
     switch (m_LEDCurrentCommand) {
-      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:     message = "1\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:     message = "2\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:  message = "3\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:   message = "4\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:  message = "5\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:  message = "6\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::IDK:          message = "7\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::TEST:         message = "8\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:        message = "1\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:        message = "2\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:     message = "3\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ALGAE_HELD:      message = "4\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:     message = "5\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:     message = "6\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::IDK:             message = "7\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMBLEFTTRUE:   message = "8\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE:  message = "9\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTTRUE:  message = "10\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE: message = "11\r\n"; break;
       default:
         std::printf("Unknown LED command: %d\n", static_cast<int>(m_LEDCurrentCommand));
         break;

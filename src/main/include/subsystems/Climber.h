@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Commands.h>
+#include <frc2/command/button/Trigger.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -14,6 +15,10 @@
 #include <frc/trajectory/TrapezoidProfile.h>
 
 #include <subsystems/IClimberDataProvider.h>
+
+#include <chrono>
+
+using namespace std::chrono;
 
 // @todo All constants here are TEMPORARY - change them as needed
 constexpr int kClimberMotor1Id = 50;
@@ -39,6 +44,14 @@ public:
 
     frc2::CommandPtr StopClimber();
 
+    bool IsLeftOnCage();
+
+    bool IsRightOnCage();
+
+    frc2::Trigger IsReadyToClimb = frc2::Trigger([this] {
+        return m_readyToClimb;
+    });
+
 private:
     void SetMotorVoltage();
 
@@ -61,4 +74,10 @@ private:
     };
 
     units::degree_t m_setpointAngle = 0.0_deg;
+
+    bool m_readyToClimb = false;
+
+    std::optional<time_point<std::chrono::steady_clock>> m_leftCaptureStart = std::nullopt;
+
+    std::optional<time_point<std::chrono::steady_clock>> m_rightCaptureStart = std::nullopt;
 };
