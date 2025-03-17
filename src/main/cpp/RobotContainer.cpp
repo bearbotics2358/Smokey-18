@@ -129,7 +129,8 @@ void RobotContainer::ConfigureBindings() {
     ));
 
     // **** Xbox A, B, X, & Y Button functions **** //
-    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
+    // TODO: change the false parameter to the value of the switch that'll determine whether to go left or right
+    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr());
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
@@ -155,7 +156,7 @@ void RobotContainer::ConfigureBindings() {
         );
 
     // **** Xbox Dpad Buttons **** //
-    m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
+    m_joystick.POVUp().OnTrue(m_climberSubsystem.Climb());
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 }
