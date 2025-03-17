@@ -53,19 +53,6 @@ void RobotContainer::ConfigureBindings() {
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     // **** Driver Station Buttons **** //
-
-    m_joystick.POVRight().WhileTrue(
-        m_drivetrain.ApplyRequest([this] -> auto&& {
-            return strafe.WithVelocityY(-0.25_mps);
-        })
-    );
-
-    m_joystick.POVLeft().WhileTrue(
-        m_drivetrain.ApplyRequest([this] -> auto&& {
-            return strafe.WithVelocityY(0.25_mps);
-        })
-    );
-
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
@@ -108,7 +95,7 @@ void RobotContainer::ConfigureBindings() {
         m_scoringSuperstructure.ToCollectPosition();
         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
     }));
-
+  
     // **** Xbox A, B, X, & Y Button functions **** //
     m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
 
@@ -139,6 +126,18 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
+
+    m_joystick.POVRight().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(-0.25_mps);
+        })
+    );
+
+    m_joystick.POVLeft().WhileTrue(
+        m_drivetrain.ApplyRequest([this] -> auto&& {
+            return strafe.WithVelocityY(0.25_mps);
+        })
+    );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
@@ -180,4 +179,8 @@ void RobotContainer::AddPathPlannerCommands() {
         "ScoreAlgae", 
         std::move(m_scoringSuperstructure.ScoreIntoProcessor())
     );
+}
+
+frc::Pose2d RobotContainer::GetRobotPose() {
+    return m_drivetrain.GetState().Pose;
 }

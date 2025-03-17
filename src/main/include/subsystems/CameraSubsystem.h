@@ -26,7 +26,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   std::optional<int> GetTargetTagId();
 
   void Periodic() override;
-
+  
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
