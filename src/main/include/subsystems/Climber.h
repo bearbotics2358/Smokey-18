@@ -43,8 +43,8 @@ private:
 
     ctre::phoenix6::hardware::TalonFX m_climberMotor;
 
-    static constexpr units::turns_per_second_t kMaxVelocity = 10_tps;
-    static constexpr units::turns_per_second_squared_t kMaxAcceleration = 100_tr_per_s_sq;
+    static constexpr units::turns_per_second_t kMaxVelocity = 5_deg_per_s;
+    static constexpr units::turns_per_second_squared_t kMaxAcceleration = 10_deg_per_s_sq;
     static constexpr double kP = 60.0;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
