@@ -23,6 +23,8 @@ class CameraSubsystem : public frc2::SubsystemBase {
   double getDistance();
   units::degree_t getZRotation();
 
+  std::optional<int> GetTargetTagId();
+
   void Periodic() override;
 
  private:
