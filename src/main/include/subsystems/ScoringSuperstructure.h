@@ -61,6 +61,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr ScoreReefL2();
         frc2::CommandPtr ScoreReefL3(bool algaeOnly);
         frc2::CommandPtr ScoreReefL4();
+
+        frc2::CommandPtr DispenseCoralAndMoveBack();
 };
 
 }
