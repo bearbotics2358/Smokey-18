@@ -92,11 +92,10 @@ void RobotContainer::ConfigureBindings() {
             })
         ));
 
-    // TODO: change the name of ALGAE_HELD
     m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
         })
     ));
 
@@ -114,9 +113,13 @@ void RobotContainer::ConfigureBindings() {
         })
     ));
 
-    m_gamepad.Button(2).OnTrue(
-        m_scoringSuperstructure.ToStowPosition()
-    );
+    // #TODO: use logic to determine if the robot should go to stow or to processor depending if there is a algae held currently
+    m_gamepad.Button(2).OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.ToStowPosition(),
+        frc2::cmd::RunOnce([this] {
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+        })
+    ));
 
     m_gamepad.Button(3).OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.ToCollectPosition(),
