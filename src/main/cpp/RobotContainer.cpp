@@ -131,8 +131,6 @@ void RobotContainer::ConfigureBindings() {
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
-    m_joystick.Y().WhileTrue(m_climberSubsystem.Climb());
-
     // **** Xbox Trigger & Bumper Buttons **** //
     m_joystick.RightTrigger()
         .OnTrue(
@@ -155,7 +153,7 @@ void RobotContainer::ConfigureBindings() {
         );
 
     // **** Xbox Dpad Buttons **** //
-    m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
+    m_joystick.POVUp().OnTrue(m_climberSubsystem.Climb());
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 }
