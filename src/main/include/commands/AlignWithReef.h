@@ -57,11 +57,11 @@ private:
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.0_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(2_in);
-    const units::meter_t kStrafeTolerance = units::meter_t(1_in);
+    const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
     const units::degree_t kRotationTolerance = 2_deg;
 
     units::meter_t kDistanceFromReefSetpoint = units::meter_t(30_in);
-    units::meter_t kStrafeSetpoint = units::meter_t(-1_in);
+    units::meter_t kStrafeSetpoint = units::meter_t(-2_in);
 
     const std::map<int, units::degree_t> kTagAngleMap = {
         {6, 120_deg},
