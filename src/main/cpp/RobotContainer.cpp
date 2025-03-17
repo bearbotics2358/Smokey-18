@@ -126,7 +126,8 @@ void RobotContainer::ConfigureBindings() {
     ));
 
     // **** Xbox A, B, X, & Y Button functions **** //
-    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr());
+    // TODO: change the false parameter to the value of the switch that'll determine whether to go left or right
+    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr());
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
