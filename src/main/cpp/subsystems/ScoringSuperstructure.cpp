@@ -29,7 +29,8 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
         m_elevator.WaitUntilElevatorAtHeight(),
         DriveForwardToScore(&m_drivetrain).WithTimeout(kForwardTimeout),
         m_coral.dispenseCoral(),
-        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout)
+        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
+        ToStowPosition()
     );
 }
 
