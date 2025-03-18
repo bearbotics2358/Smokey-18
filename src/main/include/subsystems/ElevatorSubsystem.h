@@ -58,6 +58,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         frc2::CommandPtr WaitUntilElevatorAtHeight();
     private:
+
+        frc2::Trigger IsLimitSwitchedPressed = frc2::Trigger([this] {
+            return IsMagneticLimitSwitchActive();
+        });
+
         bool GetElevatorHeightAboveThreshold();
 
         bool elevatorAtHeight = false;
