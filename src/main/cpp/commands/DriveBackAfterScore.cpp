@@ -10,11 +10,11 @@ DriveBackAfterScore::DriveBackAfterScore(subsystems::CommandSwerveDrivetrain* dr
 }
 
 void DriveBackAfterScore::Initialize() {
-    m_targetX = kBackwardDistance + m_drivetrain->GetState().Pose.X();
+    m_targetX = kBackwardDistance + m_drivetrain->GetPose().X();
 }
 
 void DriveBackAfterScore::Execute() {
-    units::inch_t currentXDistance = m_drivetrain->GetState().Pose.X();
+    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
     double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetX.value());
     forward = std::clamp(forward, -1.0, 1.0);
 
@@ -22,6 +22,6 @@ void DriveBackAfterScore::Execute() {
 }
 
 bool DriveBackAfterScore::IsFinished() {
-    units::inch_t currentXDistance = m_drivetrain->GetState().Pose.X();
+    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
     return units::math::abs(currentXDistance - m_targetX) < kTolerance;
 }

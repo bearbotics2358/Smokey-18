@@ -123,7 +123,7 @@ void RobotContainer::ConfigureBindings() {
 
     // **** Xbox A, B, X, & Y Button functions **** //
     m_joystick.B().WhileTrue(
-        AlignWithReef(&m_cameraSubsystem, &m_drivetrain).ToPtr().AndThen(AddControllerRumble(1.0))
+        AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0))
     ).ToggleOnFalse(
         AddControllerRumble(0.0)
     );
@@ -154,7 +154,7 @@ void RobotContainer::ConfigureBindings() {
         );
 
     // **** Xbox Dpad Buttons **** //
-    m_joystick.POVUp().OnTrue(m_coralSubsystem.dispenseCoral());
+    m_joystick.POVUp().OnTrue(m_climberSubsystem.Climb());
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 

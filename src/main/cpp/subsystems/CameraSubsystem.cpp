@@ -74,24 +74,8 @@ void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
 
     updateData();
-    // photon::PhotonPipelineResult result = limelightCamera.GetLatestResult();
-    // if (result.HasTargets()) {
-    //     photon::PhotonTrackedTarget bestTarget = result.GetBestTarget();
-    //     frc::SmartDashboard::PutNumber("Yaw To Best Tag", bestTarget.GetYaw());
-    //     frc::Transform3d pose = bestTarget.GetBestCameraToTarget();
-    //     double x = pose.X().value();
-    //     double y = pose.Y().value();
-    //     double rotX = (((pose.Rotation().X().value())/M_PI) * 180);
-    //     double rotZ = (((pose.Rotation().Z().value())/M_PI) * 180);
-    //     frc::SmartDashboard::PutNumber("X To Best Tag", x);
-    //     frc::SmartDashboard::PutNumber("Y To Best Tag", y);
-    //     frc::SmartDashboard::PutNumber("X Rotation To Best Tag", rotX);
-    //     frc::SmartDashboard::PutNumber("Z Rotation To Best Tag", rotZ);
-    //     frc::SmartDashboard::PutNumber("Best Tag ID", bestTarget.GetFiducialId());
-    // } else {
-    //     frc::SmartDashboard::PutNumber("Yaw To Best Tag", 0);
-    //     frc::SmartDashboard::PutNumber("X To Best Tag", 0);
-    //     frc::SmartDashboard::PutNumber("Y To Best Tag", 0);
-    //     frc::SmartDashboard::PutNumber("Best Tag ID", 0);
-    // }
+
+    frc::SmartDashboard::PutNumber("Robot X Position", m_drivetrain->GetPose().X().value());
+    frc::SmartDashboard::PutNumber("Robot Y Position", m_drivetrain->GetPose().Y().value());
+    frc::SmartDashboard::PutNumber("Robot Rotation", m_drivetrain->GetPose().Rotation().Degrees().value());
 }
