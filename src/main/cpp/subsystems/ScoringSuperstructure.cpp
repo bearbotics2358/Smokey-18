@@ -83,10 +83,10 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool algaeOnly) {
 }
 
 frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
-    auto [coralAngle, algaeAngle] = m_elevatorMap[kElevatorL2Position];
+    auto [coralAngle, algaeAngle] = m_elevatorMap[kElevatorL4Position];
 
     return frc2::cmd::Parallel(
-        m_elevator.GoToHeight(kElevatorL2Position),
+        m_elevator.GoToHeight(kElevatorL4Position),
         m_coral.GoToAngle(coralAngle),
         DispenseCoralAndMoveBack()
     );

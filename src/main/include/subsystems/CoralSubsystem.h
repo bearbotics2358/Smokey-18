@@ -13,7 +13,7 @@ constexpr units::degree_t kCoralStow = 160.0_deg;
 constexpr units::degree_t kCoralL1 = 65.0_deg;
 constexpr units::degree_t kCoralL2 = 55.0_deg;
 constexpr units::degree_t kCoralL3 = 55.0_deg;
-constexpr units::degree_t kCoralL4 = 50.0_deg;
+constexpr units::degree_t kCoralL4 = 47.5_deg;
 
 class CoralSubsystem : public frc2::SubsystemBase {
  public:

@@ -59,7 +59,8 @@ float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
 }
 
 bool FeatherCanDecoder::IsAlgaeCollected() {
-    return m_algaeCollected;
+    //return m_algaeCollected;
+    return false;
 }
 
 float FeatherCanDecoder::GetClimberAngleDegrees() {
