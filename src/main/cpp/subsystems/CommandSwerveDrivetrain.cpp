@@ -74,3 +74,7 @@ void CommandSwerveDrivetrain::StartSimThread()
     });
     m_simNotifier->StartPeriodic(kSimLoopPeriod);
 }
+
+frc::Pose2d CommandSwerveDrivetrain::GetPose() {
+    return GetState().Pose;
+}

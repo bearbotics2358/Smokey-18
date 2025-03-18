@@ -17,7 +17,7 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     // Motor 2 has the same configuration as Motor 1 except that it runs in the opposite direction
     motorConfigs.WithInverted(false);
     m_elevatorMotor2.GetConfigurator().Apply(motorConfigs);
-    
+
     m_elevatorMotor1.SetPosition(0_tr);
     m_elevatorMotor2.SetPosition(0_tr);
     /*
@@ -25,21 +25,23 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      * The CTRE docs state that this API can ensure that set operations are completed before continuing control flow.
      * This method reports an error to the DriverStation.
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
-     */ 
+     */
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
     m_elevatorMotor2.GetPosition().WaitForUpdate(20_ms);
+
+    IsMagneticLimitSwitchActive.OnTrue(frc2::cmd::RunOnce([this] {
+        frc::SmartDashboard::PutBoolean("Elevator Limit Switch", true);
+        // Avoid calling SetPosition from the Periodic function because the call can take more than 20 milliseconds
+        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
+    })).OnFalse(frc2::cmd::RunOnce([this] {
+        frc::SmartDashboard::PutBoolean("Elevator Limit Switch", false);
+    }));
 };
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
 
     frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
-
-    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
-
-    if (IsMagneticLimitSwitchActive()) {
-        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
-    }
 
     SetMotorVoltage();
 }
@@ -52,7 +54,7 @@ void ElevatorSubsystem::Periodic() {
  * Alternatively, use the search widget to find `Elevator Motor Position`.
  * Drag the Elevator widget onto the screen into a empty position. You should see a green highlight.
  * Right click on the widget -> `Show As` -> `Graph`.
- * To resize the graph, drag on the outlines of the widget. 
+ * To resize the graph, drag on the outlines of the widget.
  */
 void ElevatorSubsystem::PlotElevatorPosition() {
     ctre::phoenix6::StatusSignal<units::turn_t> position = m_elevatorMotor1.GetPosition();
@@ -67,11 +69,6 @@ units::inch_t ElevatorSubsystem::CurrentHeight() {
     );
 }
 
-bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
-    // The REV magnetic limit switch is Active-low so a false from the Get() call means the elevator is at the bottom
-    return !m_elevatorLimitSwitch.Get();
-}
-
 void ElevatorSubsystem::SetMotorVoltage() {
     double value = m_elevatorPID.Calculate(CurrentHeight(), m_setpointHeight);
     frc::SmartDashboard::PutNumber("Elevator PID", value);
@@ -83,15 +80,28 @@ void ElevatorSubsystem::SetMotorVoltage() {
     if (current_difference >= TOLERANCE) {
         m_elevatorMotor1.SetVoltage(goalVolts);
         m_elevatorMotor2.SetVoltage(goalVolts);
+        elevatorAtHeight = false;
+    } else if (m_setpointHeight == 0.0_in) {
+        m_elevatorMotor1.SetVoltage(0_V);
+        m_elevatorMotor2.SetVoltage(0_V);
+        elevatorAtHeight = false;
     } else {
-        m_elevatorMotor1.SetVoltage(0.4_V);
-        m_elevatorMotor2.SetVoltage(0.4_V);
+        m_elevatorMotor1.SetVoltage(kG);
+        m_elevatorMotor2.SetVoltage(kG);
+        elevatorAtHeight = true;
     }
-    frc::SmartDashboard::PutNumber("Elevator diff", current_difference);
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
         m_setpointHeight = height;
     });
+}
+
+bool ElevatorSubsystem::GetElevatorHeightAboveThreshold() {
+    return CurrentHeight() >= kHeightThreshold;
+}
+
+frc2::CommandPtr ElevatorSubsystem::WaitUntilElevatorAtHeight() {
+    return frc2::cmd::WaitUntil([this] { return elevatorAtHeight; });
 }

@@ -7,6 +7,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/button/CommandGenericHID.h>
 #include "io/FeatherCanDecoder.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/CameraSubsystem.h"
@@ -14,8 +15,10 @@
 #include "subsystems/CoralSubsystem.h"
 #include "subsystems/Climber.h"
 #include "subsystems/ScoringSuperstructure.h"
+#include "subsystems/LED.h"
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
+#include "subsystems/AlgaeSubsystem.h"
 
 class RobotContainer {
 private:
@@ -31,18 +34,25 @@ private:
     swerve::requests::PointWheelsAt point{};
     swerve::requests::RobotCentric forwardStraight = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
+    swerve::requests::RobotCentric strafe = swerve::requests::RobotCentric{}
+        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+        .WithVelocityX(0_mps);
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
     Telemetry logger{m_maxSpeed};
 
     frc2::CommandXboxController m_joystick{0};
+    frc2::CommandGenericHID m_gamepad{4};
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
+    LED m_LED;
     CameraSubsystem m_cameraSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
+    AlgaeSubsystem m_algaeSubsystem;
+    
     Climber m_climberSubsystem;
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
 
@@ -58,6 +68,8 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
+    frc2::CommandPtr AddControllerRumble(double rumble);
 private:
     void ConfigureBindings();
+    void AddPathPlannerCommands();
 };
