@@ -61,7 +61,7 @@ private:
     const units::degree_t kRotationTolerance = 2_deg;
 
     units::meter_t kDistanceFromReefSetpoint = units::meter_t(30_in);
-    units::meter_t kStrafeSetpoint = units::meter_t(-2_in);
+    units::meter_t kStrafeSetpoint = units::meter_t(11_in);
 
     const std::map<int, units::degree_t> kTagAngleMap = {
         {6, 120_deg},

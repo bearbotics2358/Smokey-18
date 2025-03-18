@@ -37,7 +37,7 @@ void ElevatorSubsystem::Periodic() {
 
     frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
 
-    if (IsMagneticLimitSwitchActive()) {
+    if (IsLimitSwitchedPressed.Get()) {
         m_elevatorMotor1.SetPosition(0_tr, 13_ms);
     }
 

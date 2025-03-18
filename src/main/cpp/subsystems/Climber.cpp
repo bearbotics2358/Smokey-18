@@ -27,12 +27,6 @@ void Climber::Periodic() {
 
     frc::SmartDashboard::PutNumber("Climber Setpoint", m_setpointAngle.value());
 
-    if (CurrentAngle() == 368.500_deg) {
-        frc::SmartDashboard::PutBoolean("Climber Angle Good?", false);
-    } else {
-        frc::SmartDashboard::PutBoolean("Climber Angle Good?", true);
-    }
-
     SetMotorVoltage();
 }
 
@@ -50,7 +44,9 @@ frc2::CommandPtr Climber::Climb() {
     });
 }
 
-//Cancels the climb
+/**
+ * Prepare the climber by extending it to the Ready To Climb position
+ */
 frc2::CommandPtr Climber::Extend() {
     return frc2::cmd::RunOnce([this] {
         m_setpointAngle = kClimberStartAngle;
@@ -69,7 +65,7 @@ void Climber::SetMotorVoltage() {
     double value = -m_climberPID.Calculate(CurrentAngle(), m_setpointAngle);
     frc::SmartDashboard::PutNumber("Climber PID", value);
 
-    //m_climberMotor.SetVoltage(units::volt_t(value));
+    m_climberMotor.SetVoltage(units::volt_t(value));
 }
 
 //Stops the climb motor completely

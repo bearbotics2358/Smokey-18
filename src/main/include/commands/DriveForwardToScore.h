@@ -26,11 +26,11 @@ private:
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
-    static constexpr units::meters_per_second_t kMaxVelocity = 0.25_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 0.5_mps;
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
-    const units::inch_t kTolerance = 2_in;
-    const units::inch_t kForwardDistance = 4_in;
+    const units::inch_t kTolerance = 1_in;
+    const units::inch_t kForwardDistance = 8_in;
     units::inch_t m_targetX;
 };

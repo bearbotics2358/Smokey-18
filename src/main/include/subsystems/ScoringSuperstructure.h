@@ -44,7 +44,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
 
         ScoringSelector m_selectedScore = L1;
 
-        static constexpr units::second_t kForwardTimeout = 2_s;
+        static constexpr units::second_t kForwardTimeout = 2.2_s;
         static constexpr units::second_t kBackupTimeout = 1_s;
 
         // Values for the tuple are coral and algae angles.

@@ -34,6 +34,12 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
     AddPathPlannerCommands();
 }
 
+frc2::CommandPtr RobotContainer::AddControllerRumble(double rumble) {
+    return frc2::cmd::RunOnce([this, rumble] {
+        m_joystick.SetRumble(frc::GenericHID::RumbleType::kBothRumble, rumble);
+    });
+}
+
 void RobotContainer::ConfigureBindings() {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
@@ -54,26 +60,17 @@ void RobotContainer::ConfigureBindings() {
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-    m_joystick.POVRight().WhileTrue(
-        m_drivetrain.ApplyRequest([this]() -> auto&& {
-            return strafe.WithVelocityY(-0.25_mps);
-        })
-    );
-
-    m_joystick.POVLeft().WhileTrue(
-        m_drivetrain.ApplyRequest([this]() -> auto&& {
-            return strafe.WithVelocityY(0.25_mps);
-        })
-    );
-
     // **** Driver Station Buttons **** //
-
     m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
-        })
-
-        // @todo Add a command to move the climber to the Ready To Climb position
+        }),
+        m_climberSubsystem.Extend()
+    )).OnFalse(frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+        }),
+        m_climberSubsystem.Stow()
     ));
 
     m_gamepad.Button(11).OnTrue(
@@ -129,15 +126,20 @@ void RobotContainer::ConfigureBindings() {
     ));
 
     // **** Xbox A, B, X, & Y Button functions **** //
-    // TODO: change the false parameter to the value of the switch that'll determine whether to go left or right
-    m_joystick.B().WhileTrue(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr());
+    m_joystick.B().WhileTrue(
+        AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0))
+    ).ToggleOnFalse(
+        AddControllerRumble(0.0)
+    );
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_joystick.RightTrigger()
         .OnTrue(
-            m_scoringSuperstructure.ScoreIntoReef()
+            m_scoringSuperstructure.ScoreIntoReef().FinallyDo(
+                [this] { m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE); }
+            )
         );
         // .OnFalse(
         //     m_elevatorSubsystem.GoToHeight(m_elevatorSubsystem.CurrentHeight())
@@ -159,6 +161,18 @@ void RobotContainer::ConfigureBindings() {
     m_joystick.POVUp().OnTrue(m_climberSubsystem.Climb());
 
     m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
+
+    m_joystick.POVRight().WhileTrue(
+        m_drivetrain.ApplyRequest([this]() -> auto&& {
+            return strafe.WithVelocityY(-0.25_mps);
+        })
+    );
+
+    m_joystick.POVLeft().WhileTrue(
+        m_drivetrain.ApplyRequest([this]() -> auto&& {
+            return strafe.WithVelocityY(0.25_mps);
+        })
+    );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
