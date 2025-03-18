@@ -28,20 +28,20 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      */
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
     m_elevatorMotor2.GetPosition().WaitForUpdate(20_ms);
-};
 
-void ElevatorSubsystem::Periodic() {
-    PlotElevatorPosition();
-
-    frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
-
-     IsMagneticLimitSwitchActive.OnTrue(frc2::cmd::RunOnce([this] {
+    IsMagneticLimitSwitchActive.OnTrue(frc2::cmd::RunOnce([this] {
         frc::SmartDashboard::PutBoolean("Elevator Limit Switch", true);
         // Avoid calling SetPosition from the Periodic function because the call can take more than 20 milliseconds
         m_elevatorMotor1.SetPosition(0_tr, 13_ms);
     })).OnFalse(frc2::cmd::RunOnce([this] {
         frc::SmartDashboard::PutBoolean("Elevator Limit Switch", false);
     }));
+};
+
+void ElevatorSubsystem::Periodic() {
+    PlotElevatorPosition();
+
+    frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
 
     SetMotorVoltage();
 }
