@@ -28,18 +28,20 @@ m_elevatorLimitSwitch(kLimitSwitchId)
      */
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
     m_elevatorMotor2.GetPosition().WaitForUpdate(20_ms);
+
+    IsMagneticLimitSwitchActive.OnTrue(frc2::cmd::RunOnce([this] {
+        frc::SmartDashboard::PutBoolean("Elevator Limit Switch", true);
+        // Avoid calling SetPosition from the Periodic function because the call can take more than 20 milliseconds
+        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
+    })).OnFalse(frc2::cmd::RunOnce([this] {
+        frc::SmartDashboard::PutBoolean("Elevator Limit Switch", false);
+    }));
 };
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
 
     frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
-
-    frc::SmartDashboard::PutBoolean("Elevator Limit Switch", IsMagneticLimitSwitchActive());
-
-    if (IsLimitSwitchedPressed.Get()) {
-        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
-    }
 
     SetMotorVoltage();
 }
@@ -65,11 +67,6 @@ units::inch_t ElevatorSubsystem::CurrentHeight() {
     return units::inch_t(
         (m_elevatorMotor1.GetPosition().GetValueAsDouble() * 2 * M_PI * WHEEL_RADIUS) / GEAR_RATIO
     );
-}
-
-bool ElevatorSubsystem::IsMagneticLimitSwitchActive() {
-    // The REV magnetic limit switch is Active-low so a false from the Get() call means the elevator is at the bottom
-    return !m_elevatorLimitSwitch.Get();
 }
 
 void ElevatorSubsystem::SetMotorVoltage() {
