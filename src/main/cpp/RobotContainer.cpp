@@ -65,9 +65,12 @@ void RobotContainer::ConfigureBindings() {
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
         }),
-
-        // @todo Add a command to move the climber to the Ready To Climb position
         m_climberSubsystem.Extend()
+    )).OnFalse(frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+        }),
+        m_climberSubsystem.Stow()
     ));
 
     m_gamepad.Button(11).OnTrue(

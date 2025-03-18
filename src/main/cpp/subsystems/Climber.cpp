@@ -44,7 +44,9 @@ frc2::CommandPtr Climber::Climb() {
     });
 }
 
-//Cancels the climb
+/**
+ * Prepare the climber by extending it to the Ready To Climb position
+ */
 frc2::CommandPtr Climber::Extend() {
     return frc2::cmd::RunOnce([this] {
         m_setpointAngle = kClimberStartAngle;

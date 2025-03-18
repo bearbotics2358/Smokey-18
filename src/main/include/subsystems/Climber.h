@@ -18,7 +18,7 @@
 constexpr int kClimberMotor1Id = 32;
 
 constexpr units::degree_t kClimberStartAngle = 168.0_deg;
-constexpr units::degree_t kClimberEndAngle = 90.0_deg;
+constexpr units::degree_t kClimberEndAngle = 41.0_deg;
 constexpr units::degree_t kClimberStowAngle = 10.0_deg;
 
 const double kClimberGearRatio = 1.0;
@@ -43,8 +43,8 @@ private:
 
     ctre::phoenix6::hardware::TalonFX m_climberMotor;
 
-    static constexpr units::turns_per_second_t kMaxVelocity = 5_deg_per_s;
-    static constexpr units::turns_per_second_squared_t kMaxAcceleration = 10_deg_per_s_sq;
+    static constexpr units::turns_per_second_t kMaxVelocity = 25_deg_per_s;
+    static constexpr units::turns_per_second_squared_t kMaxAcceleration = 30_deg_per_s_sq;
     static constexpr double kP = 60.0;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
