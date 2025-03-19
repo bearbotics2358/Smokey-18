@@ -17,6 +17,15 @@ m_bellyPanCAN(kBellyPanDeviceID)
     m_climberAngleDegrees = 0.0;
 }
 
+/**
+ * Detect when the FeatherCAN sent a bad reading for the time of flight (TOF) sensor.
+ */
+bool FeatherCanDecoder::IsTOFDataValid(int tofReading) {
+    static constexpr int kBadTOFValue = 0xFFFF;
+
+    return kBadTOFValue != tofReading;
+}
+
 void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
@@ -59,6 +68,7 @@ float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
 }
 
 bool FeatherCanDecoder::IsAlgaeCollected() {
+    // @todo The kAlgaeProximityThreshold TOF threshold needs to be tuned before this can be re-enabled
     //return m_algaeCollected;
     return false;
 }
@@ -115,7 +125,12 @@ void FeatherCanDecoder::UnpackAlgaeCANData() {
 
         int proximity = (data.data[2] << 8) | data.data[3];
         frc::SmartDashboard::PutNumber("Algae Collected Value", proximity);
-        m_algaeCollected = proximity > kAlgaeProximityThreshold;
+
+        if (IsTOFDataValid(proximity)) {
+            // Only update the algae collected value if the TOF data is good. Otherwise we
+            // may incorrectly report that algae is collected.
+            m_algaeCollected = proximity > kAlgaeProximityThreshold;
+        }
     }
 }
 

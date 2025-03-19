@@ -73,6 +73,8 @@ public:
     void UnpackBellyPanCANData();
 
 private:
+    bool IsTOFDataValid(int proximityReading);
+
     float m_coralIntakeAngleDegrees;
     bool m_coralCollected;
     frc::CAN m_coralCAN;
