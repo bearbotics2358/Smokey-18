@@ -4,8 +4,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
-m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
-m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless), 
+m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless),
+m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless),
 m_coralDataProvider(dataProvider)
 {
     m_setpointAngle = 160.0;
@@ -50,7 +50,7 @@ void CoralSubsystem::SetPivotSpeed(double speed) {
  * Set the desired setpoint angle for the coral scoring mechanism. This function only
  * changes the saved setpoint. The Periodic function is responsible for tracking the
  * setpoint and holding the motor at the angle.
- * 
+ *
  * @param targetAngle The desired angle of the mechanism in degrees
  */
 //Set the angle of the coral scoring mechanism. Requires the desired angle as a parameter
@@ -65,23 +65,23 @@ frc2::CommandPtr CoralSubsystem::collectCoral() {
     return frc2::cmd::StartEnd(
         [this] {
             SetIntakeSpeed(0.5);
-        }, 
+        },
         [this] {
             m_intakeMotor.StopMotor();
-        }, 
+        },
         {this}
     ).WithTimeout(3_s).Until(([this] { return CoralPresent(); })).WithName("collectCoral");
-}   
+}
 
 // Run the intake motor backwards for one second to dispense held coral
 frc2::CommandPtr CoralSubsystem::dispenseCoral() {
     return frc2::cmd::StartEnd(
         [this] {
             SetIntakeSpeed(-0.5);
-        }, 
+        },
         [this] {
             m_intakeMotor.StopMotor();
-        }, 
+        },
         {this}
     ).WithTimeout(1_s).WithName("dispenseCoral");
 }
