@@ -27,7 +27,7 @@ constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
 constexpr units::inch_t kElevatorL2Position = 12_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
-constexpr units::inch_t kElevatorL4Position = 57_in;
+constexpr units::inch_t kElevatorL4Position = 61.5_in;
 
 constexpr float kSlowElevator = 0.6;
 

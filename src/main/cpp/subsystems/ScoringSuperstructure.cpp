@@ -34,6 +34,13 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     );
 }
 
+frc2::CommandPtr ScoringSuperstructure::CancelScore() {
+    return frc2::cmd::Sequence(
+        // DriveBackAfterScore(&m_drivetrain).WithTimeout(1_s),
+        ToStowPosition()
+    );
+}
+
 frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {
     return frc2::cmd::Select<ScoringSelector>([this] {
             return m_selectedScore;
@@ -60,8 +67,8 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL2() {
 
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL2Position),
-        m_coral.GoToAngle(coralAngle),
-        DispenseCoralAndMoveBack()
+        m_coral.GoToAngle(coralAngle)
+        // DispenseCoralAndMoveBack()
     );
 }
 
@@ -78,8 +85,8 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool algaeOnly) {
             ),
             m_algae.SetGoalAngle(algaeAngle),
             [this, algaeOnly] { return algaeOnly; }
-        ),
-        DispenseCoralAndMoveBack()
+        )
+        // DispenseCoralAndMoveBack()
     );
 }
 
@@ -88,8 +95,8 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
 
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL4Position),
-        m_coral.GoToAngle(coralAngle),
-        DispenseCoralAndMoveBack()
+        m_coral.GoToAngle(coralAngle)
+        // DispenseCoralAndMoveBack()
     );
 }
 

@@ -13,7 +13,7 @@ constexpr units::degree_t kCoralStow = 160.0_deg;
 constexpr units::degree_t kCoralL1 = 65.0_deg;
 constexpr units::degree_t kCoralL2 = 55.0_deg;
 constexpr units::degree_t kCoralL3 = 55.0_deg;
-constexpr units::degree_t kCoralL4 = 45.5_deg;
+constexpr units::degree_t kCoralL4 = 30_deg;
 
 class CoralSubsystem : public frc2::SubsystemBase {
  public:
@@ -29,6 +29,7 @@ class CoralSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr GoToAngle(units::degree_t angle);
   frc2::CommandPtr collectCoral();
   frc2::CommandPtr dispenseCoral();
+  frc2::CommandPtr StopIntake();
 
  private:
     const int kPivotMotorMaxCurrentAmps = 10;
