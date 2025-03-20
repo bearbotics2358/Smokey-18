@@ -33,7 +33,6 @@ public:
     const int kClimberProximityThreshold = 1500;//todo:add the threshold here
 
     const int kBellyPanDeviceID = 4;
-    const int kBellyPanProximityThreshold = 1500;
 
     FeatherCanDecoder();
 
@@ -63,12 +62,12 @@ public:
     void UnpackClimberCANData();
 
     // **** IBellyPanDataProvider interface functions **** //
-    bool m_rightBellyPanProximity;
-    bool m_leftBellyPanProximity;
+    double m_rightBellyPanDistance;
+    double m_leftBellyPanDistance;
     frc::CAN m_bellyPanCAN;
 
-    bool IsLeftProximity() override;
-    bool IsRightProximity() override;
+    double GetBellyPanLeftDistance() override;
+    double GetBellyPanRightDistance() override;
 
     void UnpackBellyPanCANData();
 
