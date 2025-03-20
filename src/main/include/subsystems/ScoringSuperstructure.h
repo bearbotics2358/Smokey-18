@@ -6,6 +6,7 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/AlgaeSubsystem.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
+#include "subsystems/CameraSubsystem.h"
 
 #include <map>
 #include <tuple>
@@ -23,7 +24,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         };
 
         ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech,
-                              CommandSwerveDrivetrain& drivetrain);
+                              CameraSubsystem& cameraSubsystem, CommandSwerveDrivetrain& drivetrain);
 
         frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
         frc2::CommandPtr PrepareAndScoreIntoReef(ScoringSelector selectedScore);
@@ -42,6 +43,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;
         AlgaeSubsystem& m_algae;
+        CameraSubsystem& m_camera;
         CommandSwerveDrivetrain& m_drivetrain;
 
         ScoringSelector m_selectedScore = L1;

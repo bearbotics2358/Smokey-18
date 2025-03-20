@@ -12,11 +12,13 @@ ScoringSuperstructure::ScoringSuperstructure(
     ElevatorSubsystem& elevator,
     CoralSubsystem& coralMech,
     AlgaeSubsystem& algaeMech,
+    CameraSubsystem& cameraSubsystem,
     CommandSwerveDrivetrain& drivetrain
 ):
 m_elevator(elevator),
 m_coral(coralMech),
 m_algae(algaeMech),
+m_camera(cameraSubsystem),
 m_drivetrain(drivetrain)
 {
     AddPathPlannerCommands();
@@ -31,7 +33,7 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
-        DriveForwardToScore(&m_drivetrain).WithTimeout(kForwardTimeout),
+        DriveForwardToScore(&m_drivetrain, m_camera.GetSavedAprilTagPose()).WithTimeout(kForwardTimeout),
         m_coral.dispenseCoral(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
         ToStowPosition()
