@@ -20,7 +20,7 @@ m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
-m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_drivetrain)
+m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_cameraSubsystem, m_drivetrain)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);

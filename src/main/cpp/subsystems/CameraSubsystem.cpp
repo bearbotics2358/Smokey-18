@@ -33,7 +33,8 @@ void CameraSubsystem::updateData() {
 
 std::optional<int> CameraSubsystem::GetTargetTagId() {
     if (visibleTargets()) {
-        return bestTarget.GetFiducialId();
+        m_savedAprilTagID = bestTarget.GetFiducialId();
+        return m_savedAprilTagID;
     } else {
         return std::nullopt;
     }
@@ -78,4 +79,8 @@ void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("Robot X Position", m_drivetrain->GetPose().X().value());
     frc::SmartDashboard::PutNumber("Robot Y Position", m_drivetrain->GetPose().Y().value());
     frc::SmartDashboard::PutNumber("Robot Rotation", m_drivetrain->GetPose().Rotation().Degrees().value());
+}
+
+frc::Pose2d CameraSubsystem::GetSavedAprilTagPose() {
+    return aprilTagFieldLayout.GetTagPose(m_savedAprilTagID).value().ToPose2d();
 }

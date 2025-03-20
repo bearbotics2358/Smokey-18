@@ -6,24 +6,32 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain)
-    : m_drivetrain{drivetrain} {
+DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, frc::Pose2d goalPose):
+m_drivetrain{drivetrain},
+m_goalPose(goalPose)
+{
     AddRequirements(m_drivetrain);
 }
 
 void DriveForwardToScore::Initialize() {
-    m_targetX = kForwardDistance + m_drivetrain->GetPose().X();
+    m_initialPosition = m_drivetrain->GetPose();
+
+    m_targetDistance = GetDistance(m_initialPosition, m_goalPose) - 26_in;
 }
 
 void DriveForwardToScore::Execute() {
-    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
+    units::inch_t currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
     frc::SmartDashboard::PutNumber("Drive Forward Current X", currentXDistance.value());
-    double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetX.value());
+    double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetDistance.value());
     forward = std::clamp(forward, -1.0, 1.0);
     m_drivetrain->SetControl(robotOriented.WithVelocityX(forward * kMaxVelocity));
 }
 
 bool DriveForwardToScore::IsFinished() {
     units::inch_t currentXDistance = m_drivetrain->GetPose().X();
-    return units::math::abs(currentXDistance - m_targetX) < kTolerance;
+    return units::math::abs(currentXDistance - m_targetDistance) < kTolerance;
+}
+
+units::inch_t DriveForwardToScore::GetDistance(frc::Pose2d first, frc::Pose2d second) {
+    return units::inch_t(first.Translation().Distance(second.Translation()));
 }
