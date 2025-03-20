@@ -12,6 +12,12 @@ AlignWithReef::AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveD
     AddRequirements(m_drivetrain);
     AddRequirements(m_camera);
 
+    if (goToLeft) {
+        m_strafeSetpoint = kStrafeLeftReefSetpoint;
+    } else {
+        m_strafeSetpoint = kStrafeRightReefSetpoint;
+    }
+
     m_rotationalPID.EnableContinuousInput(-180.0, 180.0);
 }
 
@@ -40,10 +46,10 @@ void AlignWithReef::Execute() {
         forward = 0.0;
     }
 
-    double strafe = m_YAlignmentPID.Calculate(m_camera->getStrafeTransformation().value(), kStrafeSetpoint.value());
+    double strafe = m_YAlignmentPID.Calculate(m_camera->getStrafeTransformation().value(), m_strafeSetpoint.value());
     strafe = std::clamp(strafe, -1.0, 1.0);
 
-    units::meter_t strafe_diff = units::math::abs(kStrafeSetpoint - m_camera->getStrafeTransformation());
+    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
     if (strafe_diff < kStrafeTolerance) {
         strafe = 0.0;
     }
@@ -68,7 +74,7 @@ bool AlignWithReef::IsFinished() {
     }
 
     units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
-    units::meter_t strafe_diff = units::math::abs(kStrafeSetpoint - m_camera->getStrafeTransformation());
+    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
     units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
     units::degree_t rotational_diff = units::math::abs(currentDegrees - m_targetDegrees);
 

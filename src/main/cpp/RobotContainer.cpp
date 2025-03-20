@@ -127,7 +127,15 @@ void RobotContainer::ConfigureBindings() {
 
     // **** Xbox A, B, X, & Y Button functions **** //
     m_joystick.B().WhileTrue(
-        AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0))
+        frc2::cmd::Either(
+            // This checks the state of the L/R reef switch to determine which reef pole to align with
+            // Sending false to AlignWithReef aligns right
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0)),
+            // Sending true to AlignWithReef aligns left
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr().AndThen(AddControllerRumble(1.0)),
+
+            [this] { return m_gamepad.Button(5).Get(); }
+        )
     ).ToggleOnFalse(
         AddControllerRumble(0.0)
     );
