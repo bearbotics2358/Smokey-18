@@ -52,7 +52,7 @@ private:
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
     AlgaeSubsystem m_algaeSubsystem;
-    
+
     Climber m_climberSubsystem;
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
 
