@@ -154,7 +154,10 @@ void RobotContainer::ConfigureBindings() {
         // );
 
     m_joystick.LeftTrigger().OnTrue(
-        m_coralSubsystem.collectCoral()
+        frc2::cmd::Sequence(
+            m_coralSubsystem.collectCoral(),
+            m_scoringSuperstructure.ToStowPosition()
+        )
     );
 
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
