@@ -141,6 +141,8 @@ void RobotContainer::ConfigureBindings() {
     );
 
     m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
+    // m_joystick.X().WhileTrue(m_climberSubsystem.SlowMoveOut());
+    // m_joystick.Y().WhileTrue(m_climberSubsystem.SlowMoveIn());
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_joystick.RightTrigger()

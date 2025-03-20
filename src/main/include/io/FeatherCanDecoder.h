@@ -30,6 +30,7 @@ public:
     const int kClimberDeviceID = 3;
     const int kClimberAPIId = 3;
     const double kClimberAngleOffsetDegrees = -368.5;
+    // const double kClimberAngleOffsetDegrees = 0.0;
     const int kClimberProximityThreshold = 1500;//todo:add the threshold here
 
     const int kBellyPanDeviceID = 4;
