@@ -31,13 +31,15 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 }
 
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
+    std::optional<frc::Pose2d> aprilTagPose = m_camera.GetSavedAprilTagPose();
+
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
-        DriveForwardToScore(&m_drivetrain, m_camera.GetSavedAprilTagPose()).WithTimeout(kForwardTimeout),
+        DriveForwardToScore(&m_drivetrain, aprilTagPose.value()).WithTimeout(kForwardTimeout),
         m_coral.dispenseCoral(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
         ToStowPosition()
-    );
+    ).OnlyIf([aprilTagPose] { return aprilTagPose.has_value(); });
 }
 
 frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {

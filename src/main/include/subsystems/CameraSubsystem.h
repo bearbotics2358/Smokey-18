@@ -27,7 +27,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
 
   void Periodic() override;
 
-  frc::Pose2d GetSavedAprilTagPose();
+  std::optional<frc::Pose2d> GetSavedAprilTagPose();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

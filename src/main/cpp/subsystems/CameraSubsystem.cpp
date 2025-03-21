@@ -19,7 +19,6 @@ void CameraSubsystem::updateData() {
         if (estimatedPose){
             m_drivetrain->AddVisionMeasurement(estimatedPose->estimatedPose.ToPose2d(),ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose->timestamp));
         }
-
         
         frc::SmartDashboard::PutBoolean("Has Targets", true);
 
@@ -81,6 +80,10 @@ void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("Robot Rotation", m_drivetrain->GetPose().Rotation().Degrees().value());
 }
 
-frc::Pose2d CameraSubsystem::GetSavedAprilTagPose() {
-    return aprilTagFieldLayout.GetTagPose(m_savedAprilTagID).value().ToPose2d();
+std::optional<frc::Pose2d> CameraSubsystem::GetSavedAprilTagPose() {
+    std::optional<frc::Pose3d> aprilTagPose = aprilTagFieldLayout.GetTagPose(m_savedAprilTagID);
+    if (aprilTagPose.has_value()) {
+        return aprilTagPose.value().ToPose2d();
+    }
+    return std::nullopt;
 }
