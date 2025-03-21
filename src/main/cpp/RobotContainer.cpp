@@ -10,7 +10,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/auto/NamedCommands.h>
 
 using namespace subsystems;
 
@@ -20,7 +19,8 @@ m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
-m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_drivetrain)
+m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_drivetrain),
+m_drivetrain{TunerConstants::CreateDrivetrain()}
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
@@ -30,8 +30,6 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
     m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
     ConfigureBindings();
-
-    AddPathPlannerCommands();
 }
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(double rumble) {
@@ -189,40 +187,4 @@ void RobotContainer::ConfigureBindings() {
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
-}
-
-void RobotContainer::AddPathPlannerCommands() {
-    using namespace pathplanner;
-    NamedCommands::registerCommand(
-        "Stow",
-        std::move(m_scoringSuperstructure.ToStowPosition())
-    );
-    NamedCommands::registerCommand(
-        "Collect",
-        std::move(m_scoringSuperstructure.ToCollectPosition())
-    );
-    NamedCommands::registerCommand(
-        "ScoreL1",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L1))
-    );
-    NamedCommands::registerCommand(
-        "ScoreL2",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
-    );
-    NamedCommands::registerCommand(
-        "ScoreL3",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
-    );
-    NamedCommands::registerCommand(
-        "ScoreL4",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L4))
-    );
-    NamedCommands::registerCommand(
-        "ScoreL3AndRemoveAlgae",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
-    );
-    NamedCommands::registerCommand(
-        "ScoreAlgae",
-        std::move(m_scoringSuperstructure.ScoreIntoProcessor())
-    );
 }

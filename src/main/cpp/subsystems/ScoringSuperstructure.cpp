@@ -4,6 +4,8 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <pathplanner/lib/auto/NamedCommands.h>
+
 using namespace subsystems;
 
 ScoringSuperstructure::ScoringSuperstructure(
@@ -16,7 +18,9 @@ m_elevator(elevator),
 m_coral(coralMech),
 m_algae(algaeMech),
 m_drivetrain(drivetrain)
-{}
+{
+    AddPathPlannerCommands();
+}
 
 frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedScore) {
     return frc2::cmd::RunOnce([this, selectedScore] {
@@ -140,3 +144,40 @@ frc2::CommandPtr ScoringSuperstructure::ToStowPosition() {
         [this] { return m_algae.IsAlgaeStored(); }
     );
 }
+
+void ScoringSuperstructure::AddPathPlannerCommands() {
+    using namespace pathplanner;
+    NamedCommands::registerCommand(
+        "Stow",
+        std::move(ToStowPosition())
+    );
+    NamedCommands::registerCommand(
+        "Collect",
+        std::move(ToCollectPosition())
+    );
+    NamedCommands::registerCommand(
+        "ScoreL1",
+        std::move(PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L1))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL2",
+        std::move(PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL3",
+        std::move(PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL4",
+        std::move(PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L4))
+    );
+    NamedCommands::registerCommand(
+        "ScoreL3AndRemoveAlgae",
+        std::move(PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
+    );
+    NamedCommands::registerCommand(
+        "ScoreAlgae",
+        std::move(ScoreIntoProcessor())
+    );
+}
+
