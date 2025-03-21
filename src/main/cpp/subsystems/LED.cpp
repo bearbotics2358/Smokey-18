@@ -82,9 +82,6 @@ void LED::Periodic() {
   if (!frc::DriverStation::IsDSAttached()) {
     SetLEDState(ArduinoConstants::RIO_MESSAGES::NO_COMMS);
   }
-  else{
-    SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
-  }
 }
 
 void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
