@@ -22,6 +22,8 @@ LED::LED() {
   }
 
   memset(m_rxBuff, 0, sizeof(m_rxBuff));
+
+  SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 }
 
 LED::~LED() {
