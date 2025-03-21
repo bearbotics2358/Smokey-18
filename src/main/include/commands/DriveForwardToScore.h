@@ -10,10 +10,12 @@
 class DriveForwardToScore
     : public frc2::CommandHelper<frc2::Command, DriveForwardToScore> {
 public:
-    explicit DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain);
+    explicit DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, frc::Pose2d goalPose);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
+
+    units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
@@ -31,6 +33,7 @@ private:
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
     const units::inch_t kTolerance = 1_in;
-    const units::inch_t kForwardDistance = 8_in;
-    units::inch_t m_targetX;
+    frc::Pose2d m_initialPosition;
+    frc::Pose2d m_goalPose;
+    units::inch_t m_targetDistance;
 };

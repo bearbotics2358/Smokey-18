@@ -10,17 +10,27 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+
 #include <pathplanner/lib/auto/NamedCommands.h>
 
 using namespace subsystems;
 
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
-m_cameraSubsystem(&m_drivetrain),
 m_coralSubsystem(m_featherCanDecoder),
-m_algaeSubsystem(m_featherCanDecoder),
+m_algaeSubsystem(m_featherCanDecoder),  
 m_climberSubsystem(m_featherCanDecoder),
-m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_drivetrain)
+m_drivetrain{TunerConstants::CreateDrivetrain(std::bind(
+    &RobotContainer::AddPathPlannerCommands, this
+))},
+m_scoringSuperstructure(
+    m_elevatorSubsystem,
+    m_coralSubsystem, 
+    m_algaeSubsystem, 
+    std::bind(&CameraSubsystem::GetSavedAprilTagPose, &m_cameraSubsystem), 
+    m_drivetrain
+),
+m_cameraSubsystem(&m_drivetrain)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
@@ -30,8 +40,6 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
     m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
     ConfigureBindings();
-
-    AddPathPlannerCommands();
 }
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(double rumble) {
@@ -230,4 +238,13 @@ void RobotContainer::AddPathPlannerCommands() {
         "ScoreAlgae",
         std::move(m_scoringSuperstructure.ScoreIntoProcessor())
     );
+    NamedCommands::registerCommand(
+        "AlignWithReefLeft",
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr().AndThen(AddControllerRumble(1.0)))
+    );
+     NamedCommands::registerCommand(
+        "AlignWithReefRight",
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0)))
+    );
 }
+

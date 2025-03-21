@@ -6,9 +6,11 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/AlgaeSubsystem.h"
 #include "subsystems/CommandSwerveDrivetrain.h"
+#include "subsystems/CameraSubsystem.h"
 
 #include <map>
 #include <tuple>
+#include <functional>
 
 namespace subsystems {
 
@@ -23,6 +25,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         };
 
         ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech,
+                              std::function<std::optional<frc::Pose2d>()> AprilTagPoseSupplier, 
                               CommandSwerveDrivetrain& drivetrain);
 
         frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
@@ -43,6 +46,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         CoralSubsystem& m_coral;
         AlgaeSubsystem& m_algae;
         CommandSwerveDrivetrain& m_drivetrain;
+
+        std::function<std::optional<frc::Pose2d>()> m_aprilTagPoseSupplier;
 
         ScoringSelector m_selectedScore = L1;
 

@@ -10,13 +10,16 @@ ScoringSuperstructure::ScoringSuperstructure(
     ElevatorSubsystem& elevator,
     CoralSubsystem& coralMech,
     AlgaeSubsystem& algaeMech,
+    std::function<std::optional<frc::Pose2d>()> AprilTagPoseSupplier,
     CommandSwerveDrivetrain& drivetrain
 ):
 m_elevator(elevator),
 m_coral(coralMech),
 m_algae(algaeMech),
 m_drivetrain(drivetrain)
-{}
+{
+    m_aprilTagPoseSupplier = std::function<std::optional<frc::Pose2d>()>(AprilTagPoseSupplier);
+}
 
 frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedScore) {
     return frc2::cmd::RunOnce([this, selectedScore] {
@@ -25,13 +28,22 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 }
 
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
+    std::optional<frc::Pose2d> aprilTagPose;
+    if (m_aprilTagPoseSupplier) {
+        aprilTagPose = m_aprilTagPoseSupplier();
+    }
+    if (!aprilTagPose) {
+        aprilTagPose = std::optional<frc::Pose2d>(frc::Pose2d());
+    }
+
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
-        DriveForwardToScore(&m_drivetrain).WithTimeout(kForwardTimeout),
+        DriveForwardToScore(&m_drivetrain, aprilTagPose.value()).WithTimeout(kForwardTimeout),
         m_coral.dispenseCoral(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
         ToStowPosition()
     );
+    // ).OnlyIf([aprilTagPose] { return aprilTagPose.has_value(); });
 }
 
 frc2::CommandPtr ScoringSuperstructure::CancelScore() {
