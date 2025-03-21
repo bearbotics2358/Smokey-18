@@ -6,7 +6,8 @@
 CoralSubsystem::CoralSubsystem(ICoralIntakeDataProvider* dataProvider) :
 m_intakeMotor(kCoralIntakeMotorID, rev::spark::SparkMax::MotorType::kBrushless),
 m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless),
-m_coralDataProvider(dataProvider)
+m_coralDataProvider(dataProvider),
+m_pivotEncoder(m_pivotMotor.GetEncoder())
 {
     m_setpointAngle = 160.0;
 
@@ -24,12 +25,34 @@ void CoralSubsystem::Periodic() {
 
     frc::SmartDashboard::PutNumber("Coral Setpoint", m_setpointAngle);
 
+    frc::SmartDashboard::PutNumber("Coral Neo 550 Angle", GetAngleDegreesFallback().value());
+
     // Prevent damage if we lose the coral angle
     if (m_coralDataProvider->IsCoralAngleValid()) {
+        // Only set the encoder offset the first time a value is valid. This needs to be done
+        // in Periodic since the angle is not unpacked until the FeatherCanDecoder periodic
+        // function runs.
+        if (0.0 == m_relEncoderOffsetDegrees) {
+            m_relEncoderOffsetDegrees = m_coralDataProvider->GetCoralIntakeRawAngleDegrees();
+        }
+
         double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
         frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
         SetPivotSpeed(pid_calculation);
+    } else {
+        double fallback_pid_calculation = m_coralPID.Calculate(GetAngleDegreesFallback().value(), m_setpointAngle);
+        frc::SmartDashboard::PutNumber("Coral Neo 550 PID", fallback_pid_calculation);
+        // @todo Enable this after validating that the calculated angles are correct
+        // SetPivotSpeed(fallback_pid_calculation);
     }
+}
+
+units::degree_t CoralSubsystem::GetAngleDegreesFallback() {
+    double currentPosition = m_pivotEncoder.GetPosition();
+    double scaledPosition = currentPosition / kCoralPivotGearRatio;
+    units::degree_t angle = units::radian_t((scaledPosition / kNeoCountsPerRev) * 2 * M_PI);
+
+    return angle - units::degree_t(m_relEncoderOffsetDegrees);
 }
 
 //Returns true if a coral is collected and false otherwise
