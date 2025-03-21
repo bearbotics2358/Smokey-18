@@ -32,6 +32,9 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     if (m_aprilTagPoseSupplier) {
         aprilTagPose = m_aprilTagPoseSupplier();
     }
+    if (!aprilTagPose) {
+        aprilTagPose = std::optional<frc::Pose2d>(frc::Pose2d());
+    }
 
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
