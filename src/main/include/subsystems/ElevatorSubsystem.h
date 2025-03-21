@@ -80,7 +80,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         //  is causing that.
         // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
         // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
-        static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
+        static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
         static constexpr units::meters_per_second_squared_t kMaxAcceleration = 2.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 0.5;

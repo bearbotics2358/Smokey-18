@@ -31,7 +31,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr Dispense();
 
   bool IsAlgaeStored();
-  
+
   frc2::CommandPtr SetGoalAngle(units::degree_t angle);
   units::degree_t CurrentAngle();
 
@@ -41,7 +41,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
 
     rev::spark::SparkMax m_algaeLeftMotor;
-    rev::spark::SparkMax m_algaeRightMotor;
+    // rev::spark::SparkMax m_algaeRightMotor;
 
     static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
