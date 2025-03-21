@@ -36,9 +36,6 @@ public:
 
     frc2::CommandPtr StopClimber();
 
-    frc2::CommandPtr SlowMoveOut();
-    frc2::CommandPtr SlowMoveIn();
-
 private:
     void SetMotorVoltage();
 

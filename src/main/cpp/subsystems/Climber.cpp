@@ -62,18 +62,6 @@ frc2::CommandPtr Climber::Stow() {
     });
 }
 
-frc2::CommandPtr Climber::SlowMoveOut() {
-    return frc2::cmd::Run([this] {
-        m_climberMotor.SetVoltage(units::volt_t(1.0));
-    });
-}
-
-frc2::CommandPtr Climber::SlowMoveIn() {
-    return frc2::cmd::Run([this] {
-        m_climberMotor.SetVoltage(units::volt_t(-1.0));
-    });
-}
-
 //Sets the motor voltage based on profiled PID calculations
 void Climber::SetMotorVoltage() {
     double value = -m_climberPID.Calculate(CurrentAngle(), m_setpointAngle);
