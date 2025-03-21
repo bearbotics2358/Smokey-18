@@ -137,9 +137,9 @@ void RobotContainer::ConfigureBindings() {
         frc2::cmd::Either(
             // This checks the state of the L/R reef switch to determine which reef pole to align with
             // Sending false to AlignWithReef aligns right
-            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefShift::Left).ToPtr().AndThen(AddControllerRumble(1.0)),
-            // Sending true to AlignWithReef aligns left
             AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefShift::Right).ToPtr().AndThen(AddControllerRumble(1.0)),
+            // Sending true to AlignWithReef aligns left
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefShift::Left).ToPtr().AndThen(AddControllerRumble(1.0)),
 
             [this] { return m_gamepad.Button(5).Get(); }
         )
