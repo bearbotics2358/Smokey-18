@@ -233,5 +233,13 @@ void RobotContainer::AddPathPlannerCommands() {
         "ScoreAlgae",
         std::move(m_scoringSuperstructure.ScoreIntoProcessor())
     );
+    NamedCommands::registerCommand(
+        "AlignWithReefLeft",
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr().AndThen(AddControllerRumble(1.0)))
+    );
+     NamedCommands::registerCommand(
+        "AlignWithReefRight",
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0)))
+    );
 }
 
