@@ -26,8 +26,7 @@ m_drivetrain{TunerConstants::CreateDrivetrain(std::bind(
 m_scoringSuperstructure(
     m_elevatorSubsystem,
     m_coralSubsystem, 
-    m_algaeSubsystem, 
-    std::bind(&CameraSubsystem::GetSavedAprilTagPose, &m_cameraSubsystem), 
+    m_algaeSubsystem,
     m_drivetrain
 ),
 m_cameraSubsystem(&m_drivetrain)
