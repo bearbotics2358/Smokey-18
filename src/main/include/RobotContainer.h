@@ -68,8 +68,6 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
-    frc2::Command *StartLEDS();
-
     frc2::CommandPtr AddControllerRumble(double rumble);
 private:
     void ConfigureBindings();
