@@ -16,19 +16,22 @@ m_goalPose(goalPose)
 void DriveForwardToScore::Initialize() {
     m_initialPosition = m_drivetrain->GetPose();
 
-    m_targetDistance = GetDistance(m_initialPosition, m_goalPose) - 26_in;
+    m_targetDistance = GetDistance(m_initialPosition, m_goalPose);
+    frc::SmartDashboard::PutNumber("Target Drive Forward Distance", m_targetDistance.value());
 }
 
 void DriveForwardToScore::Execute() {
     units::inch_t currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
-    frc::SmartDashboard::PutNumber("Drive Forward Current X", currentXDistance.value());
+    frc::SmartDashboard::PutNumber("Current Drive Forward Distance", currentXDistance.value());
+
     double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetDistance.value());
     forward = std::clamp(forward, -1.0, 1.0);
+    
     m_drivetrain->SetControl(robotOriented.WithVelocityX(forward * kMaxVelocity));
 }
 
 bool DriveForwardToScore::IsFinished() {
-    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
+    units::inch_t currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
     return units::math::abs(currentXDistance - m_targetDistance) < kTolerance;
 }
 
