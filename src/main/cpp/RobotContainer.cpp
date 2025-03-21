@@ -18,12 +18,18 @@ using namespace subsystems;
 RobotContainer::RobotContainer(FeatherCanDecoder* featherCanDecoder):
 m_featherCanDecoder(featherCanDecoder),
 m_coralSubsystem(m_featherCanDecoder),
-m_algaeSubsystem(m_featherCanDecoder),
+m_algaeSubsystem(m_featherCanDecoder),  
 m_climberSubsystem(m_featherCanDecoder),
 m_drivetrain{TunerConstants::CreateDrivetrain(std::bind(
     &RobotContainer::AddPathPlannerCommands, this
 ))},
-m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_cameraSubsystem, m_drivetrain),
+m_scoringSuperstructure(
+    m_elevatorSubsystem,
+    m_coralSubsystem, 
+    m_algaeSubsystem, 
+    std::bind(&CameraSubsystem::GetSavedAprilTagPose, &m_cameraSubsystem), 
+    m_drivetrain
+),
 m_cameraSubsystem(&m_drivetrain)
 {
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
