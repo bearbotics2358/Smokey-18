@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "21-GetOutOfWay"
+            "name": "ScoreL4"
           }
         }
       ]
