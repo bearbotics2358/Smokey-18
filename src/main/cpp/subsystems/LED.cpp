@@ -22,6 +22,8 @@ LED::LED() {
   }
 
   memset(m_rxBuff, 0, sizeof(m_rxBuff));
+
+  SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 }
 
 LED::~LED() {
@@ -78,7 +80,10 @@ void LED::Periodic() {
     }
   }
   if (!frc::DriverStation::IsDSAttached()) {
-        SetLEDState(ArduinoConstants::RIO_MESSAGES::NO_COMMS);
+    SetLEDState(ArduinoConstants::RIO_MESSAGES::NO_COMMS);
+  }
+  else{
+    SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
   }
 }
 
