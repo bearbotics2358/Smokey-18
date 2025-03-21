@@ -27,7 +27,7 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
-        DriveForwardToScore(&m_drivetrain).WithTimeout(kForwardTimeout),
+        DriveForwardToScore(&m_drivetrain).WithTimeout(1.0_s),
         m_coral.dispenseCoral(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
         ToStowPosition()
@@ -36,7 +36,7 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
 
 frc2::CommandPtr ScoringSuperstructure::CancelScore() {
     return frc2::cmd::Sequence(
-        DriveBackAfterScore(&m_drivetrain).WithTimeout(1_s),
+        DriveBackAfterScore(&m_drivetrain).WithTimeout(0.5_s),
         ToStowPosition()
     );
 }
@@ -128,7 +128,10 @@ frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
         ),
         frc2::cmd::Parallel(
             m_elevator.GoToHeight(kElevatorCollectPosition),
-            m_coral.GoToAngle(kCoralCollect)
+            frc2::cmd::Sequence(
+                m_coral.GoToAngle(kCoralCollect).WithTimeout(1.0_s),
+                m_coral.collectCoral()
+            )
         ),
         [this] { return m_algae.IsAlgaeStored(); }
     );
