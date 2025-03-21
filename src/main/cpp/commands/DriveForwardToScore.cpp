@@ -7,16 +7,16 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, frc::Pose2d goalPose):
-m_drivetrain{drivetrain},
-m_goalPose(goalPose)
+m_drivetrain{drivetrain}
 {
+    m_goalPose = goalPose;
     AddRequirements(m_drivetrain);
 }
 
 void DriveForwardToScore::Initialize() {
     m_initialPosition = m_drivetrain->GetPose();
 
-    m_targetDistance = GetDistance(m_initialPosition, m_goalPose) - 26_in;
+    m_targetDistance = GetDistance(m_initialPosition, m_goalPose);
 }
 
 void DriveForwardToScore::Execute() {

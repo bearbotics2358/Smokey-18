@@ -24,7 +24,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         };
 
         ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech,
-                              CameraSubsystem& cameraSubsystem, CommandSwerveDrivetrain& drivetrain);
+                              CameraSubsystem& cameraSubsystem, 
+                              CommandSwerveDrivetrain& drivetrain);
 
         frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
         frc2::CommandPtr PrepareAndScoreIntoReef(ScoringSelector selectedScore);
@@ -38,8 +39,6 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr DriveToReefForScoring();
         frc2::CommandPtr BackUpAfterScoring();
     private:
-        void AddPathPlannerCommands();
-        
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;
         AlgaeSubsystem& m_algae;

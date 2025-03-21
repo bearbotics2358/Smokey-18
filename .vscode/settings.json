@@ -93,6 +93,12 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "__bit_reference": "cpp",
+    "__split_buffer": "cpp",
+    "__verbose_abort": "cpp",
+    "execution": "cpp",
+    "locale": "cpp",
+    "charconv": "cpp"
   }
 }

@@ -34,6 +34,6 @@ private:
 
     const units::inch_t kTolerance = 1_in;
     frc::Pose2d m_initialPosition;
-    const frc::Pose2d m_goalPose;
+    frc::Pose2d m_goalPose;
     units::inch_t m_targetDistance;
 };

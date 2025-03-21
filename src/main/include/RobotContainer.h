@@ -19,6 +19,8 @@
 #include "Telemetry.h"
 #include "subsystems/AlgaeSubsystem.h"
 
+#include <functional>
+
 class RobotContainer {
 private:
     units::meters_per_second_t m_maxSpeed = TunerConstants::kSpeedAt12Volts;
@@ -68,6 +70,8 @@ public:
     frc2::Command *GetAutonomousCommand();
 
     frc2::CommandPtr AddControllerRumble(double rumble);
+
+    void AddPathPlannerCommands();
 private:
     void ConfigureBindings();
 };
