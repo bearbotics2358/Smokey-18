@@ -43,6 +43,7 @@ public:
     // **** ICoralIntakeDataProvider interface functions **** //
     float GetCoralIntakeAngleDegrees() override;
     float GetCoralIntakeRawAngleDegrees() override;
+    bool IsCoralAngleValid() override;
     bool IsCoralCollected() override;
 
     // **** IAlgaeDataProvider interface functions **** //
@@ -75,6 +76,7 @@ public:
 
 private:
     float m_coralIntakeAngleDegrees;
+    bool m_coralAngleValid;
     bool m_coralCollected;
     frc::CAN m_coralCAN;
 

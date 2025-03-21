@@ -24,9 +24,12 @@ void CoralSubsystem::Periodic() {
 
     frc::SmartDashboard::PutNumber("Coral Setpoint", m_setpointAngle);
 
-    double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
-    frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
-    SetPivotSpeed(pid_calculation);
+    // Prevent damage if we lose the coral angle
+    if (m_coralDataProvider->IsCoralAngleValid()) {
+        double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
+        frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
+        SetPivotSpeed(pid_calculation);
+    }
 }
 
 //Returns true if a coral is collected and false otherwise

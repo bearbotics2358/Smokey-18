@@ -46,6 +46,10 @@ float FeatherCanDecoder::GetCoralIntakeRawAngleDegrees() {
     return m_coralIntakeAngleDegrees;
 }
 
+bool FeatherCanDecoder::IsCoralAngleValid() {
+    return m_coralAngleValid;
+}
+
 bool FeatherCanDecoder::IsCoralCollected() {
     return m_coralCollected;
 }
@@ -100,6 +104,8 @@ void FeatherCanDecoder::UnpackCoralCANData() {
         frc::SmartDashboard::PutNumber("Coral Collected Value", proximity);
         m_coralCollected = proximity > kCoralProximityThreshold;
     }
+
+    m_coralAngleValid = isCoralDataValid;
 }
 
 void FeatherCanDecoder::UnpackAlgaeCANData() {
