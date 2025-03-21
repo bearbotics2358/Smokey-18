@@ -191,6 +191,11 @@ frc2::Command *RobotContainer::GetAutonomousCommand()
     return m_autoChooser.GetSelected();
 }
 
+frc2::Command *RobotContainer::StartLEDS()
+{
+    m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+}
+
 void RobotContainer::AddPathPlannerCommands() {
     using namespace pathplanner;
     NamedCommands::registerCommand(

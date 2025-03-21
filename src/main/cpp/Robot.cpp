@@ -25,6 +25,8 @@ void Robot::DisabledExit() {}
 void Robot::AutonomousInit() {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
+  m_container.StartLEDS();
+
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
   }
