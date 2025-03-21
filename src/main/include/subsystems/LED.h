@@ -39,7 +39,9 @@ public:
 
 private:
     void SendMSG(const char* message);
-    void ProcessReport();  // Kept this as it was in the original
+    void ProcessReport();  // Kept this as it was in the original\
+
+    bool wasDSAttached = false;
 
     frc::SerialPort* m_pserial;
     char m_rxBuff[32];
