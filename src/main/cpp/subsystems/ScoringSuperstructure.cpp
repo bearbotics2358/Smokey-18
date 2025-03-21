@@ -34,6 +34,13 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     );
 }
 
+frc2::CommandPtr ScoringSuperstructure::CancelScore() {
+    return frc2::cmd::Sequence(
+        DriveBackAfterScore(&m_drivetrain).WithTimeout(1_s),
+        ToStowPosition()
+    );
+}
+
 frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {
     return frc2::cmd::Select<ScoringSelector>([this] {
             return m_selectedScore;
@@ -71,14 +78,17 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool algaeOnly) {
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL3Position),
         m_coral.GoToAngle(coralAngle),
-        frc2::cmd::Either(
-            frc2::cmd::Sequence(
-                m_algae.SetGoalAngle(kAlgaeExtendedAngle),
-                m_algae.Intake()
-            ),
-            m_algae.SetGoalAngle(algaeAngle),
-            [this, algaeOnly] { return algaeOnly; }
-        ),
+
+        // @note Disabling all algae for Friday
+        // frc2::cmd::Either(
+        //     frc2::cmd::Sequence(
+        //         m_algae.SetGoalAngle(kAlgaeExtendedAngle),
+        //         m_algae.Intake()
+        //     ),
+        //     m_algae.SetGoalAngle(algaeAngle),
+        //     [this, algaeOnly] { return algaeOnly; }
+        // ),
+
         DispenseCoralAndMoveBack()
     );
 }

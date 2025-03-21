@@ -30,6 +30,7 @@ public:
     const int kClimberDeviceID = 3;
     const int kClimberAPIId = 3;
     const double kClimberAngleOffsetDegrees = -368.5;
+    // const double kClimberAngleOffsetDegrees = 0.0;
     const int kClimberProximityThreshold = 1500;//todo:add the threshold here
 
     const int kBellyPanDeviceID = 4;
@@ -42,6 +43,7 @@ public:
     // **** ICoralIntakeDataProvider interface functions **** //
     float GetCoralIntakeAngleDegrees() override;
     float GetCoralIntakeRawAngleDegrees() override;
+    bool IsCoralAngleValid() override;
     bool IsCoralCollected() override;
 
     // **** IAlgaeDataProvider interface functions **** //
@@ -74,6 +76,7 @@ public:
 
 private:
     float m_coralIntakeAngleDegrees;
+    bool m_coralAngleValid;
     bool m_coralCollected;
     frc::CAN m_coralCAN;
 

@@ -11,15 +11,17 @@ m_climberDataProvider(dataProvider)
         .WithInverted(true);  //We'll need to tests this
 
     m_climberMotor.GetConfigurator().Apply(motorConfigs);
-    
+
     m_climberMotor.SetPosition(0_tr);
     /*
      * This method blocks the current robot loop until the signal is retrieved or the timeout is activated.
      * The CTRE docs state that this API can ensure that set operations are completed before continuing control flow.
      * This method reports an error to the DriverStation.
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
-     */ 
+     */
     m_climberMotor.GetPosition().WaitForUpdate(20_ms);
+
+    m_climberPID.EnableContinuousInput(-180.0_deg, 180.0_deg);
 }
 
 void Climber::Periodic() {

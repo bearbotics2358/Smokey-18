@@ -148,17 +148,21 @@ void RobotContainer::ConfigureBindings() {
             m_scoringSuperstructure.ScoreIntoReef().FinallyDo(
                 [this] { m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE); }
             )
-        );
-        // .OnFalse(
-        //     m_elevatorSubsystem.GoToHeight(m_elevatorSubsystem.CurrentHeight())
-        // );
-
-    m_joystick.LeftTrigger().OnTrue(
-        frc2::cmd::Sequence(
-            m_coralSubsystem.collectCoral(),
-            m_scoringSuperstructure.ToStowPosition()
         )
-    );
+        .OnFalse(
+            m_scoringSuperstructure.CancelScore()
+        );
+
+    m_joystick.LeftTrigger()
+        .OnTrue(
+            m_coralSubsystem.collectCoral()
+        )
+        .OnFalse(
+            frc2::cmd::Parallel(
+                m_coralSubsystem.StopIntake(),
+                m_scoringSuperstructure.ToStowPosition()
+            )
+        );
 
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
         .OnTrue(
