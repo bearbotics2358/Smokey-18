@@ -2,8 +2,6 @@
 
 #include "ctre/phoenix6/swerve/SwerveDrivetrain.hpp"
 
-#include <functional>
-
 using namespace ctre::phoenix6;
 
 namespace subsystems {
@@ -205,7 +203,7 @@ public:
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program.
      */
-    static subsystems::CommandSwerveDrivetrain CreateDrivetrain(std::function<void()> AddPathPlannerCommands);
+    static subsystems::CommandSwerveDrivetrain CreateDrivetrain();
 };
 
 
