@@ -6,12 +6,18 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <chrono>
+
+using namespace std::chrono;
+
 DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain)
     : m_drivetrain{drivetrain} {
     AddRequirements(m_drivetrain);
 }
 
 void DriveForwardToScore::Initialize() {
+    m_startTime = steady_clock::now();
+
     m_targetX = kForwardDistance + m_drivetrain->GetPose().X();
 }
 
@@ -24,6 +30,13 @@ void DriveForwardToScore::Execute() {
 }
 
 bool DriveForwardToScore::IsFinished() {
+    auto endTime = steady_clock::now();
+    auto timeDiff = duration_cast<duration<double>>(endTime - m_startTime);
+
+    // if (timeDiff.count() > 1.5) {
+    //     return true;
+    // }
+
     units::inch_t currentXDistance = m_drivetrain->GetPose().X();
     return units::math::abs(currentXDistance - m_targetX) < kTolerance;
 }

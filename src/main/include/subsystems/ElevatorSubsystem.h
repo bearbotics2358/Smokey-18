@@ -21,7 +21,7 @@ constexpr int kElevatorMotor2Id = 37;
 constexpr int kLimitSwitchId = 0;
 
 // @todo Assign these to real values when we know the distances
-constexpr units::inch_t kElevatorCollectPosition = 1.5_in;
+constexpr units::inch_t kElevatorCollectPosition = 3.5_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
@@ -80,7 +80,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         //  is causing that.
         // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
         // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
-        static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
+        static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
         static constexpr units::meters_per_second_squared_t kMaxAcceleration = 2.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 0.5;

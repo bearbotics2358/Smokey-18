@@ -31,6 +31,8 @@ private:
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
     const units::inch_t kTolerance = 1_in;
-    const units::inch_t kForwardDistance = 8_in;
+    const units::inch_t kForwardDistance = 7_in;
     units::inch_t m_targetX;
+
+    std::chrono::steady_clock::time_point m_startTime = std::chrono::steady_clock::now();
 };

@@ -36,7 +36,7 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(double rumble) {
     return frc2::cmd::RunOnce([this, rumble] {
-        m_joystick.SetRumble(frc::GenericHID::RumbleType::kBothRumble, rumble);
+        m_driverJoystick.SetRumble(frc::GenericHID::RumbleType::kBothRumble, rumble);
     });
 }
 
@@ -48,32 +48,34 @@ void RobotContainer::ConfigureBindings() {
     m_drivetrain.SetDefaultCommand(m_drivetrain.ApplyRequest([this]() -> auto&& {
         // Drivetrain will execute this command periodically
         return drive.WithVelocityX(
-                -m_joystick.GetLeftY() * m_maxSpeed * m_speedMultiplier
+                -m_driverJoystick.GetLeftY() * m_maxSpeed * m_speedMultiplier
             ) // Drive forward with negative Y (forward)
             .WithVelocityY(
-                -m_joystick.GetLeftX() * m_maxSpeed * m_speedMultiplier
+                -m_driverJoystick.GetLeftX() * m_maxSpeed * m_speedMultiplier
             ) // Drive left with negative X (left)
             .WithRotationalRate(
-                -m_joystick.GetRightX() * m_maxAngularRate * m_speedMultiplier
+                -m_driverJoystick.GetRightX() * m_maxAngularRate * m_speedMultiplier
             ); // Drive counterclockwise with negative X (left)
     }));
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
     // **** Driver Station Buttons **** //
-    m_gamepad.Button(7).OnTrue(frc2::cmd::Parallel(
+    m_operatorJoystick.POVUp().OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
         }),
         m_climberSubsystem.Extend()
-    )).OnFalse(frc2::cmd::Parallel(
+    ));
+
+    m_operatorJoystick.POVDown().OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
         }),
         m_climberSubsystem.Stow()
     ));
 
-    m_gamepad.Button(11).OnTrue(
+    m_operatorJoystick.Y().OnTrue(
         frc2::cmd::Parallel(
             m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L4),
             frc2::cmd::RunOnce([this] {
@@ -81,7 +83,7 @@ void RobotContainer::ConfigureBindings() {
             })
         ));
 
-    m_gamepad.Button(10).OnTrue(
+    m_operatorJoystick.X().OnTrue(
         frc2::cmd::Parallel(
             m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral),
             frc2::cmd::RunOnce([this] {
@@ -89,36 +91,36 @@ void RobotContainer::ConfigureBindings() {
             })
         ));
 
-    m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
-        })
-    ));
+    // m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
+    //     m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
+    //     frc2::cmd::RunOnce([this] {
+    //         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
+    //     })
+    // ));
 
-    m_gamepad.Button(6).OnTrue(frc2::cmd::Parallel(
+    m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L2),
         frc2::cmd::RunOnce([this] {
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
         })
     ));
 
-    m_gamepad.Button(1).OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L1),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
-        })
-    ));
+    // m_gamepad.Button(1).OnTrue(frc2::cmd::Parallel(
+    //     m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L1),
+    //     frc2::cmd::RunOnce([this] {
+    //         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+    //     })
+    // ));
 
     // #TODO: use logic to determine if the robot should go to stow or to processor depending if there is a algae held currently
-    m_gamepad.Button(2).OnTrue(frc2::cmd::Parallel(
+    m_operatorJoystick.LeftBumper().OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.ToStowPosition(),
         frc2::cmd::RunOnce([this] {
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
         })
     ));
 
-    m_gamepad.Button(3).OnTrue(frc2::cmd::Parallel(
+    m_operatorJoystick.A().OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.ToCollectPosition(),
         frc2::cmd::RunOnce([this] {
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
@@ -126,7 +128,7 @@ void RobotContainer::ConfigureBindings() {
     ));
 
     // **** Xbox A, B, X, & Y Button functions **** //
-    m_joystick.B().WhileTrue(
+    m_driverJoystick.B().WhileTrue(
         frc2::cmd::Either(
             // This checks the state of the L/R reef switch to determine which reef pole to align with
             // Sending false to AlignWithReef aligns right
@@ -134,16 +136,16 @@ void RobotContainer::ConfigureBindings() {
             // Sending true to AlignWithReef aligns left
             AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr().AndThen(AddControllerRumble(1.0)),
 
-            [this] { return m_gamepad.Button(5).Get(); }
+            [this] { return m_operatorJoystick.POVRight().Get(); }
         )
     ).ToggleOnFalse(
         AddControllerRumble(0.0)
     );
 
-    m_joystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
+    m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
     // **** Xbox Trigger & Bumper Buttons **** //
-    m_joystick.RightTrigger()
+    m_driverJoystick.RightTrigger()
         .OnTrue(
             m_scoringSuperstructure.ScoreIntoReef().FinallyDo(
                 [this] { m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE); }
@@ -153,7 +155,7 @@ void RobotContainer::ConfigureBindings() {
             m_scoringSuperstructure.CancelScore()
         );
 
-    m_joystick.LeftTrigger()
+    m_driverJoystick.LeftTrigger()
         .OnTrue(
             m_coralSubsystem.collectCoral()
         )
@@ -164,7 +166,7 @@ void RobotContainer::ConfigureBindings() {
             )
         );
 
-    (m_elevatorSubsystem.IsHeightAboveThreshold || m_joystick.LeftBumper())
+    (m_elevatorSubsystem.IsHeightAboveThreshold || m_driverJoystick.LeftBumper())
         .OnTrue(
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
         )
@@ -173,17 +175,17 @@ void RobotContainer::ConfigureBindings() {
         );
 
     // **** Xbox Dpad Buttons **** //
-    m_joystick.POVUp().OnTrue(m_climberSubsystem.Climb());
+    m_driverJoystick.POVUp().OnTrue(m_climberSubsystem.Climb());
 
-    m_joystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
+    m_driverJoystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] { m_drivetrain.SeedFieldCentric(); }));
 
-    m_joystick.POVRight().WhileTrue(
+    m_driverJoystick.POVRight().WhileTrue(
         m_drivetrain.ApplyRequest([this]() -> auto&& {
             return strafe.WithVelocityY(-0.25_mps);
         })
     );
 
-    m_joystick.POVLeft().WhileTrue(
+    m_driverJoystick.POVLeft().WhileTrue(
         m_drivetrain.ApplyRequest([this]() -> auto&& {
             return strafe.WithVelocityY(0.25_mps);
         })
