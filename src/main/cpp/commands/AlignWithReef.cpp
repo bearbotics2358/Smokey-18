@@ -4,15 +4,15 @@
 
 #include "commands/AlignWithReef.h"
 
-AlignWithReef::AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool goToLeft)
+AlignWithReef::AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, ReefShift shift)
     : m_camera{camera},
     m_drivetrain{drivetrain},
-    m_goToLeft(goToLeft) {
+    m_reefShift(shift) {
     // Register that this command requires the subsystem.
     AddRequirements(m_drivetrain);
     AddRequirements(m_camera);
 
-    if (goToLeft) {
+    if (m_reefShift == ReefShift::Left) {
         m_strafeSetpoint = kStrafeLeftReefSetpoint;
     } else {
         m_strafeSetpoint = kStrafeRightReefSetpoint;

@@ -17,7 +17,6 @@
 #include "subsystems/ScoringSuperstructure.h"
 #include "subsystems/LED.h"
 #include "Telemetry.h"
-#include <frc2/command/RunCommand.h>
 #include "subsystems/AlgaeSubsystem.h"
 
 class RobotContainer {
@@ -58,7 +57,7 @@ private:
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
 
 public:
-    subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
+    subsystems::CommandSwerveDrivetrain m_drivetrain;
 
 private:
     /* Path follower */
@@ -70,7 +69,8 @@ public:
     frc2::Command *GetAutonomousCommand();
 
     frc2::CommandPtr AddControllerRumble(double rumble);
+
+    void AddPathPlannerCommands();
 private:
     void ConfigureBindings();
-    void AddPathPlannerCommands();
 };

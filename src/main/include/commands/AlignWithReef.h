@@ -16,6 +16,11 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
+enum ReefShift{
+    Left,
+    Right
+};
+
 class AlignWithReef
     : public frc2::CommandHelper<frc2::Command, AlignWithReef> {
 public:
@@ -25,7 +30,7 @@ public:
      * @param camera The subsystem used by this command.
      * @param drivetrain
      */
-    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool goToLeft);
+    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, ReefShift shift);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
@@ -80,5 +85,5 @@ private:
         {22, 120_deg},
     };
 
-    bool m_goToLeft = true;
+    ReefShift m_reefShift = ReefShift::Left;
 };

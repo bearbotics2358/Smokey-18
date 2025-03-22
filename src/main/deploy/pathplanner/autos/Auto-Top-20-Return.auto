@@ -13,13 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "AlignWithReefLeft"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "20-GetOutOfWay"
+            "name": "ScoreL4"
           }
         }
       ]

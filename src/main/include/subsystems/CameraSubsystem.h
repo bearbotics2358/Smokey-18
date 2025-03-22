@@ -27,6 +27,8 @@ class CameraSubsystem : public frc2::SubsystemBase {
 
   void Periodic() override;
 
+  std::optional<frc::Pose2d> GetSavedAprilTagPose();
+
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -42,4 +44,5 @@ class CameraSubsystem : public frc2::SubsystemBase {
 
   subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
+  int m_savedAprilTagID = -1;
 };

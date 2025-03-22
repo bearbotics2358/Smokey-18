@@ -11,9 +11,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 5.0
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         },
         {
@@ -23,15 +29,27 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 5.0
+            "name": "Collect"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "13-19"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         }
       ]
