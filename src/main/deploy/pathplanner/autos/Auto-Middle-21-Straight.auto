@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Middle-21"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
         }
       ]
     }
