@@ -20,9 +20,7 @@ m_featherCanDecoder(featherCanDecoder),
 m_coralSubsystem(m_featherCanDecoder),
 m_algaeSubsystem(m_featherCanDecoder),  
 m_climberSubsystem(m_featherCanDecoder),
-m_drivetrain{TunerConstants::CreateDrivetrain(std::bind(
-    &RobotContainer::AddPathPlannerCommands, this
-))},
+m_drivetrain{TunerConstants::CreateDrivetrain()},
 m_scoringSuperstructure(
     m_elevatorSubsystem,
     m_coralSubsystem, 

@@ -19,8 +19,6 @@
 #include "Telemetry.h"
 #include "subsystems/AlgaeSubsystem.h"
 
-#include <functional>
-
 class RobotContainer {
 private:
     units::meters_per_second_t m_maxSpeed = TunerConstants::kSpeedAt12Volts;
