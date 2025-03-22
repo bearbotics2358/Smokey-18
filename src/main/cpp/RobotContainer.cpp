@@ -31,12 +31,16 @@ m_scoringSuperstructure(
 ),
 m_cameraSubsystem(&m_drivetrain)
 {
-    m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
-    frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
-
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+
+    AddPathPlannerCommands();
+
+    m_drivetrain.ConfigureAutoBuilder();
+
+    m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
+    frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
     ConfigureBindings();
 }
