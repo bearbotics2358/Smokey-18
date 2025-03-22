@@ -31,7 +31,7 @@ void DriveForwardToScore::Execute() {
     double error = m_targetDistance.value() - m_currentXDistance.value();
     frc::SmartDashboard::PutNumber("Drive Forward Error", error);
 
-    double forward = m_XAlignmentPID.Calculate(error, m_targetDistance.value());
+    double forward = m_XAlignmentPID.Calculate(error, 0.0);
     forward = std::clamp(forward, -1.0, 1.0);
     frc::SmartDashboard::PutNumber("Drive Forward Value", forward);
     
