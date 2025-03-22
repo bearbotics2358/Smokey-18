@@ -25,18 +25,21 @@ void DriveForwardToScore::Initialize() {
 }
 
 void DriveForwardToScore::Execute() {
-    currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
-    frc::SmartDashboard::PutNumber("Drive Forward Current", currentXDistance.value());
+    m_currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
+    frc::SmartDashboard::PutNumber("Drive Forward Current", m_currentXDistance.value());
 
-    double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetDistance.value());
+    double error = m_targetDistance.value() - m_currentXDistance.value();
+    frc::SmartDashboard::PutNumber("Drive Forward Error", error);
+
+    double forward = m_XAlignmentPID.Calculate(error, m_targetDistance.value());
     forward = std::clamp(forward, -1.0, 1.0);
-    frc::SmartDashboard::PutNumber("Drive Forward Current", forward);
+    frc::SmartDashboard::PutNumber("Drive Forward Value", forward);
     
-    m_drivetrain->SetControl(robotOriented.WithVelocityX(forward * kMaxVelocity));
+    // m_drivetrain->SetControl(robotOriented.WithVelocityX(forward * kMaxVelocity));
 }
 
 bool DriveForwardToScore::IsFinished() {
-    return units::math::abs(currentXDistance - m_targetDistance) < kTolerance;
+    return units::math::abs(m_targetDistance - m_currentXDistance) < kTolerance;
 }
 
 units::inch_t DriveForwardToScore::GetDistance(frc::Pose2d first, frc::Pose2d second) {

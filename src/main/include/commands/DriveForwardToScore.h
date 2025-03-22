@@ -36,5 +36,5 @@ private:
     frc::Pose2d m_initialPosition;
     frc::Pose2d m_goalPose;
     units::inch_t m_targetDistance;
-    units::inch_t currentXDistance;
+    units::inch_t m_currentXDistance;
 };
