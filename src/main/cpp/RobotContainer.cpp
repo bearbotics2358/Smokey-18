@@ -174,6 +174,8 @@ void RobotContainer::ConfigureBindings() {
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
 
+    m_driverJoystick.RightBumper().WhileTrue(m_drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
+
     // **** Xbox Dpad Buttons **** //
     m_driverJoystick.POVUp().OnTrue(m_climberSubsystem.Climb());
 
