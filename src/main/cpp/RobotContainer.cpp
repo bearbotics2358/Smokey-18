@@ -22,16 +22,18 @@ m_algaeSubsystem(m_featherCanDecoder),
 m_climberSubsystem(m_featherCanDecoder),
 m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem, m_drivetrain)
 {
-    m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
-    frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
-
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
     m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-    ConfigureBindings();
-
     AddPathPlannerCommands();
+
+    m_drivetrain.ConfigureAutoBuilder();
+
+    m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
+    frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
+
+    ConfigureBindings();
 }
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(double rumble) {
