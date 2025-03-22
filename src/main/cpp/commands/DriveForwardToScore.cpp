@@ -16,12 +16,16 @@ m_drivetrain{drivetrain}
 void DriveForwardToScore::Initialize() {
     m_initialPosition = m_drivetrain->GetPose();
 
+    frc::SmartDashboard::PutNumber("April Tag Goal Pose X", m_goalPose.X().value());
+    frc::SmartDashboard::PutNumber("April Tag Goal Pose Y", m_goalPose.Y().value());
+    frc::SmartDashboard::PutNumber("April Tag Goal Pose Rot", m_goalPose.Rotation().Degrees().value());
+
     m_targetDistance = GetDistance(m_initialPosition, m_goalPose);
     frc::SmartDashboard::PutNumber("Drive Forward Target", m_targetDistance.value());
 }
 
 void DriveForwardToScore::Execute() {
-    units::inch_t currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
+    currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
     frc::SmartDashboard::PutNumber("Drive Forward Current", currentXDistance.value());
 
     double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetDistance.value());
@@ -32,7 +36,6 @@ void DriveForwardToScore::Execute() {
 }
 
 bool DriveForwardToScore::IsFinished() {
-    units::inch_t currentXDistance = GetDistance(m_initialPosition, m_drivetrain->GetPose());
     return units::math::abs(currentXDistance - m_targetDistance) < kTolerance;
 }
 
