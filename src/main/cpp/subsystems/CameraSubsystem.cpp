@@ -26,6 +26,7 @@ void CameraSubsystem::updateData() {
         frc::SmartDashboard::PutNumber("Rotation", bestTarget.GetYaw());
         frc::SmartDashboard::PutNumber("Strafe Distance", units::inch_t(getStrafeTransformation()).value());
         frc::SmartDashboard::PutNumber("Forward Distance", units::inch_t(getForwardTransformation()).value());
+        frc::SmartDashboard::PutNumber("Distance", units::inch_t(getDistance()).value());
     } else {
         frc::SmartDashboard::PutBoolean("Has Targets", false);
     }

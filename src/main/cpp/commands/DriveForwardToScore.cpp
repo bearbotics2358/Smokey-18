@@ -20,6 +20,10 @@ void DriveForwardToScore::Initialize() {
     m_startTime = steady_clock::now();
 
     m_initialPose = frc::Pose2d(m_drivetrain->GetPose());
+
+    if (m_forwardDistance == 0_in) {
+        m_forwardDistance = kDefaultDistance;
+    }
 }
 
 void DriveForwardToScore::Execute() {
