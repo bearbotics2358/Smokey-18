@@ -10,13 +10,11 @@ ScoringSuperstructure::ScoringSuperstructure(
     ElevatorSubsystem& elevator,
     CoralSubsystem& coralMech,
     AlgaeSubsystem& algaeMech,
-    CameraSubsystem& camera,
     CommandSwerveDrivetrain& drivetrain
 ):
 m_elevator(elevator),
 m_coral(coralMech),
 m_algae(algaeMech),
-m_camera(camera),
 m_drivetrain(drivetrain)
 {}
 
@@ -29,7 +27,7 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
-        DriveForwardToScore(&m_drivetrain, units::inch_t(m_camera.getDistance())).WithTimeout(2.0_s),
+        DriveForwardToScore(&m_drivetrain, 12_in).WithTimeout(2.0_s),
         frc2::cmd::RunOnce([this] {m_drivetrain.SetControl(stopDriving);}),
         m_coral.dispenseCoral(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
