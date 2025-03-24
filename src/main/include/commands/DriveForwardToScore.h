@@ -10,7 +10,7 @@
 class DriveForwardToScore
     : public frc2::CommandHelper<frc2::Command, DriveForwardToScore> {
 public:
-    explicit DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain);
+    explicit DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, units::inch_t distance);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
@@ -30,9 +30,10 @@ private:
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
-    const units::inch_t kTolerance = 1_in;
-    const units::inch_t kForwardDistance = 7_in;
+    const units::inch_t kTolerance = 0.5_in;
+    units::inch_t m_forwardDistance = 12_in;
     units::inch_t m_targetX;
+    frc::Pose2d m_initialPose;
 
     std::chrono::steady_clock::time_point m_startTime = std::chrono::steady_clock::now();
 };

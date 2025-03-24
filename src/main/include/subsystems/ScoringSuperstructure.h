@@ -49,6 +49,12 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         static constexpr units::second_t kForwardTimeout = 0.5_s;
         static constexpr units::second_t kBackupTimeout = 1_s;
 
+        swerve::requests::RobotCentric stopDriving = swerve::requests::RobotCentric{}
+            .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+            .WithVelocityX(0_mps)
+            .WithVelocityY(0_mps)
+            .WithRotationalRate(0_rad_per_s);
+
         // Values for the tuple are coral and algae angles.
         std::map<units::inch_t, std::tuple<units::degree_t, units::degree_t>> m_elevatorMap = {
             {kElevatorStowPosition, std::make_tuple(kCoralStow, kAlgaeStowAngle)},
