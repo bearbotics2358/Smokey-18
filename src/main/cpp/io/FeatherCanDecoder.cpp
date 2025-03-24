@@ -17,6 +17,15 @@ m_bellyPanCAN(kBellyPanDeviceID)
     m_climberAngleDegrees = 0.0;
 }
 
+/**
+ * Detect when the FeatherCAN sent a bad reading for the time of flight (TOF) sensor.
+ */
+bool FeatherCanDecoder::IsTOFDataValid(int tofReading) {
+    static constexpr int kBadTOFValue = 0xFFFF;
+
+    return kBadTOFValue != tofReading;
+}
+
 void FeatherCanDecoder::Update() {
     UnpackCoralCANData();
     frc::SmartDashboard::PutNumber("Raw Angle of Coral FeatherCan", GetCoralIntakeRawAngleDegrees());
@@ -34,8 +43,6 @@ void FeatherCanDecoder::Update() {
     frc::SmartDashboard::PutBoolean("Climber Collected?", m_leftProximity);
 
     UnpackBellyPanCANData();
-    frc::SmartDashboard::PutBoolean("BellyPan Right Proximity?", m_rightBellyPanProximity);
-    frc::SmartDashboard::PutBoolean("BellyPan Left Proximity?", m_leftBellyPanProximity);
 }
 
 float FeatherCanDecoder::GetCoralIntakeAngleDegrees() {
@@ -63,6 +70,7 @@ float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
 }
 
 bool FeatherCanDecoder::IsAlgaeCollected() {
+    // @todo The kAlgaeProximityThreshold TOF threshold needs to be tuned before this can be re-enabled
     //return m_algaeCollected;
     return false;
 }
@@ -83,12 +91,12 @@ bool FeatherCanDecoder::IsRightCageHooked() {
     return m_rightProximity;
 }
 
-bool FeatherCanDecoder::IsLeftProximity() {
-    return m_leftBellyPanProximity;
+double FeatherCanDecoder::GetBellyPanLeftDistance() {
+    return m_leftBellyPanDistance;
 }
 
-bool FeatherCanDecoder::IsRightProximity() {
-    return m_rightBellyPanProximity;
+double FeatherCanDecoder::GetBellyPanRightDistance() {
+    return m_rightBellyPanDistance;
 }
 
 void FeatherCanDecoder::UnpackCoralCANData() {
@@ -121,7 +129,12 @@ void FeatherCanDecoder::UnpackAlgaeCANData() {
 
         int proximity = (data.data[2] << 8) | data.data[3];
         frc::SmartDashboard::PutNumber("Algae Collected Value", proximity);
-        m_algaeCollected = proximity > kAlgaeProximityThreshold;
+
+        if (IsTOFDataValid(proximity)) {
+            // Only update the algae collected value if the TOF data is good. Otherwise we
+            // may incorrectly report that algae is collected.
+            m_algaeCollected = proximity > kAlgaeProximityThreshold;
+        }
     }
 }
 
@@ -152,11 +165,21 @@ void FeatherCanDecoder::UnpackBellyPanCANData() {
 
     if (isBellyPanDataValid) {
         int proximityright = (data.data[0] << 8) | data.data[1];
-        frc::SmartDashboard::PutNumber("Is the BellyPan in proximity?", proximityright);
-        m_rightBellyPanProximity = proximityright > kBellyPanProximityThreshold;
+        frc::SmartDashboard::PutNumber("BellyPan Right Distance", proximityright);
+
+        if (IsTOFDataValid(proximityright)) {
+            // Only update the value if the TOF data is good. Otherwise we
+            // may incorrectly report the distance.
+            m_rightBellyPanDistance = proximityright;
+        }
 
         int proximityleft = (data.data[2] << 8) | data.data[3];
-        frc::SmartDashboard::PutNumber("Is the BellyPan in proximity?", proximityleft);
-        m_leftBellyPanProximity = proximityleft > kBellyPanProximityThreshold;
+        frc::SmartDashboard::PutNumber("BellyPan Left Distance", proximityleft);
+
+        if (IsTOFDataValid(proximityleft)) {
+            // Only update the value if the TOF data is good. Otherwise we
+            // may incorrectly report the distance.
+            m_leftBellyPanDistance = proximityleft;
+        }
     }
 }
