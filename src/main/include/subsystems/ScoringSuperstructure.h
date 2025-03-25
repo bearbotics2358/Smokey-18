@@ -36,6 +36,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
 
         frc2::CommandPtr DriveToReefForScoring();
         frc2::CommandPtr BackUpAfterScoring();
+        frc2::CommandPtr StopDriving();
 
         frc2::CommandPtr CancelScore();
     private:

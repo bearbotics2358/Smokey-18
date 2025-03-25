@@ -28,10 +28,16 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
         DriveForwardToScore(&m_drivetrain, kForwardDistance).WithTimeout(2.0_s),
-        frc2::cmd::RunOnce([this] {m_drivetrain.SetControl(stopDriving);}),
+        StopDriving(),
         m_coral.dispenseCoral(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
         ToStowPosition()
+    );
+}
+
+frc2::CommandPtr ScoringSuperstructure::StopDriving() {
+    return frc2::cmd::RunOnce(
+        [this] {m_drivetrain.SetControl(stopDriving);}  
     );
 }
 

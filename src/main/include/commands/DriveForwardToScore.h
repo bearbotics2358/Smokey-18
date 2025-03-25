@@ -34,7 +34,5 @@ private:
     units::inch_t m_forwardDistance;
     frc::Pose2d m_initialPose;
 
-    const units::inch_t kDefaultDistance = 7_in;
-
     std::chrono::steady_clock::time_point m_startTime = std::chrono::steady_clock::now();
 };
