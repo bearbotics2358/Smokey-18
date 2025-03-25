@@ -10,10 +10,13 @@
 class DriveForwardToScore
     : public frc2::CommandHelper<frc2::Command, DriveForwardToScore> {
 public:
-    explicit DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, units::inch_t distance);
+    static constexpr units::inch_t kDefaultDistance = 8_in;
+
+    explicit DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, units::inch_t distance = kDefaultDistance);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
+    units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
@@ -33,6 +36,4 @@ private:
     const units::inch_t kTolerance = 1_in;
     units::inch_t m_forwardDistance;
     frc::Pose2d m_initialPose;
-
-    std::chrono::steady_clock::time_point m_startTime = std::chrono::steady_clock::now();
 };

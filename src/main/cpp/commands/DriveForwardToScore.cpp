@@ -17,7 +17,7 @@ void DriveForwardToScore::Initialize() {
 }
 
 void DriveForwardToScore::Execute() {
-    units::inch_t currentDistanceTraveled = units::inch_t(m_initialPose.Translation().Distance(m_drivetrain->GetPose().Translation()));
+    units::inch_t currentDistanceTraveled = GetDistance(m_initialPose, m_drivetrain->GetPose());
     frc::SmartDashboard::PutNumber("Drive Forward Current X", currentDistanceTraveled.value());
     double forward = m_XAlignmentPID.Calculate(currentDistanceTraveled.value(), m_forwardDistance.value());
     forward = std::clamp(forward, -1.0, 1.0);
@@ -27,4 +27,8 @@ void DriveForwardToScore::Execute() {
 bool DriveForwardToScore::IsFinished() {
     units::inch_t currentDistanceTraveled = units::inch_t(m_initialPose.Translation().Distance(m_drivetrain->GetPose().Translation()));
     return units::math::abs(currentDistanceTraveled - m_forwardDistance) < kTolerance;
+}
+
+units::inch_t DriveForwardToScore::GetDistance(frc::Pose2d first, frc::Pose2d second) {
+    return units::inch_t(first.Translation().Distance(second.Translation()));
 }
