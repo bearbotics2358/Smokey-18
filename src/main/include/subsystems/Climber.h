@@ -15,6 +15,9 @@
 
 #include <subsystems/IClimberDataProvider.h>
 
+#include <frc2/command/button/Trigger.h>
+#include <io/FeatherCanDecoder.h>
+
 constexpr int kClimberMotor1Id = 32;
 
 constexpr units::degree_t kClimberStartAngle = 165.0_deg;
@@ -35,6 +38,14 @@ public:
     units::degree_t CurrentAngle();
 
     frc2::CommandPtr StopClimber();
+
+    frc2::Trigger IsLeftCageHooked = frc2::Trigger([this] {
+        return m_climberDataProvider->IsLeftCageHooked();
+    });
+
+    frc2::Trigger IsRightCageHooked = frc2::Trigger([this] {
+        return m_climberDataProvider->IsRightCageHooked();
+    });
 
 private:
     void SetMotorVoltage();

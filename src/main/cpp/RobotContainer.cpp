@@ -36,9 +36,9 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
     ConfigureBindings();
 }
 
-frc2::CommandPtr RobotContainer::AddControllerRumble(double rumble) {
-    return frc2::cmd::RunOnce([this, rumble] {
-        m_driverJoystick.SetRumble(frc::GenericHID::RumbleType::kBothRumble, rumble);
+frc2::CommandPtr RobotContainer::AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble) {
+    return frc2::cmd::RunOnce([this, rumble, rumbleType] {
+        m_driverJoystick.SetRumble(rumbleType, rumble);
     });
 }
 
@@ -134,14 +134,18 @@ void RobotContainer::ConfigureBindings() {
         frc2::cmd::Either(
             // This checks the state of the L/R reef switch to determine which reef pole to align with
             // Sending false to AlignWithReef aligns right
-            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0)),
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false)
+                .ToPtr()
+                .AndThen(AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0)),
             // Sending true to AlignWithReef aligns left
-            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr().AndThen(AddControllerRumble(1.0)),
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true)
+                .ToPtr()
+                .AndThen(AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0)),
 
             [this] { return m_operatorJoystick.POVRight().Get(); }
         )
     ).ToggleOnFalse(
-        AddControllerRumble(0.0)
+        AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0)
     );
 
     m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
@@ -194,6 +198,22 @@ void RobotContainer::ConfigureBindings() {
             return strafe.WithVelocityY(0.25_mps);
         })
     );
+
+    (m_climberSubsystem.IsLeftCageHooked)
+        .OnTrue(
+            AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 1.0)
+        )
+        .OnFalse(
+            AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 0.0)
+        );
+
+    (m_climberSubsystem.IsRightCageHooked)
+        .OnTrue(
+            AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 1.0)
+        )
+        .OnFalse(
+            AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 0.0)
+        );
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

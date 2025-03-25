@@ -69,7 +69,7 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
-    frc2::CommandPtr AddControllerRumble(double rumble);
+    frc2::CommandPtr AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble);
 private:
     void ConfigureBindings();
     void AddPathPlannerCommands();
