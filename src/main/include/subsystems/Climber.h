@@ -41,10 +41,6 @@ public:
 
     bool IsRightOnCage();
 
-    frc2::Trigger IsReadyToClimb = frc2::Trigger([this] {
-        return m_readyToClimb;
-    });
-
 private:
     void SetMotorVoltage();
 

@@ -32,28 +32,6 @@ void Climber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber Setpoint", m_setpointAngle.value());
 
     SetMotorVoltage();
-
-    if (IsLeftOnCage() && !m_leftCaptureStart){
-        m_leftCaptureStart = steady_clock::now();
-    }
-    else if (!IsLeftOnCage()){
-        m_leftCaptureStart = std::nullopt;
-    }
-
-    if (IsRightOnCage() && !m_rightCaptureStart){
-        m_rightCaptureStart = steady_clock::now();
-    }
-    else if (!IsRightOnCage()){
-        m_rightCaptureStart = std::nullopt;
-    }
-
-    if (duration_cast<milliseconds>(steady_clock::now() - m_leftCaptureStart.value()) >= 500ms 
-        && duration_cast<milliseconds>(steady_clock::now() - m_rightCaptureStart.value()) >= 500ms){
-        m_readyToClimb = true;
-    }
-    else{
-        m_readyToClimb = false;
-    }
 }
 
 //Returns the current angle of the climber in degrees
