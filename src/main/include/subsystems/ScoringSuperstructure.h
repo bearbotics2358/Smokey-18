@@ -49,6 +49,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         static constexpr units::second_t kForwardTimeout = 0.5_s;
         static constexpr units::second_t kBackupTimeout = 1_s;
 
+        static constexpr units::inch_t kForwardDistance = 8_in;
+
         swerve::requests::RobotCentric stopDriving = swerve::requests::RobotCentric{}
             .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
             .WithVelocityX(0_mps)
