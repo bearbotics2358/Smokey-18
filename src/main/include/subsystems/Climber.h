@@ -16,7 +16,6 @@
 #include <subsystems/IClimberDataProvider.h>
 
 #include <frc2/command/button/Trigger.h>
-#include <io/FeatherCanDecoder.h>
 
 constexpr int kClimberMotor1Id = 32;
 
