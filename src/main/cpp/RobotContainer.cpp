@@ -74,39 +74,39 @@ void RobotContainer::ConfigureBindings() {
         m_climberSubsystem.Extend()
     ));
 
-    m_gamepad.Button(7)
-        .OnTrue(frc2::cmd::RunOnce([this] {
-            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
-            m_climberSubsystem.CancelClimb();
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
+    // m_gamepad.Button(7)
+    //     .OnTrue(frc2::cmd::RunOnce([this] {
+    //         m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+    //         m_climberSubsystem.CancelClimb();
+    //         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE);
+    //         m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE);
 
-            if (m_climberSubsystem.IsLeftOnCage()){
-                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTTRUE);
-            } else {
-                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBLEFTFALSE);
-            }
+    //         if (m_climberSubsystem.IsLeftOnCage()){
+    //             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE);
+    //         } else {
+    //             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE);
+    //         }
 
-            if (m_climberSubsystem.IsRightOnCage()) {
-                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTTRUE);
-            } else {
-                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMBRIGHTFALSE);
-            }}))
-        .OnFalse(frc2::cmd::RunOnce([this] {
-            m_climberSubsystem.CancelClimb();
+    //         if (m_climberSubsystem.IsRightOnCage()) {
+    //             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE);
+    //         } else {
+    //             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE);
+    //         }}))
+    //     .OnFalse(frc2::cmd::RunOnce([this] {
+    //         m_climberSubsystem.CancelClimb();
 
-        }));
+    //     }));
     
     // TODO: change the name of ALGAE_HELD
-    m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {
-        m_scoringSuperstructure.PrepareElevator(kElevatorL3Position, true);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ALGAE_HELD);
-    }));
+    // m_gamepad.Button(9).OnTrue(frc2::cmd::RunOnce([this] {
+    //     m_scoringSuperstructure.PrepareElevator(kElevatorL3Position, true);
+    //     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
+    // }));
 
-    m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
-        m_scoringSuperstructure.PrepareElevator(kElevatorL2Position, false);
-        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
-    }));
+    // m_gamepad.Button(6).OnTrue(frc2::cmd::RunOnce([this] {
+    //     m_scoringSuperstructure.PrepareElevator(kElevatorL2Position, false);
+    //     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+    // }));
 
     m_operatorJoystick.POVDown().OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
