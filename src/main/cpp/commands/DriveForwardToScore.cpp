@@ -6,37 +6,29 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include <chrono>
-
-using namespace std::chrono;
-
-DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain)
-    : m_drivetrain{drivetrain} {
+DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, units::inch_t distance)
+    : m_drivetrain{drivetrain}, 
+    m_forwardDistance{distance} {
     AddRequirements(m_drivetrain);
 }
 
 void DriveForwardToScore::Initialize() {
-    m_startTime = steady_clock::now();
-
-    m_targetX = kForwardDistance + m_drivetrain->GetPose().X();
+    m_initialPose = m_drivetrain->GetPose();
 }
 
 void DriveForwardToScore::Execute() {
-    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
-    frc::SmartDashboard::PutNumber("Drive Forward Current X", currentXDistance.value());
-    double forward = m_XAlignmentPID.Calculate(currentXDistance.value(), m_targetX.value());
+    units::inch_t currentDistanceTraveled = GetDistance(m_initialPose, m_drivetrain->GetPose());
+    frc::SmartDashboard::PutNumber("Drive Forward Current X", currentDistanceTraveled.value());
+    double forward = m_XAlignmentPID.Calculate(currentDistanceTraveled.value(), m_forwardDistance.value());
     forward = std::clamp(forward, -1.0, 1.0);
     m_drivetrain->SetControl(robotOriented.WithVelocityX(forward * kMaxVelocity));
 }
 
 bool DriveForwardToScore::IsFinished() {
-    auto endTime = steady_clock::now();
-    auto timeDiff = duration_cast<duration<double>>(endTime - m_startTime);
+    units::inch_t currentDistanceTraveled = units::inch_t(m_initialPose.Translation().Distance(m_drivetrain->GetPose().Translation()));
+    return units::math::abs(currentDistanceTraveled - m_forwardDistance) < kTolerance;
+}
 
-    // if (timeDiff.count() > 1.5) {
-    //     return true;
-    // }
-
-    units::inch_t currentXDistance = m_drivetrain->GetPose().X();
-    return units::math::abs(currentXDistance - m_targetX) < kTolerance;
+units::inch_t DriveForwardToScore::GetDistance(frc::Pose2d first, frc::Pose2d second) {
+    return units::inch_t(first.Translation().Distance(second.Translation()));
 }

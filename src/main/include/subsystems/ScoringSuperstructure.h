@@ -22,7 +22,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
             L4
         };
 
-        ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech,
+        ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech, 
                               CommandSwerveDrivetrain& drivetrain);
 
         frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
@@ -36,6 +36,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
 
         frc2::CommandPtr DriveToReefForScoring();
         frc2::CommandPtr BackUpAfterScoring();
+        frc2::CommandPtr StopDriving();
 
         frc2::CommandPtr CancelScore();
     private:
@@ -48,6 +49,12 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
 
         static constexpr units::second_t kForwardTimeout = 0.5_s;
         static constexpr units::second_t kBackupTimeout = 1_s;
+
+        swerve::requests::RobotCentric stopDriving = swerve::requests::RobotCentric{}
+            .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+            .WithVelocityX(0_mps)
+            .WithVelocityY(0_mps)
+            .WithRotationalRate(0_rad_per_s);
 
         // Values for the tuple are coral and algae angles.
         std::map<units::inch_t, std::tuple<units::degree_t, units::degree_t>> m_elevatorMap = {
