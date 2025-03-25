@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 5.0
+            "name": "AlignWithReefLeft"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "20-GetOutOfWay"
+            "name": "ScoreL2"
           }
         }
       ]

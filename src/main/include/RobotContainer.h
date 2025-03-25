@@ -42,8 +42,9 @@ private:
      *       define a destructor to un-register the telemetry from the drivetrain */
     Telemetry logger{m_maxSpeed};
 
-    frc2::CommandXboxController m_joystick{0};
-    frc2::CommandGenericHID m_gamepad{4};
+    frc2::CommandXboxController m_driverJoystick{0};
+    frc2::CommandXboxController m_operatorJoystick{1};
+    // frc2::CommandGenericHID m_gamepad{4};
 
     // Robot.cpp owns the FeatherCanDecoder object
     FeatherCanDecoder* m_featherCanDecoder;
@@ -52,7 +53,7 @@ private:
     ElevatorSubsystem m_elevatorSubsystem;
     CoralSubsystem m_coralSubsystem;
     AlgaeSubsystem m_algaeSubsystem;
-    
+
     Climber m_climberSubsystem;
     subsystems::ScoringSuperstructure m_scoringSuperstructure;
 
@@ -68,6 +69,7 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
+    frc2::CommandPtr AddControllerRumble(double rumble);
 private:
     void ConfigureBindings();
     void AddPathPlannerCommands();

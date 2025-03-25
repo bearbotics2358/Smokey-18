@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle-21"
+            "pathName": "One Foot"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "21-GetOutOfWay"
+            "name": "ScoreL2"
           }
         }
       ]

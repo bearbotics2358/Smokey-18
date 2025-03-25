@@ -13,15 +13,17 @@ m_climberDataProvider(dataProvider)
         .WithInverted(true);  //We'll need to tests this
 
     m_climberMotor.GetConfigurator().Apply(motorConfigs);
-    
+
     m_climberMotor.SetPosition(0_tr);
     /*
      * This method blocks the current robot loop until the signal is retrieved or the timeout is activated.
      * The CTRE docs state that this API can ensure that set operations are completed before continuing control flow.
      * This method reports an error to the DriverStation.
      * The link: https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/status-signals.html
-     */ 
+     */
     m_climberMotor.GetPosition().WaitForUpdate(20_ms);
+
+    m_climberPID.EnableContinuousInput(-180.0_deg, 180.0_deg);
 }
 
 void Climber::Periodic() {
@@ -68,8 +70,10 @@ frc2::CommandPtr Climber::Climb() {
     });
 }
 
-//Cancels the climb
-frc2::CommandPtr Climber::CancelClimb() {
+/**
+ * Prepare the climber by extending it to the Ready To Climb position
+ */
+frc2::CommandPtr Climber::Extend() {
     return frc2::cmd::RunOnce([this] {
         m_setpointAngle = kClimberStartAngle;
     });
@@ -84,10 +88,10 @@ frc2::CommandPtr Climber::Stow() {
 
 //Sets the motor voltage based on profiled PID calculations
 void Climber::SetMotorVoltage() {
-    double value = m_climberPID.Calculate(CurrentAngle(), m_setpointAngle);
+    double value = -m_climberPID.Calculate(CurrentAngle(), m_setpointAngle);
     frc::SmartDashboard::PutNumber("Climber PID", value);
 
-    //m_climberMotor.SetVoltage(goalVolts); Uncomment this when we know everything works
+    m_climberMotor.SetVoltage(units::volt_t(value));
 }
 
 //Stops the climb motor completely

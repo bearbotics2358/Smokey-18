@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bottom-22"
+            "pathName": "Top 20 Angled"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "AlignWithReefLeft"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "22-GetOutOfWay"
+            "name": "ScoreL2"
           }
         }
       ]

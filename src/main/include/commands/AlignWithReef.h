@@ -25,7 +25,7 @@ public:
      * @param camera The subsystem used by this command.
      * @param drivetrain
      */
-    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain);
+    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool goToLeft);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
@@ -38,31 +38,47 @@ private:
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
-    static constexpr double kP = 1.0;
-    static constexpr double kI = 0.1;
+    std::optional<int> m_targetTagId;
+    units::degree_t m_targetDegrees;
+
+    static constexpr double kP = 2.0;
+    static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
     frc::PIDController m_YAlignmentPID {kP, kI, kD};
 
-    static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.0_rad_per_s;
-    static constexpr units::turns_per_second_squared_t kMaxAngularAcceleration = 1.0_rad_per_s_sq;
-    static constexpr double kRotationP = 1.0;
-    static constexpr double kRotationI = 0.1;
+    static constexpr double kRotationP = 0.05;
+    static constexpr double kRotationI = 0.0;
     static constexpr double kRotationD = 0.0;
+    frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    frc::TrapezoidProfile<units::radians>::Constraints m_angularConstraints {
-        kMaxAngularVelocity, kMaxAngularAcceleration
-    };
-    frc::ProfiledPIDController<units::radians> m_angularAlignmentPID {
-        kRotationP, kRotationI, kRotationD, m_angularConstraints
-    };
+    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
+    static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.0_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(2_in);
-    const units::meter_t kStrafeTolerance = units::meter_t(2_in);
-    const units::degree_t kRotationTolerance = 3_deg;
+    const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
+    const units::degree_t kRotationTolerance = 2_deg;
 
-    units::meter_t m_distanceFromReefSetpoint = units::meter_t(48_in);
-    units::meter_t m_strafeSetpoint = units::meter_t(0_in);
-    units::radian_t m_rotationalSetpoint = 0_rad;
+    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(30_in);
+    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(0_in);
+    const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13_in);
+    units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
+
+    const std::map<int, units::degree_t> kTagAngleMap = {
+        {6, 120_deg},
+        {7, 180_deg},
+        {8, 240_deg},
+        {9, 300_deg},
+        {10, 0_deg},
+        {11, 60_deg},
+        {17, 60_deg},
+        {18, 0_deg},
+        {19, 300_deg},
+        {20, 240_deg},
+        {21, 180_deg},
+        {22, 120_deg},
+    };
+
+    bool m_goToLeft = true;
 };

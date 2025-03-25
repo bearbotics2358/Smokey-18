@@ -29,11 +29,11 @@ public:
 
     const int kClimberDeviceID = 3;
     const int kClimberAPIId = 3;
-    const double kClimberAngleOffsetDegrees = -374.4;
+    const double kClimberAngleOffsetDegrees = -368.5;
+    // const double kClimberAngleOffsetDegrees = 0.0;
     const int kClimberProximityThreshold = 1500;//todo:add the threshold here
 
     const int kBellyPanDeviceID = 4;
-    const int kBellyPanProximityThreshold = 1500;
 
     FeatherCanDecoder();
 
@@ -42,6 +42,7 @@ public:
     // **** ICoralIntakeDataProvider interface functions **** //
     float GetCoralIntakeAngleDegrees() override;
     float GetCoralIntakeRawAngleDegrees() override;
+    bool IsCoralAngleValid() override;
     bool IsCoralCollected() override;
 
     // **** IAlgaeDataProvider interface functions **** //
@@ -63,17 +64,20 @@ public:
     void UnpackClimberCANData();
 
     // **** IBellyPanDataProvider interface functions **** //
-    bool m_rightBellyPanProximity;
-    bool m_leftBellyPanProximity;
+    double m_rightBellyPanDistance;
+    double m_leftBellyPanDistance;
     frc::CAN m_bellyPanCAN;
 
-    bool IsLeftProximity() override;
-    bool IsRightProximity() override;
+    double GetBellyPanLeftDistance() override;
+    double GetBellyPanRightDistance() override;
 
     void UnpackBellyPanCANData();
 
 private:
+    bool IsTOFDataValid(int proximityReading);
+
     float m_coralIntakeAngleDegrees;
+    bool m_coralAngleValid;
     bool m_coralCollected;
     frc::CAN m_coralCAN;
 

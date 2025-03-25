@@ -5,6 +5,7 @@
 #include "subsystems/CoralSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/AlgaeSubsystem.h"
+#include "subsystems/CommandSwerveDrivetrain.h"
 
 #include <map>
 #include <tuple>
@@ -13,24 +14,47 @@ namespace subsystems {
 
 class ScoringSuperstructure : public frc2::SubsystemBase {
     public:
-        // @todo This will also need to include the CoralSubsystem and AlgaeSubsystem when they are ready
-        ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech);
+        enum ScoringSelector {
+            L1,
+            L2,
+            L3AlgaeAndCoral,
+            L3AlgaeOnly,
+            L4
+        };
 
-        frc2::CommandPtr PrepareElevator(units::inch_t desiredPosition, bool removeAlgae);
+        ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech, 
+                              CommandSwerveDrivetrain& drivetrain);
+
+        frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
+        frc2::CommandPtr PrepareAndScoreIntoReef(ScoringSelector selectedScore);
 
         frc2::CommandPtr ScoreIntoReef();
         frc2::CommandPtr ScoreIntoProcessor();
-        frc2::CommandPtr PrepareAndScoreIntoReef(units::inch_t desiredPosition, bool removeAlgae);
 
         frc2::CommandPtr ToCollectPosition();
         frc2::CommandPtr ToStowPosition();
+
+        frc2::CommandPtr DriveToReefForScoring();
+        frc2::CommandPtr BackUpAfterScoring();
+        frc2::CommandPtr StopDriving();
+
+        frc2::CommandPtr CancelScore();
     private:
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;
         AlgaeSubsystem& m_algae;
+        CommandSwerveDrivetrain& m_drivetrain;
 
-        units::inch_t m_elevatorSetpointHeight;
-        bool m_collectAlgae;
+        ScoringSelector m_selectedScore = L1;
+
+        static constexpr units::second_t kForwardTimeout = 0.5_s;
+        static constexpr units::second_t kBackupTimeout = 1_s;
+
+        swerve::requests::RobotCentric stopDriving = swerve::requests::RobotCentric{}
+            .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+            .WithVelocityX(0_mps)
+            .WithVelocityY(0_mps)
+            .WithRotationalRate(0_rad_per_s);
 
         // Values for the tuple are coral and algae angles.
         std::map<units::inch_t, std::tuple<units::degree_t, units::degree_t>> m_elevatorMap = {
@@ -41,6 +65,13 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
             {kElevatorL3Position, std::make_tuple(kCoralL3, kAlgaeStowAngle)},
             {kElevatorL4Position, std::make_tuple(kCoralL4, kAlgaeStowAngle)},
         };
+
+        frc2::CommandPtr ScoreReefL1();
+        frc2::CommandPtr ScoreReefL2();
+        frc2::CommandPtr ScoreReefL3(bool algaeOnly);
+        frc2::CommandPtr ScoreReefL4();
+
+        frc2::CommandPtr DispenseCoralAndMoveBack();
 };
 
 }

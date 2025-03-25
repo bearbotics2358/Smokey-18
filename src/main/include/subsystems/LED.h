@@ -20,7 +20,7 @@ namespace ArduinoConstants {
         MSG_IDLE = 1,
         NO_COMMS = 2,
         ELEVATOR_L1 = 3,
-        ALGAE_HELD = 4,
+        ELEVATOR_L3_ALGAE = 4,
         ELEVATOR_L2 = 5,
         ELEVATOR_L3 = 6,
         IDK = 7,
@@ -42,7 +42,9 @@ public:
 
 private:
     void SendMSG(const char* message);
-    void ProcessReport();  // Kept this as it was in the original
+    void ProcessReport();  // Kept this as it was in the original\
+
+    bool wasDSAttached = false;
 
     frc::SerialPort* m_pserial;
     char m_rxBuff[32];

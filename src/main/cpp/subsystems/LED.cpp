@@ -22,6 +22,8 @@ LED::LED() {
   }
 
   memset(m_rxBuff, 0, sizeof(m_rxBuff));
+
+  SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 }
 
 LED::~LED() {
@@ -38,7 +40,6 @@ void LED::Periodic() {
         if (m_rxIndex > 0) {
           m_rxBuff[m_rxIndex] = 0;  // Null-terminate
           printf("RX: %s\n", m_rxBuff);
-          ProcessReport();
         }
         m_rxIndex = 0;
         memset(m_rxBuff, 0, sizeof(m_rxBuff));  // Clear buffer
@@ -81,7 +82,14 @@ void LED::Periodic() {
     }
   }
   if (!frc::DriverStation::IsDSAttached()) {
-        SetLEDState(ArduinoConstants::RIO_MESSAGES::NO_COMMS);
+    SetLEDState(ArduinoConstants::RIO_MESSAGES::NO_COMMS);
+    wasDSAttached = false;
+  }
+  else{
+    if(!wasDSAttached){
+      SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+      wasDSAttached = true;
+    }
   }
 }
 
@@ -96,9 +104,4 @@ void LED::SendMSG(const char* message) {
    } catch (const std::exception& e) {
     std::printf("Error writing to serial port: %s\n", e.what());
   }
-}
-
-void LED::ProcessReport() {
-  // Parse report - no action needed in this example
-  // Kept as it was in the original file
 }

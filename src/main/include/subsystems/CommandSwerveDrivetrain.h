@@ -128,7 +128,6 @@ public:
         if (utils::IsSimulation()) {
             StartSimThread();
         }
-        ConfigureAutoBuilder();
     }
 
     /**
@@ -155,7 +154,6 @@ public:
         if (utils::IsSimulation()) {
             StartSimThread();
         }
-        ConfigureAutoBuilder();
     }
 
     /**
@@ -189,7 +187,6 @@ public:
         if (utils::IsSimulation()) {
             StartSimThread();
         }
-        ConfigureAutoBuilder();
     }
 
     /**
@@ -254,8 +251,9 @@ public:
         return m_sysIdRoutineToApply->Dynamic(direction);
     }
 
-private:
+    frc::Pose2d GetPose();
     void ConfigureAutoBuilder();
+private:
     void StartSimThread();
 };
 
