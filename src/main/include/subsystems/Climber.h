@@ -55,7 +55,7 @@ private:
 
     static constexpr units::turns_per_second_t kMaxVelocity = 60_deg_per_s;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 80_deg_per_s_sq;
-    static constexpr double kP = 65.0;
+    static constexpr double kP = 77.5;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
 
