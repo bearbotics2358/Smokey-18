@@ -34,7 +34,6 @@ public:
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
 
 private:
-
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
@@ -53,8 +52,8 @@ private:
     static constexpr double kRotationD = 0.0;
     frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
-    static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.0_rad_per_s;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.25_mps;
+    static constexpr units::radians_per_second_t kMaxAngularVelocity = 0.75_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(2_in);
     const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
