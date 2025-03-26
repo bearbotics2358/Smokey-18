@@ -83,6 +83,4 @@ private:
         {21, 180_deg},
         {22, 120_deg},
     };
-
-    ReefSide m_reefSide = ReefSide::Left;
 };

@@ -8,7 +8,7 @@ AlignWithReef::AlignWithReef(
     CameraSubsystem* camera, 
     subsystems::CommandSwerveDrivetrain* drivetrain, 
     ReefSide reefSide
-): m_camera{camera}, m_drivetrain{drivetrain}, m_reefSide(reefSide) {
+): m_camera{camera}, m_drivetrain{drivetrain} {
     // Register that this command requires the subsystem.
     AddRequirements(m_drivetrain);
     AddRequirements(m_camera);
