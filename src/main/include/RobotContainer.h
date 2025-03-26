@@ -19,6 +19,7 @@
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
 #include "subsystems/AlgaeSubsystem.h"
+#include "commands/AlignWithReef.h"
 
 class RobotContainer {
 private:

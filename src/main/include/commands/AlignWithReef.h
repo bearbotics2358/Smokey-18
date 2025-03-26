@@ -16,7 +16,7 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
-enum ReefSide : char {
+ enum ReefSide {
     Left,
     Right
 };
@@ -37,7 +37,7 @@ public:
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
-
+    
 private:
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
