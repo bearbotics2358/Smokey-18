@@ -134,9 +134,9 @@ void RobotContainer::ConfigureBindings() {
         frc2::cmd::Either(
             // This checks the state of the L/R reef switch to determine which reef pole to align with
             // Sending false to AlignWithReef aligns right
-            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, false).ToPtr().AndThen(AddControllerRumble(1.0)),
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().AndThen(AddControllerRumble(1.0)),
             // Sending true to AlignWithReef aligns left
-            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr().AndThen(AddControllerRumble(1.0)),
+            AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().AndThen(AddControllerRumble(1.0)),
 
             [this] { return m_operatorJoystick.POVRight().Get(); }
         )
@@ -167,6 +167,10 @@ void RobotContainer::ConfigureBindings() {
                 m_scoringSuperstructure.ToStowPosition()
             )
         );
+
+    m_driverJoystick.A().OnTrue(m_coralSubsystem.dispenseCoral());
+    
+    m_driverJoystick.Y().OnTrue(m_coralSubsystem.collectCoral());
 
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_driverJoystick.LeftBumper())
         .OnTrue(
@@ -238,6 +242,6 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, true).ToPtr())
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr())
     );
 }
