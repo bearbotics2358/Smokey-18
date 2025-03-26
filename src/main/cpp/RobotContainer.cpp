@@ -129,6 +129,18 @@ void RobotContainer::ConfigureBindings() {
         })
     ));
 
+    m_operatorJoystick.POVRight().OnTrue(frc2::cmd::RunOnce(
+        [this] {
+            m_reefSide = ReefSide::Right;
+        })
+    );
+
+    m_operatorJoystick.POVLeft().OnTrue(frc2::cmd::RunOnce(
+        [this] {
+            m_reefSide = ReefSide::Left;
+        })
+    );
+
     // **** Xbox A, B, X, & Y Button functions **** //
     m_driverJoystick.B().WhileTrue(
         frc2::cmd::Either(
@@ -139,7 +151,7 @@ void RobotContainer::ConfigureBindings() {
             AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left)
                 .ToPtr()
                 .AndThen(AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0)),
-            [this] { return m_operatorJoystick.POVRight().Get(); }
+            [this] { return m_reefSide == ReefSide::Right; }
         )
     ).ToggleOnFalse(
         AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0)
