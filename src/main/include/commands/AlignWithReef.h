@@ -16,6 +16,11 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
+ enum ReefSide {
+    Left,
+    Right
+};
+
 class AlignWithReef
     : public frc2::CommandHelper<frc2::Command, AlignWithReef> {
 public:
@@ -25,16 +30,15 @@ public:
      * @param camera The subsystem used by this command.
      * @param drivetrain
      */
-    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, bool goToLeft);
+    explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, ReefSide reefSide);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
-
+    
 private:
-
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
@@ -53,8 +57,8 @@ private:
     static constexpr double kRotationD = 0.0;
     frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
-    static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.0_rad_per_s;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.25_mps;
+    static constexpr units::radians_per_second_t kMaxAngularVelocity = 0.75_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(2_in);
     const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
@@ -79,6 +83,4 @@ private:
         {21, 180_deg},
         {22, 120_deg},
     };
-
-    bool m_goToLeft = true;
 };
