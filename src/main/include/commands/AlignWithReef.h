@@ -16,7 +16,7 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
-const enum ReefSide : char {
+enum ReefSide : char {
     Left,
     Right
 };
