@@ -9,7 +9,7 @@ m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless),
 m_coralDataProvider(dataProvider),
 m_pivotEncoder(m_pivotMotor.GetEncoder())
 {
-    m_setpointAngle = 160.0;
+    m_setpointAngle = kCoralStow.value();
 
     rev::spark::SparkBaseConfig pivotConfig;
     pivotConfig.SmartCurrentLimit(kPivotMotorMaxCurrentAmps)
@@ -19,6 +19,8 @@ m_pivotEncoder(m_pivotMotor.GetEncoder())
 }
 
 void CoralSubsystem::Periodic() {
+    frc::SmartDashboard::PutNumber("Coral Angle", m_coralDataProvider->GetCoralIntakeAngleDegrees());
+    
     frc::SmartDashboard::PutNumber("Pivot Temp", m_pivotMotor.GetMotorTemperature());
     frc::SmartDashboard::PutBoolean("Pivot Temp Good?", m_pivotMotor.GetMotorTemperature() < 60.0);
     frc::SmartDashboard::PutNumber("Pivot Current", m_pivotMotor.GetOutputCurrent());
@@ -66,7 +68,7 @@ bool CoralSubsystem::CoralPresent() {
 
 //Set the speed of the coral collector - parameter should be a value from -1.0 to 1.0
 void CoralSubsystem::SetIntakeSpeed(double speed) {
-    const double kSlowDown = 0.4;
+    const double kSlowDown = 0.1;
     m_intakeMotor.Set(speed * kSlowDown);
 }
 
@@ -91,7 +93,7 @@ frc2::CommandPtr CoralSubsystem::GoToAngle(units::degree_t targetAngle) {
 }
 
 // Start the intake motor and stop it either when the coral is collected or after three seconds
-frc2::CommandPtr CoralSubsystem::collectCoral() {
+frc2::CommandPtr CoralSubsystem::Collect() {
     return frc2::cmd::StartEnd(
         [this] {
             SetIntakeSpeed(0.5);
@@ -100,11 +102,12 @@ frc2::CommandPtr CoralSubsystem::collectCoral() {
             m_intakeMotor.StopMotor();
         },
         {this}
-    ).Until(([this] { return CoralPresent(); })).WithName("collectCoral");
+    ).Until(([this] { return CoralPresent(); }))
+     .WithName("collectCoral");
 }
 
 // Run the intake motor backwards for one second to dispense held coral
-frc2::CommandPtr CoralSubsystem::dispenseCoral() {
+frc2::CommandPtr CoralSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
         [this] {
             SetIntakeSpeed(-0.5);
