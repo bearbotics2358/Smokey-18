@@ -28,7 +28,7 @@ void DriveBackAfterScore::Execute() {
 
 bool DriveBackAfterScore::IsFinished() {
     units::inch_t currentDistanceTraveled = units::inch_t(
-        m_initialPose.Translation().Distance(m_drivetrain->GetPose().Translation())
+        GetDistance(m_initialPose, m_drivetrain->GetPose())
     );
     return units::math::abs(currentDistanceTraveled - m_forwardDistance) <= kTolerance;
 }
