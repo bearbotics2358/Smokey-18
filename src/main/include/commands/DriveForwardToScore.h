@@ -22,7 +22,6 @@ public:
 
     units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
 
-
 private:
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
