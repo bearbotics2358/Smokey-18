@@ -27,8 +27,8 @@ class CoralSubsystem : public frc2::SubsystemBase {
   bool CoralPresent();
 
   frc2::CommandPtr GoToAngle(units::degree_t angle);
-  frc2::CommandPtr collectCoral();
-  frc2::CommandPtr dispenseCoral();
+  frc2::CommandPtr Collect();
+  frc2::CommandPtr Dispense();
   frc2::CommandPtr StopIntake();
 
  private:

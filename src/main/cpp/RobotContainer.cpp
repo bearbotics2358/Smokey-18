@@ -86,9 +86,9 @@ void RobotContainer::ConfigureBindings() {
 
     m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
-    m_driverJoystick.A().OnTrue(m_coralSubsystem.dispenseCoral());
+    m_driverJoystick.A().OnTrue(m_coralSubsystem.Dispense());
     
-    m_driverJoystick.Y().OnTrue(m_coralSubsystem.collectCoral());
+    m_driverJoystick.Y().OnTrue(m_coralSubsystem.Collect());
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_driverJoystick.RightTrigger()
@@ -103,7 +103,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_driverJoystick.LeftTrigger()
         .OnTrue(
-            m_coralSubsystem.collectCoral()
+            m_coralSubsystem.Collect()
         )
         .OnFalse(
             frc2::cmd::Parallel(

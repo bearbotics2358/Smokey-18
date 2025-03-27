@@ -29,7 +29,7 @@ void CoralSubsystem::Periodic() {
 
     double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
     frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
-    SetPivotSpeed(pid_calculation);
+    //SetPivotSpeed(pid_calculation);
 
     // Prevent damage if we lose the coral angle
     // if (m_coralDataProvider->IsCoralAngleValid()) {
@@ -91,7 +91,7 @@ frc2::CommandPtr CoralSubsystem::GoToAngle(units::degree_t targetAngle) {
 }
 
 // Start the intake motor and stop it either when the coral is collected or after three seconds
-frc2::CommandPtr CoralSubsystem::collectCoral() {
+frc2::CommandPtr CoralSubsystem::Collect() {
     return frc2::cmd::StartEnd(
         [this] {
             SetIntakeSpeed(0.5);
@@ -104,7 +104,7 @@ frc2::CommandPtr CoralSubsystem::collectCoral() {
 }
 
 // Run the intake motor backwards for one second to dispense held coral
-frc2::CommandPtr CoralSubsystem::dispenseCoral() {
+frc2::CommandPtr CoralSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
         [this] {
             SetIntakeSpeed(-0.5);
