@@ -18,7 +18,7 @@ public:
     const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
     const int kCoralProximityThreshold = 1500;
-    const double kCoralAngleOffsetDegrees = -377.9;
+    const double kCoralAngleOffsetDegrees = -258;
 
     const int kAlgaeDeviceID = 2;
     const int kAlgaeAPIId = 2;
