@@ -298,4 +298,12 @@ void RobotContainer::AddPathPlannerCommands() {
         "AlignWithReefLeft",
         std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr())
     );
+    NamedCommands::registerCommand(
+        "AlignWithReefRight",
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr())
+    );
+    NamedCommands::registerCommand(
+        "WaitTillElevatorAtHeight",
+        std::move(m_scoringSuperstructure.WaitTillElevatorAtHeight())
+    );
 }
