@@ -39,6 +39,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr StopDriving();
 
         frc2::CommandPtr CancelScore();
+
+        frc2::CommandPtr WaitTillElevatorAtHeight();
     private:
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;

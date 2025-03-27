@@ -10,18 +10,25 @@
 class DriveBackAfterScore
     : public frc2::CommandHelper<frc2::Command, DriveBackAfterScore> {
 public:
-    explicit DriveBackAfterScore(subsystems::CommandSwerveDrivetrain* drivetrain);
+    static constexpr units::inch_t kDefaultDistance = 6_in;
+
+    explicit DriveBackAfterScore(
+        subsystems::CommandSwerveDrivetrain* drivetrain, 
+        units::inch_t distance = kDefaultDistance
+    );
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
+
+    units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
+
+private:
+    subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
         .WithVelocityY(0_mps)
         .WithRotationalRate(0_rad_per_s);
-
-private:
-    subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.0;
@@ -31,6 +38,6 @@ private:
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
     const units::inch_t kTolerance = 1_in;
-    const units::inch_t kBackwardDistance = 6_in;
-    units::inch_t m_targetX;
+    units::inch_t m_backwardDistance;
+    frc::Pose2d m_initialPose;
 };
