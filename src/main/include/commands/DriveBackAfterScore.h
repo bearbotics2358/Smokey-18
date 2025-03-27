@@ -38,6 +38,6 @@ private:
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
     const units::inch_t kTolerance = 1_in;
-    units::inch_t m_forwardDistance;
+    units::inch_t m_backwardDistance;
     frc::Pose2d m_initialPose;
 };
