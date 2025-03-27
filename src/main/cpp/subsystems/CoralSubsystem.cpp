@@ -9,7 +9,7 @@ m_pivotMotor(kCoralPivotMotorID, rev::spark::SparkMax::MotorType::kBrushless),
 m_coralDataProvider(dataProvider),
 m_pivotEncoder(m_pivotMotor.GetEncoder())
 {
-    m_setpointAngle = 157;
+    m_setpointAngle = kCoralStow.value();
 
     rev::spark::SparkBaseConfig pivotConfig;
     pivotConfig.SmartCurrentLimit(kPivotMotorMaxCurrentAmps)
@@ -103,7 +103,6 @@ frc2::CommandPtr CoralSubsystem::Collect() {
         },
         {this}
     ).Until(([this] { return CoralPresent(); }))
-     .WithTimeout(3_s)
      .WithName("collectCoral");
 }
 
