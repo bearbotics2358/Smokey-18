@@ -1,6 +1,5 @@
 #include "subsystems/ScoringSuperstructure.h"
-#include "commands/DriveForwardToScore.h"
-#include "commands/DriveBackAfterScore.h"
+#include "commands/DriveRobot.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -27,11 +26,11 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
-        DriveForwardToScore(&m_drivetrain).WithTimeout(2.0_s),
+        DriveRobot(&m_drivetrain, DriveDirection::Forward).WithTimeout(2.0_s),
         StopDriving(),
         m_coral.dispenseCoral(),
         ToStowPosition(),
-        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout)
+        DriveRobot(&m_drivetrain, DriveDirection::Backward, 6_in).WithTimeout(kBackupTimeout)
     );
 }
 
@@ -43,7 +42,7 @@ frc2::CommandPtr ScoringSuperstructure::StopDriving() {
 
 frc2::CommandPtr ScoringSuperstructure::CancelScore() {
     return frc2::cmd::Sequence(
-        DriveBackAfterScore(&m_drivetrain).WithTimeout(0.5_s),
+        DriveRobot(&m_drivetrain, DriveDirection::Backward, 6_in).WithTimeout(0.5_s),
         ToStowPosition()
     );
 }

@@ -7,21 +7,26 @@
 
 #include <frc/controller/PIDController.h>
 
-class DriveForwardToScore
-    : public frc2::CommandHelper<frc2::Command, DriveForwardToScore> {
+enum DriveDirection {
+    Backward = -1,
+    Forward  =  1
+};
+
+class DriveRobot
+    : public frc2::CommandHelper<frc2::Command, DriveRobot> {
 public:
     static constexpr units::inch_t kDefaultDistance = 8_in;
 
-    explicit DriveForwardToScore(
+    explicit DriveRobot(
         subsystems::CommandSwerveDrivetrain* drivetrain, 
+        DriveDirection direction,
         units::inch_t distance = kDefaultDistance
     );
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
 
-    units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
-
+    units::inch_t GetTraveledDistance();
 
 private:
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
@@ -39,6 +44,7 @@ private:
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
     const units::inch_t kTolerance = 1_in;
-    units::inch_t m_forwardDistance;
+    units::inch_t m_distance;
+    DriveDirection m_direction;
     frc::Pose2d m_initialPose;
 };
