@@ -27,9 +27,7 @@ void DriveForwardToScore::Execute() {
 }
 
 bool DriveForwardToScore::IsFinished() {
-    units::inch_t currentDistanceTraveled = units::inch_t(
-        GetDistance(m_initialPose, m_drivetrain->GetPose())
-    );
+    units::inch_t currentDistanceTraveled = GetDistance(m_initialPose, m_drivetrain->GetPose());
     return units::math::abs(currentDistanceTraveled - m_forwardDistance) <= kTolerance;
 }
 
