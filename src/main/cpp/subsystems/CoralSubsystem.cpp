@@ -102,7 +102,9 @@ frc2::CommandPtr CoralSubsystem::Collect() {
             m_intakeMotor.StopMotor();
         },
         {this}
-    ).Until(([this] { return CoralPresent(); })).WithName("collectCoral");
+    ).Until(([this] { return CoralPresent(); }))
+     .WithTimeout(3_s)
+     .WithName("collectCoral");
 }
 
 // Run the intake motor backwards for one second to dispense held coral
