@@ -86,9 +86,9 @@ void RobotContainer::ConfigureBindings() {
 
     m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
 
-    m_driverJoystick.A().OnTrue(m_coralSubsystem.Dispense());
+    m_driverJoystick.A().OnTrue(m_coralSubsystem.GoToAngle(120.0_deg));
     
-    m_driverJoystick.Y().OnTrue(m_coralSubsystem.Collect());
+    m_driverJoystick.Y().OnTrue(m_coralSubsystem.GoToAngle(40.0_deg));
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_driverJoystick.RightTrigger()

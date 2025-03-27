@@ -18,10 +18,8 @@ public:
     const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
     const int kCoralProximityThreshold = 1500;
-    const double kCoralAngleOffsetDegrees = -262.6;
+    const double kCoralAngleOffsetDegrees = -377.9;
 
-
-    // All algae values are copied over from the coral values: modify algae values accordingly
     const int kAlgaeDeviceID = 2;
     const int kAlgaeAPIId = 2;
     const int kAlgaeProximityThreshold = 1500;
@@ -31,7 +29,7 @@ public:
     const int kClimberAPIId = 3;
     const double kClimberAngleOffsetDegrees = -368.5;
     // const double kClimberAngleOffsetDegrees = 0.0;
-    const int kClimberProximityThreshold = 1500;//todo:add the threshold here
+    const int kClimberProximityThreshold = 1500;
 
     const int kBellyPanDeviceID = 4;
 
