@@ -84,7 +84,7 @@ void ElevatorSubsystem::SetMotorVoltage() {
     } else if (m_setpointHeight <= 0.2_in) {
         m_elevatorMotor1.SetVoltage(0_V);
         m_elevatorMotor2.SetVoltage(0_V);
-        elevatorAtHeight = false;
+        elevatorAtHeight = true;
     } else {
         m_elevatorMotor1.SetVoltage(kG);
         m_elevatorMotor2.SetVoltage(kG);

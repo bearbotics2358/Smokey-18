@@ -19,19 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitTillElevatorAtHeight"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "name": "ScoreL2"
           }
         },
         {
@@ -43,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "ScoreL2"
           }
         }
       ]

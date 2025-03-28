@@ -30,8 +30,8 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
         DriveForwardToScore(&m_drivetrain).WithTimeout(2.0_s),
         StopDriving(),
         m_coral.Dispense(),
-        ToStowPosition(),
-        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout)
+        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
+        ToStowPosition()
     );
 }
 
