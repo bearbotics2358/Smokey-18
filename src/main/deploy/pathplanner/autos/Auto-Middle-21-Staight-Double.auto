@@ -23,6 +23,24 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "10-Collect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect-10"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "AlignWithReefRight"

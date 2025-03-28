@@ -68,7 +68,7 @@ bool CoralSubsystem::CoralPresent() {
 
 //Set the speed of the coral collector - parameter should be a value from -1.0 to 1.0
 void CoralSubsystem::SetIntakeSpeed(double speed) {
-    const double kSlowDown = 0.1;
+    const double kSlowDown = 0.4;
     m_intakeMotor.Set(speed * kSlowDown);
 }
 
@@ -96,13 +96,14 @@ frc2::CommandPtr CoralSubsystem::GoToAngle(units::degree_t targetAngle) {
 frc2::CommandPtr CoralSubsystem::Collect() {
     return frc2::cmd::StartEnd(
         [this] {
-            SetIntakeSpeed(0.5);
+            SetIntakeSpeed(0.75);
         },
         [this] {
             m_intakeMotor.StopMotor();
         },
         {this}
-    ).Until(([this] { return CoralPresent(); }))
+    )
+     .Until(([this] { return CoralPresent(); }))
      .WithName("collectCoral");
 }
 
@@ -110,7 +111,7 @@ frc2::CommandPtr CoralSubsystem::Collect() {
 frc2::CommandPtr CoralSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
         [this] {
-            SetIntakeSpeed(-0.5);
+            SetIntakeSpeed(-0.75);
         },
         [this] {
             m_intakeMotor.StopMotor();

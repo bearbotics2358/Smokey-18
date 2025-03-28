@@ -136,7 +136,7 @@ frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
         frc2::cmd::Parallel(
             m_elevator.GoToHeight(kElevatorCollectPosition),
             frc2::cmd::Sequence(
-                m_coral.GoToAngle(kCoralCollect).WithTimeout(1.0_s),
+                m_coral.GoToAngle(kCoralCollect),
                 m_coral.Collect()
             )
         ),

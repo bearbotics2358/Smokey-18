@@ -60,7 +60,7 @@ private:
     static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1_rad_per_s;
 
-    const units::meter_t kForwardTolerance = units::meter_t(2_in);
+    const units::meter_t kForwardTolerance = units::meter_t(3_in);
     const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
     const units::degree_t kRotationTolerance = 2_deg;
 

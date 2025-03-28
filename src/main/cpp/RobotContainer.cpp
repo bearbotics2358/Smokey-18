@@ -272,7 +272,7 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "ScoreL2",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2).WithTimeout(5_s))
     );
     NamedCommands::registerCommand(
         "ScoreL3",

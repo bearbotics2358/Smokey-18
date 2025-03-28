@@ -21,7 +21,7 @@ constexpr int kElevatorMotor2Id = 37;
 constexpr int kLimitSwitchId = 0;
 
 // @todo Assign these to real values when we know the distances
-constexpr units::inch_t kElevatorCollectPosition = 3.5_in;
+constexpr units::inch_t kElevatorCollectPosition = 0_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
@@ -31,7 +31,6 @@ constexpr units::inch_t kElevatorL4Position = 61.5_in;
 
 constexpr float kSlowElevator = 0.6;
 
-// TODO: Tune later
 constexpr units::inch_t kHeightThreshold = 20_in;
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
@@ -86,7 +85,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         static constexpr double kI = 0.5;
         static constexpr double kD = 2.0;
         static constexpr units::volt_t kS = 0.325_V;
-        static constexpr units::volt_t kG = 0.40_V;
+        static constexpr units::volt_t kG = 0.20_V;
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
