@@ -117,7 +117,8 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
             m_algae.SetGoalAngle(kAlgaeExtendedAngle)
         ),
         m_elevator.WaitUntilElevatorAtHeight(),
-        m_algae.Dispense()
+        m_algae.Dispense(),
+        ToStowPosition()
     ).OnlyIf([this] { return m_algae.IsAlgaeStored(); });
 }
 

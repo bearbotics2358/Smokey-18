@@ -88,7 +88,11 @@ void RobotContainer::ConfigureBindings() {
         AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0)
     );
 
-    m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
+    m_driverJoystick.X().OnTrue(
+        m_scoringSuperstructure.ScoreIntoProcessor().FinallyDo(
+            [this] { m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE); }
+        )
+    );
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_driverJoystick.RightTrigger()
@@ -108,7 +112,9 @@ void RobotContainer::ConfigureBindings() {
         .OnFalse(
             frc2::cmd::Parallel(
                 m_coralSubsystem.StopIntake(),
-                m_scoringSuperstructure.ToStowPosition()
+                m_scoringSuperstructure.ToStowPosition().FinallyDo(
+                    [this] { m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE); }
+                )
             )
         );
 
