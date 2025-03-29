@@ -23,8 +23,12 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
 {
     m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
 
-    m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    if (m_elevatorSubsystem.CurrentHeight() == kElevatorStowPosition) {
+        m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+    }
 
+    m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+  
     AddPathPlannerCommands();
 
     m_drivetrain.ConfigureAutoBuilder();

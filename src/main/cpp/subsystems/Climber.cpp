@@ -1,6 +1,8 @@
 #include "subsystems/Climber.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
+using namespace std::chrono;
+
 Climber::Climber(IClimberDataProvider* dataProvider):
 m_climberMotor(kClimberMotor1Id),
 m_climberDataProvider(dataProvider)
@@ -75,4 +77,12 @@ frc2::CommandPtr Climber::StopClimber() {
     return frc2::cmd::RunOnce([this] {
         m_climberMotor.StopMotor();
     });
+}
+
+bool Climber::IsLeftOnCage(){
+    return m_climberDataProvider->IsLeftCageHooked();
+}
+
+bool Climber::IsRightOnCage(){
+    return m_climberDataProvider->IsRightCageHooked();
 }

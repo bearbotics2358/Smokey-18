@@ -24,7 +24,10 @@ namespace ArduinoConstants {
         ELEVATOR_L2 = 5,
         ELEVATOR_L3 = 6,
         IDK = 7,
-        TEST = 8,
+        CLIMB_LEFT_TRUE = 8,
+        CLIMB_LEFT_FALSE = 9,
+        CLIMB_RIGHT_TRUE = 10,
+        CLIMB_RIGHT_FALSE = 11, 
     };
 }
 
@@ -39,7 +42,6 @@ public:
 
 private:
     void SendMSG(const char* message);
-    void ProcessReport();  // Kept this as it was in the original\
 
     bool wasDSAttached = false;
 

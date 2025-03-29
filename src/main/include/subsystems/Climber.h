@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Commands.h>
+#include <frc2/command/button/Trigger.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -38,6 +39,7 @@ public:
 
     frc2::CommandPtr StopClimber();
 
+
     frc2::Trigger IsLeftCageHooked = frc2::Trigger([this] {
         return m_climberDataProvider->IsLeftCageHooked();
     });
@@ -45,6 +47,7 @@ public:
     frc2::Trigger IsRightCageHooked = frc2::Trigger([this] {
         return m_climberDataProvider->IsRightCageHooked();
     });
+  
 
 private:
     void SetMotorVoltage();

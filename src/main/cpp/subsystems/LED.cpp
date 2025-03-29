@@ -40,7 +40,6 @@ void LED::Periodic() {
         if (m_rxIndex > 0) {
           m_rxBuff[m_rxIndex] = 0;  // Null-terminate
           printf("RX: %s\n", m_rxBuff);
-          ProcessReport();
         }
         m_rxIndex = 0;
         memset(m_rxBuff, 0, sizeof(m_rxBuff));  // Clear buffer
@@ -63,14 +62,17 @@ void LED::Periodic() {
     const char* message = "";
 
     switch (m_LEDCurrentCommand) {
-      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:            message = "1\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:            message = "2\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:         message = "3\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE:   message = "4\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:         message = "5\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:         message = "6\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::IDK:                 message = "7\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::TEST:                message = "8\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::MSG_IDLE:        message = "1\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::NO_COMMS:        message = "2\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1:     message = "3\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE:      message = "4\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:     message = "5\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:     message = "6\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::IDK:             message = "7\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE:   message = "8\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE:  message = "9\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE:  message = "10\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE: message = "11\r\n"; break;
       default:
         std::printf("Unknown LED command: %d\n", static_cast<int>(m_LEDCurrentCommand));
         break;
@@ -102,9 +104,4 @@ void LED::SendMSG(const char* message) {
    } catch (const std::exception& e) {
     std::printf("Error writing to serial port: %s\n", e.what());
   }
-}
-
-void LED::ProcessReport() {
-  // Parse report - no action needed in this example
-  // Kept as it was in the original file
 }
