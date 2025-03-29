@@ -5,8 +5,7 @@
 
 ElevatorSubsystem::ElevatorSubsystem():
 m_elevatorMotor1(kElevatorMotor1Id),
-m_elevatorMotor2(kElevatorMotor2Id),
-m_elevatorLimitSwitch(kLimitSwitchId)
+m_elevatorMotor2(kElevatorMotor2Id)
 {
     ctre::phoenix6::configs::MotorOutputConfigs motorConfigs;
     motorConfigs.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
@@ -29,19 +28,23 @@ m_elevatorLimitSwitch(kLimitSwitchId)
     m_elevatorMotor1.GetPosition().WaitForUpdate(20_ms);
     m_elevatorMotor2.GetPosition().WaitForUpdate(20_ms);
 
-    IsMagneticLimitSwitchActive.OnTrue(frc2::cmd::RunOnce([this] {
-        frc::SmartDashboard::PutBoolean("Elevator Limit Switch", true);
-        // Avoid calling SetPosition from the Periodic function because the call can take more than 20 milliseconds
-        m_elevatorMotor1.SetPosition(0_tr, 13_ms);
-    })).OnFalse(frc2::cmd::RunOnce([this] {
-        frc::SmartDashboard::PutBoolean("Elevator Limit Switch", false);
-    }));
+    IsMagneticLimitSwitchActive
+        .OnTrue(frc2::InstantCommand([this] {
+            frc::SmartDashboard::PutBoolean("Elevator Limit Switch", true);
+            // Avoid calling SetPosition from the Periodic function because the call can take more than 20 milliseconds
+            m_elevatorMotor1.SetPosition(0_tr, 13_ms);
+        }).ToPtr())
+        .OnFalse(frc2::InstantCommand([this] {
+            frc::SmartDashboard::PutBoolean("Elevator Limit Switch", false);
+        }).ToPtr());
 };
 
 void ElevatorSubsystem::Periodic() {
     PlotElevatorPosition();
 
     frc::SmartDashboard::PutNumber("Elevator Set Point", m_setpointHeight.value());
+
+    frc::SmartDashboard::PutBoolean("Elevator Limit Switch Raw Value", !m_elevatorLimitSwitch.Get());
 
     SetMotorVoltage();
 }
@@ -80,21 +83,22 @@ void ElevatorSubsystem::SetMotorVoltage() {
     if (current_difference >= TOLERANCE) {
         m_elevatorMotor1.SetVoltage(goalVolts);
         m_elevatorMotor2.SetVoltage(goalVolts);
-        elevatorAtHeight = false;
     } else if (m_setpointHeight <= 0.2_in) {
         m_elevatorMotor1.SetVoltage(0_V);
         m_elevatorMotor2.SetVoltage(0_V);
-        elevatorAtHeight = false;
     } else {
         m_elevatorMotor1.SetVoltage(kG);
         m_elevatorMotor2.SetVoltage(kG);
-        elevatorAtHeight = true;
     }
+
+    m_elevatorAtHeight = (current_difference < TOLERANCE);
+    frc::SmartDashboard::PutBoolean("Elevator At Height", m_elevatorAtHeight);
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
         m_setpointHeight = height;
+        m_elevatorAtHeight = false;
     });
 }
 
@@ -103,5 +107,5 @@ bool ElevatorSubsystem::GetElevatorHeightAboveThreshold() {
 }
 
 frc2::CommandPtr ElevatorSubsystem::WaitUntilElevatorAtHeight() {
-    return frc2::cmd::WaitUntil([this] { return elevatorAtHeight; });
+    return frc2::cmd::WaitUntil([this] { return m_elevatorAtHeight; });
 }

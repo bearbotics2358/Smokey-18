@@ -25,7 +25,7 @@ constexpr units::inch_t kElevatorCollectPosition = 0_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
-constexpr units::inch_t kElevatorL2Position = 12_in;
+constexpr units::inch_t kElevatorL2Position = 13_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
 constexpr units::inch_t kElevatorL4Position = 61.5_in;
 
@@ -60,11 +60,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         bool GetElevatorHeightAboveThreshold();
 
-        bool elevatorAtHeight = false;
+        bool m_elevatorAtHeight = false;
 
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
-        frc::DigitalInput m_elevatorLimitSwitch;
+        frc::DigitalInput m_elevatorLimitSwitch{kLimitSwitchId};
 
         frc2::Trigger IsMagneticLimitSwitchActive = frc2::Trigger([this] {
             // The REV magnetic limit switch is Active-low so a false from the Get() call means the
@@ -79,8 +79,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         //  is causing that.
         // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
         // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
-        static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 2.0_mps_sq;
+        static constexpr units::meters_per_second_t kMaxVelocity = 1.5_mps;
+        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 4.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 0.5;
         static constexpr double kD = 2.0;

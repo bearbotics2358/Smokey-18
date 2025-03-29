@@ -272,7 +272,7 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "ScoreL2",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2).WithTimeout(5_s))
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
     );
     NamedCommands::registerCommand(
         "ScoreL3",
@@ -292,11 +292,11 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr())
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(4_s))
     );
     NamedCommands::registerCommand(
         "AlignWithReefRight",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr())
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(4_s))
     );
     NamedCommands::registerCommand(
         "WaitTillElevatorAtHeight",

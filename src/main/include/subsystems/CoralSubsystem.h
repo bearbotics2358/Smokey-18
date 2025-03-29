@@ -45,7 +45,7 @@ class CoralSubsystem : public frc2::SubsystemBase {
 
     double m_setpointAngle;
 
-    const double kCoralP = 0.0085;
+    const double kCoralP = 0.0087;
     const double kCoralI = 0.0;
     const double kCoralD = 0.0005;
 

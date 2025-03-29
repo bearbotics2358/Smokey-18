@@ -13,12 +13,13 @@ public:
     static constexpr units::inch_t kDefaultDistance = 6_in;
 
     explicit DriveBackAfterScore(
-        subsystems::CommandSwerveDrivetrain* drivetrain, 
+        subsystems::CommandSwerveDrivetrain* drivetrain,
         units::inch_t distance = kDefaultDistance
     );
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
+    void End(bool interrupted) override;
 
     units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
 

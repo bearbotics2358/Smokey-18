@@ -57,7 +57,7 @@ private:
     static constexpr double kRotationD = 0.0;
     frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.75_mps;
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(3_in);
@@ -65,7 +65,7 @@ private:
     const units::degree_t kRotationTolerance = 2_deg;
 
     const units::meter_t kDistanceFromReefSetpoint = units::meter_t(30_in);
-    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(0_in);
+    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(-1_in);
     const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
 
