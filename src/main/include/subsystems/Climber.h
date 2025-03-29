@@ -47,7 +47,9 @@ public:
     frc2::Trigger IsRightCageHooked = frc2::Trigger([this] {
         return m_climberDataProvider->IsRightCageHooked();
     });
-  
+    
+    bool IsRightOnCage();
+    bool IsLeftOnCage();
 
 private:
     void SetMotorVoltage();
