@@ -244,20 +244,24 @@ void RobotContainer::ConfigureBindings() {
         );
 
     (m_climberSubsystem.IsLeftCageHooked)
-        .OnTrue(
-            AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 1.0)
-        )
-        .OnFalse(
-            AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 0.0)
-        );
+        .OnTrue(frc2::cmd::Parallel(
+            AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 1.0),
+            frc2::cmd::RunOnce( [this] {m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE);}
+        )))
+        .OnFalse(frc2::cmd::Parallel(
+            AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 0.0),
+            frc2::cmd::RunOnce( [this] {m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE);})
+        ));
 
     (m_climberSubsystem.IsRightCageHooked)
-        .OnTrue(
-            AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 1.0)
-        )
-        .OnFalse(
-            AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 0.0)
-        );                                                                                                               
+        .OnTrue(frc2::cmd::Parallel(
+            AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 1.0),
+            frc2::cmd::RunOnce([this] {m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE);}
+        )))
+        .OnFalse(frc2::cmd::Parallel(
+            AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 0.0),
+            frc2::cmd::RunOnce([this] {m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE);})
+        ));                                                                                                               
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

@@ -48,8 +48,7 @@ public:
         return m_climberDataProvider->IsRightCageHooked();
     });
     
-    bool IsRightOnCage();
-    bool IsLeftOnCage();
+
 
 private:
     void SetMotorVoltage();

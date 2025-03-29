@@ -79,10 +79,3 @@ frc2::CommandPtr Climber::StopClimber() {
     });
 }
 
-bool Climber::IsLeftOnCage() {
-    return m_climberDataProvider->IsLeftCageHooked();
-}
-
-bool Climber::IsRightOnCage() {
-    return m_climberDataProvider->IsRightCageHooked();
-}
