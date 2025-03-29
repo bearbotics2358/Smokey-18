@@ -19,6 +19,7 @@
 #include "Telemetry.h"
 #include <frc2/command/RunCommand.h>
 #include "subsystems/AlgaeSubsystem.h"
+#include "commands/AlignWithReef.h"
 
 class RobotContainer {
 private:
@@ -69,8 +70,10 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
-    frc2::CommandPtr AddControllerRumble(double rumble);
+    frc2::CommandPtr AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble);
 private:
     void ConfigureBindings();
     void AddPathPlannerCommands();
+    
+    ReefSide m_reefSide = ReefSide::Left;
 };

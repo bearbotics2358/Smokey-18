@@ -16,6 +16,8 @@
 
 #include <subsystems/IClimberDataProvider.h>
 
+#include <frc2/command/button/Trigger.h>
+
 constexpr int kClimberMotor1Id = 32;
 
 constexpr units::degree_t kClimberStartAngle = 165.0_deg;
@@ -37,9 +39,15 @@ public:
 
     frc2::CommandPtr StopClimber();
 
-    bool IsLeftOnCage();
 
-    bool IsRightOnCage();
+    frc2::Trigger IsLeftCageHooked = frc2::Trigger([this] {
+        return m_climberDataProvider->IsLeftCageHooked();
+    });
+
+    frc2::Trigger IsRightCageHooked = frc2::Trigger([this] {
+        return m_climberDataProvider->IsRightCageHooked();
+    });
+  
 
 private:
     void SetMotorVoltage();
@@ -50,7 +58,7 @@ private:
 
     static constexpr units::turns_per_second_t kMaxVelocity = 60_deg_per_s;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 80_deg_per_s_sq;
-    static constexpr double kP = 65.0;
+    static constexpr double kP = 77.5;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
 
