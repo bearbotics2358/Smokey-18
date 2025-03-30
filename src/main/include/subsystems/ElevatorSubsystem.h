@@ -73,19 +73,20 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         });
 
         static constexpr double TOLERANCE = 0.5;
+        static constexpr double kCloseEnoughToMove = 1.5;
 
         // @todo Re-adjust the elevator speeds. We slowed them down because raising
         //  lowering wasn't very smooth in recent tests. It's still unclear what
         //  is causing that.
         // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
         // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
-        static constexpr units::meters_per_second_t kMaxVelocity = 1.5_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 4.0_mps_sq;
+        static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
+        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 0.5;
         static constexpr double kD = 2.0;
         static constexpr units::volt_t kS = 0.325_V;
-        static constexpr units::volt_t kG = 0.20_V;
+        static constexpr units::volt_t kG = 0.25_V;
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {

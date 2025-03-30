@@ -91,7 +91,7 @@ void ElevatorSubsystem::SetMotorVoltage() {
         m_elevatorMotor2.SetVoltage(kG);
     }
 
-    m_elevatorAtHeight = (current_difference < TOLERANCE);
+    m_elevatorAtHeight = (current_difference < kCloseEnoughToMove);
     frc::SmartDashboard::PutBoolean("Elevator At Height", m_elevatorAtHeight);
 }
 
