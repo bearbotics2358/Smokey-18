@@ -8,7 +8,7 @@
 #include <frc/controller/PIDController.h>
 #include "subsystems/ICoralIntakeDataProvider.h"
 
-constexpr units::degree_t kCoralCollect = 145.0_deg;
+constexpr units::degree_t kCoralCollect = 137.5_deg;
 constexpr units::degree_t kCoralStow = 157_deg;
 constexpr units::degree_t kCoralL1 = 65.0_deg;
 constexpr units::degree_t kCoralL2 = 55.0_deg;
@@ -45,7 +45,7 @@ class CoralSubsystem : public frc2::SubsystemBase {
 
     double m_setpointAngle;
 
-    const double kCoralP = 0.0085;
+    const double kCoralP = 0.0087;
     const double kCoralI = 0.0;
     const double kCoralD = 0.0005;
 

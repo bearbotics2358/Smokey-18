@@ -19,19 +19,25 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "ScoreL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "10-Collect"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "WaitTillElevatorAtHeight"
+            "name": "Collect"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 3.0
+            "pathName": "Collect-10"
           }
         },
         {
@@ -43,7 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "ScoreL2"
           }
         }
       ]

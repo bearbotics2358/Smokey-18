@@ -102,7 +102,7 @@ double FeatherCanDecoder::GetBellyPanRightDistance() {
 void FeatherCanDecoder::UnpackCoralCANData() {
     frc::CANData data;
 
-    bool isCoralDataValid = m_coralCAN.ReadPacketNew(kCoralAPIId, &data);
+    bool isCoralDataValid = m_coralCAN.ReadPacketTimeout(kCoralAPIId, kCANReadTimeoutMs, &data);
 
     if (isCoralDataValid) {
         int angleX10 = (data.data[0] << 8) | data.data[1];

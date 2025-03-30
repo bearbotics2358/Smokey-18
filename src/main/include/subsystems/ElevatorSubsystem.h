@@ -21,17 +21,16 @@ constexpr int kElevatorMotor2Id = 37;
 constexpr int kLimitSwitchId = 0;
 
 // @todo Assign these to real values when we know the distances
-constexpr units::inch_t kElevatorCollectPosition = 3.5_in;
+constexpr units::inch_t kElevatorCollectPosition = 0_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
-constexpr units::inch_t kElevatorL2Position = 12_in;
+constexpr units::inch_t kElevatorL2Position = 13_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
 constexpr units::inch_t kElevatorL4Position = 61.5_in;
 
 constexpr float kSlowElevator = 0.6;
 
-// TODO: Tune later
 constexpr units::inch_t kHeightThreshold = 20_in;
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
@@ -61,11 +60,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         bool GetElevatorHeightAboveThreshold();
 
-        bool elevatorAtHeight = false;
+        bool m_elevatorAtHeight = false;
 
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
-        frc::DigitalInput m_elevatorLimitSwitch;
+        frc::DigitalInput m_elevatorLimitSwitch{kLimitSwitchId};
 
         frc2::Trigger IsMagneticLimitSwitchActive = frc2::Trigger([this] {
             // The REV magnetic limit switch is Active-low so a false from the Get() call means the
@@ -74,19 +73,20 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         });
 
         static constexpr double TOLERANCE = 0.5;
+        static constexpr double kCloseEnoughToMove = 1.5;
 
         // @todo Re-adjust the elevator speeds. We slowed them down because raising
         //  lowering wasn't very smooth in recent tests. It's still unclear what
         //  is causing that.
         // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
         // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
-        static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
-        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 2.0_mps_sq;
+        static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
+        static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
         static constexpr double kP = 20.0;
         static constexpr double kI = 0.5;
         static constexpr double kD = 2.0;
         static constexpr units::volt_t kS = 0.325_V;
-        static constexpr units::volt_t kG = 0.40_V;
+        static constexpr units::volt_t kG = 0.25_V;
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {

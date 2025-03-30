@@ -29,28 +29,28 @@ void CoralSubsystem::Periodic() {
 
     frc::SmartDashboard::PutNumber("Coral Neo 550 Angle", GetAngleDegreesFallback().value());
 
-    double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
-    frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
-    SetPivotSpeed(pid_calculation);
+    // double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
+    // frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
+    // SetPivotSpeed(pid_calculation);
 
     // Prevent damage if we lose the coral angle
-    // if (m_coralDataProvider->IsCoralAngleValid()) {
-    //     // Only set the encoder offset the first time a value is valid. This needs to be done
-    //     // in Periodic since the angle is not unpacked until the FeatherCanDecoder periodic
-    //     // function runs.
-    //     if (0.0 == m_relEncoderOffsetDegrees) {
-    //         m_relEncoderOffsetDegrees = m_coralDataProvider->GetCoralIntakeRawAngleDegrees();
-    //     }
+    if (m_coralDataProvider->IsCoralAngleValid()) {
+        // Only set the encoder offset the first time a value is valid. This needs to be done
+        // in Periodic since the angle is not unpacked until the FeatherCanDecoder periodic
+        // function runs.
+        if (0.0 == m_relEncoderOffsetDegrees) {
+            m_relEncoderOffsetDegrees = m_coralDataProvider->GetCoralIntakeRawAngleDegrees();
+        }
 
-    //     double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
-    //     frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
-    //     SetPivotSpeed(pid_calculation);
-    // } else {
-    //     double fallback_pid_calculation = m_coralPID.Calculate(GetAngleDegreesFallback().value(), m_setpointAngle);
-    //     frc::SmartDashboard::PutNumber("Coral Neo 550 PID", fallback_pid_calculation);
-    //     // @todo Enable this after validating that the calculated angles are correct
-    //     // SetPivotSpeed(fallback_pid_calculation);
-    // }
+        double pid_calculation = m_coralPID.Calculate(m_coralDataProvider->GetCoralIntakeAngleDegrees(), m_setpointAngle);
+        frc::SmartDashboard::PutNumber("Coral PID", pid_calculation);
+        SetPivotSpeed(pid_calculation);
+    } else {
+        double fallback_pid_calculation = m_coralPID.Calculate(GetAngleDegreesFallback().value(), m_setpointAngle);
+        frc::SmartDashboard::PutNumber("Coral Neo 550 PID", fallback_pid_calculation);
+        // @todo Enable this after validating that the calculated angles are correct
+        // SetPivotSpeed(fallback_pid_calculation);
+    }
 }
 
 units::degree_t CoralSubsystem::GetAngleDegreesFallback() {
@@ -68,7 +68,7 @@ bool CoralSubsystem::CoralPresent() {
 
 //Set the speed of the coral collector - parameter should be a value from -1.0 to 1.0
 void CoralSubsystem::SetIntakeSpeed(double speed) {
-    const double kSlowDown = 0.1;
+    const double kSlowDown = 0.4;
     m_intakeMotor.Set(speed * kSlowDown);
 }
 
@@ -96,13 +96,14 @@ frc2::CommandPtr CoralSubsystem::GoToAngle(units::degree_t targetAngle) {
 frc2::CommandPtr CoralSubsystem::Collect() {
     return frc2::cmd::StartEnd(
         [this] {
-            SetIntakeSpeed(0.5);
+            SetIntakeSpeed(0.75);
         },
         [this] {
             m_intakeMotor.StopMotor();
         },
         {this}
-    ).Until(([this] { return CoralPresent(); }))
+    )
+     .Until(([this] { return CoralPresent(); }))
      .WithName("collectCoral");
 }
 
@@ -110,7 +111,7 @@ frc2::CommandPtr CoralSubsystem::Collect() {
 frc2::CommandPtr CoralSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
         [this] {
-            SetIntakeSpeed(-0.5);
+            SetIntakeSpeed(-0.75);
         },
         [this] {
             m_intakeMotor.StopMotor();

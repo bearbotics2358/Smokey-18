@@ -28,16 +28,15 @@ frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
         m_elevator.WaitUntilElevatorAtHeight(),
         DriveForwardToScore(&m_drivetrain).WithTimeout(2.0_s),
-        StopDriving(),
         m_coral.Dispense(),
-        ToStowPosition(),
-        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout)
+        DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
+        ToStowPosition()
     );
 }
 
 frc2::CommandPtr ScoringSuperstructure::StopDriving() {
     return frc2::cmd::RunOnce(
-        [this] {m_drivetrain.SetControl(stopDriving);}  
+        [this] {m_drivetrain.SetControl(stopDriving);}
     );
 }
 
@@ -107,7 +106,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
         m_elevator.GoToHeight(kElevatorL4Position),
         m_coral.GoToAngle(coralAngle),
         DispenseCoralAndMoveBack()
-    );
+    ).AndThen(m_elevator.WaitUntilElevatorAtHeight().WithTimeout(2.0_s));
 }
 
 frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
@@ -136,7 +135,7 @@ frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
         frc2::cmd::Parallel(
             m_elevator.GoToHeight(kElevatorCollectPosition),
             frc2::cmd::Sequence(
-                m_coral.GoToAngle(kCoralCollect).WithTimeout(1.0_s),
+                m_coral.GoToAngle(kCoralCollect),
                 m_coral.Collect()
             )
         ),
@@ -145,19 +144,9 @@ frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
 }
 
 frc2::CommandPtr ScoringSuperstructure::ToStowPosition() {
-    return frc2::cmd::Either(
-        // If algae is detected, don't let the elevator go all the way down because
-        // it hits the bumper
-        frc2::cmd::Parallel(
-            m_elevator.GoToHeight(kElevatorProcessorPosition),
-            m_coral.GoToAngle(kCoralStow)
-        ),
-        frc2::cmd::Parallel(
-            m_elevator.GoToHeight(kElevatorStowPosition),
-            m_coral.GoToAngle(kCoralStow),
-            m_algae.SetGoalAngle(kAlgaeStowAngle)
-        ),
-        [this] { return m_algae.IsAlgaeStored(); }
+    return frc2::cmd::Parallel(
+        m_elevator.GoToHeight(kElevatorStowPosition),
+        m_coral.GoToAngle(kCoralStow)
     );
 }
 

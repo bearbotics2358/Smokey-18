@@ -13,12 +13,13 @@ public:
     static constexpr units::inch_t kDefaultDistance = 6_in;
 
     explicit DriveBackAfterScore(
-        subsystems::CommandSwerveDrivetrain* drivetrain, 
+        subsystems::CommandSwerveDrivetrain* drivetrain,
         units::inch_t distance = kDefaultDistance
     );
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
+    void End(bool interrupted) override;
 
     units::inch_t GetDistance(frc::Pose2d first, frc::Pose2d second);
 
@@ -33,7 +34,7 @@ private:
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
-    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 

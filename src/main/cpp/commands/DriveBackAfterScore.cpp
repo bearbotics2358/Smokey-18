@@ -31,6 +31,10 @@ bool DriveBackAfterScore::IsFinished() {
     return units::math::abs(currentDistanceTraveled - m_backwardDistance) <= kTolerance;
 }
 
+void DriveBackAfterScore::End(bool interrupted) {
+    m_drivetrain->SetControl(robotOriented.WithVelocityX(0_mps));
+}
+
 units::inch_t DriveBackAfterScore::GetDistance(frc::Pose2d first, frc::Pose2d second) {
     return units::inch_t(first.Translation().Distance(second.Translation()));
 }

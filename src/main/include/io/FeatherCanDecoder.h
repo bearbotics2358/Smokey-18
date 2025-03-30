@@ -15,6 +15,8 @@ public IBellyPanDataProvider,
 public IAlgaeDataProvider
 {
 public:
+    const int kCANReadTimeoutMs = 100;
+
     const int kCoralDeviceID = 1;
     const int kCoralAPIId = 1;
     const int kCoralProximityThreshold = 1500;
