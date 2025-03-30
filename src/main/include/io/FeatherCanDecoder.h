@@ -25,7 +25,7 @@ public:
     const int kAlgaeDeviceID = 2;
     const int kAlgaeAPIId = 2;
     const int kAlgaeProximityThreshold = 1500;
-    const double kAlgaeAngleOffsetDegrees = 47.5;
+    const double kAlgaeAngleOffsetDegrees = -237.6;
 
     const int kClimberDeviceID = 3;
     const int kClimberAPIId = 3;
@@ -84,6 +84,7 @@ private:
     void UnpackCoralCANData();
 
     float m_algaeAngleDegrees;
+    bool m_algaeAngleValid;
     bool m_algaeCollected;
     frc::CAN m_algaeCAN;
 

@@ -7,32 +7,23 @@
 
 AlgaeSubsystem::AlgaeSubsystem(IAlgaeDataProvider* dataProvider):
 m_algaePivotMotor(kAlgaePivot),
-m_algaeLeftMotor{kAlgaeMotorLeft, rev::spark::SparkLowLevel::MotorType::kBrushless},
-// m_algaeRightMotor{kAlgaeMotorRight, rev::spark::SparkLowLevel::MotorType::kBrushless},
+m_algaeMotor{kAlgaeMotor, rev::spark::SparkLowLevel::MotorType::kBrushless},
 m_algaeDataProvider(dataProvider)
 {
-    rev::spark::SparkBaseConfig config;
-    config.Follow(kAlgaeMotorRight, true);
-    config.Inverted(true);
-
-    // m_algaeLeftMotor.Configure(config,
-    //     rev::spark::SparkBase::ResetMode::kResetSafeParameters,
-    //     rev::spark::SparkBase::PersistMode::kPersistParameters
-    // );
 }
 
 void AlgaeSubsystem::Periodic() {
-    // GoToAngle();
+    GoToAngle();
     frc::SmartDashboard::PutNumber("Algae Angle", CurrentAngle().value());
 }
 
 frc2::CommandPtr AlgaeSubsystem::Intake() {
     return frc2::cmd::StartEnd(
         [this] {
-            // m_algaeRightMotor.Set(0.4);
+            m_algaeMotor.Set(0.4);
         },
         [this] {
-            // m_algaeRightMotor.Set(0.0);
+            m_algaeMotor.Set(0.0);
         }
     ).Until(
         [this] {
@@ -45,10 +36,10 @@ frc2::CommandPtr AlgaeSubsystem::Intake() {
 frc2::CommandPtr AlgaeSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
         [this] {
-            // m_algaeRightMotor.Set(-0.4);
+            m_algaeMotor.Set(-0.4);
         },
         [this] {
-            // m_algaeRightMotor.Set(0.0);
+            m_algaeMotor.Set(0.0);
         }
     ).WithTimeout(2_s);
 }
