@@ -37,6 +37,10 @@ m_elevatorMotor2(kElevatorMotor2Id)
         .OnFalse(frc2::InstantCommand([this] {
             frc::SmartDashboard::PutBoolean("Elevator Limit Switch", false);
         }).ToPtr());
+
+    // Prevent excessive wind-up in the integral feedback of the PID controller that can build up when
+    // the bot is disabled.
+    m_elevatorPID.SetIntegratorRange(-0.4, 0.4);
 };
 
 void ElevatorSubsystem::Periodic() {
@@ -79,8 +83,8 @@ void ElevatorSubsystem::SetMotorVoltage() {
     units::volt_t goalVolts = units::volt_t(value) + m_feedforward.Calculate(m_elevatorPID.GetSetpoint().velocity);
     frc::SmartDashboard::PutNumber("Elevator PID with feedforward", goalVolts.value());
 
-    double current_difference = fabs(m_setpointHeight.value() - CurrentHeight().value());
-    if (current_difference >= TOLERANCE) {
+    units::inch_t current_difference = units::math::abs(m_setpointHeight - CurrentHeight());
+    if (current_difference >= kSetpointTolerance) {
         m_elevatorMotor1.SetVoltage(goalVolts);
         m_elevatorMotor2.SetVoltage(goalVolts);
     } else if (m_setpointHeight <= 0.2_in) {
@@ -91,14 +95,14 @@ void ElevatorSubsystem::SetMotorVoltage() {
         m_elevatorMotor2.SetVoltage(kG);
     }
 
-    m_elevatorAtHeight = (current_difference < kCloseEnoughToMove);
-    frc::SmartDashboard::PutBoolean("Elevator At Height", m_elevatorAtHeight);
+    m_closeEnoughToMove = (current_difference < kCloseEnoughToMove);
+    frc::SmartDashboard::PutBoolean("Elevator At Height", m_closeEnoughToMove);
 }
 
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
         m_setpointHeight = height;
-        m_elevatorAtHeight = false;
+        m_closeEnoughToMove = false;
     });
 }
 
@@ -106,6 +110,6 @@ bool ElevatorSubsystem::GetElevatorHeightAboveThreshold() {
     return CurrentHeight() >= kHeightThreshold;
 }
 
-frc2::CommandPtr ElevatorSubsystem::WaitUntilElevatorAtHeight() {
-    return frc2::cmd::WaitUntil([this] { return m_elevatorAtHeight; });
+frc2::CommandPtr ElevatorSubsystem::WaitUntilElevatorIsCloseEnoughToMove() {
+    return frc2::cmd::WaitUntil([this] { return m_closeEnoughToMove; });
 }

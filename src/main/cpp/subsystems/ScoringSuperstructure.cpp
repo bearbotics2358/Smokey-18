@@ -26,7 +26,7 @@ frc2::CommandPtr ScoringSuperstructure::PrepareScoring(ScoringSelector selectedS
 
 frc2::CommandPtr ScoringSuperstructure::DispenseCoralAndMoveBack() {
     return frc2::cmd::Sequence(
-        m_elevator.WaitUntilElevatorAtHeight(),
+        m_elevator.WaitUntilElevatorIsCloseEnoughToMove(),
         DriveForwardToScore(&m_drivetrain).WithTimeout(2.0_s),
         m_coral.Dispense(),
         DriveBackAfterScore(&m_drivetrain).WithTimeout(kBackupTimeout),
@@ -106,7 +106,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
         m_elevator.GoToHeight(kElevatorL4Position),
         m_coral.GoToAngle(coralAngle),
         DispenseCoralAndMoveBack()
-    ).AndThen(m_elevator.WaitUntilElevatorAtHeight().WithTimeout(2.0_s));
+    ).AndThen(m_elevator.WaitUntilElevatorIsCloseEnoughToMove().WithTimeout(2.0_s));
 }
 
 frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
@@ -115,7 +115,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
             m_elevator.GoToHeight(kElevatorProcessorPosition),
             m_algae.SetGoalAngle(kAlgaeExtendedAngle)
         ),
-        m_elevator.WaitUntilElevatorAtHeight(),
+        m_elevator.WaitUntilElevatorIsCloseEnoughToMove(),
         m_algae.Dispense()
     ).OnlyIf([this] { return m_algae.IsAlgaeStored(); });
 }
@@ -151,5 +151,5 @@ frc2::CommandPtr ScoringSuperstructure::ToStowPosition() {
 }
 
 frc2::CommandPtr ScoringSuperstructure::WaitTillElevatorAtHeight() {
-    return m_elevator.WaitUntilElevatorAtHeight();
+    return m_elevator.WaitUntilElevatorIsCloseEnoughToMove();
 }

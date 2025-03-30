@@ -55,12 +55,12 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
             return GetElevatorHeightAboveThreshold();
         });
 
-        frc2::CommandPtr WaitUntilElevatorAtHeight();
+        frc2::CommandPtr WaitUntilElevatorIsCloseEnoughToMove();
     private:
 
         bool GetElevatorHeightAboveThreshold();
 
-        bool m_elevatorAtHeight = false;
+        bool m_closeEnoughToMove = false;
 
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor1;
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
@@ -72,14 +72,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
             return !m_elevatorLimitSwitch.Get();
         });
 
-        static constexpr double TOLERANCE = 0.5;
-        static constexpr double kCloseEnoughToMove = 1.5;
+        static constexpr units::inch_t kSetpointTolerance = 0.5_in;
+        static constexpr units::inch_t kCloseEnoughToMove = 4_in;
 
-        // @todo Re-adjust the elevator speeds. We slowed them down because raising
-        //  lowering wasn't very smooth in recent tests. It's still unclear what
-        //  is causing that.
-        // static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
-        // static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
         static constexpr units::meters_per_second_t kMaxVelocity = 5.0_mps;
         static constexpr units::meters_per_second_squared_t kMaxAcceleration = 8.0_mps_sq;
         static constexpr double kP = 20.0;
