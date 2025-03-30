@@ -146,7 +146,8 @@ frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
 frc2::CommandPtr ScoringSuperstructure::ToStowPosition() {
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorStowPosition),
-        m_coral.GoToAngle(kCoralStow)
+        m_coral.GoToAngle(kCoralStow),
+        m_algae.SetGoalAngle(kAlgaeStowAngle)
     );
 }
 

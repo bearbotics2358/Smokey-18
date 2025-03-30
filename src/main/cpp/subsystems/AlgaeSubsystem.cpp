@@ -41,7 +41,7 @@ frc2::CommandPtr AlgaeSubsystem::Dispense() {
         [this] {
             m_algaeMotor.Set(0.0);
         }
-    ).WithTimeout(2_s);
+    ).WithTimeout(5_s);
 }
 
 frc2::CommandPtr AlgaeSubsystem::SetGoalAngle(units::degree_t angle) {

@@ -84,7 +84,15 @@ void RobotContainer::ConfigureBindings() {
         AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0)
     );
 
-    m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
+    m_driverJoystick.X().OnTrue(
+        // @todo Move these controls to the ScoringSuperstructure
+        frc2::cmd::Parallel(
+            m_elevatorSubsystem.GoToHeight(kElevatorAlgaeOnlyL3Position),
+            m_algaeSubsystem.SetGoalAngle(kAlgaeExtendedAngle).AndThen(m_algaeSubsystem.Dispense())
+        )
+    ).OnFalse(
+        m_scoringSuperstructure.ToStowPosition()
+    );
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_driverJoystick.RightTrigger()
