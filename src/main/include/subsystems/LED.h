@@ -24,7 +24,10 @@ namespace ArduinoConstants {
         ELEVATOR_L2 = 5,
         ELEVATOR_L3 = 6,
         IDK = 7,
-        TEST = 8,
+        CLIMB_LEFT_TRUE = 8,
+        CLIMB_LEFT_FALSE = 9,
+        CLIMB_RIGHT_TRUE = 10,
+        CLIMB_RIGHT_FALSE = 11,
     };
 }
 
@@ -36,6 +39,7 @@ public:
     void Periodic() override;
 
     void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
+    frc2::CommandPtr SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES ledState);
 
 private:
     void SendMSG(const char* message);

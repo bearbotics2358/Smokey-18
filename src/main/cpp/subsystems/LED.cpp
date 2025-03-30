@@ -1,5 +1,6 @@
 #include <stdio.h> // for using printf
 #include <stdlib.h> // atoi
+#include <frc2/command/Commands.h>
 #include "frc/DriverStation.h"
 #include "subsystems/LED.h"
 
@@ -70,7 +71,10 @@ void LED::Periodic() {
       case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2:         message = "5\r\n"; break;
       case ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3:         message = "6\r\n"; break;
       case ArduinoConstants::RIO_MESSAGES::IDK:                 message = "7\r\n"; break;
-      case ArduinoConstants::RIO_MESSAGES::TEST:                message = "8\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE:     message = "8\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE:    message = "9\r\n";  break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE:    message = "10\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE:   message = "11\r\n"; break;
       default:
         std::printf("Unknown LED command: %d\n", static_cast<int>(m_LEDCurrentCommand));
         break;
@@ -93,6 +97,12 @@ void LED::Periodic() {
 
 void LED::SetLEDState(ArduinoConstants::RIO_MESSAGES ledState) {
   m_LEDCurrentCommand = ledState;
+}
+
+frc2::CommandPtr LED::SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES ledState) {
+  return frc2::cmd::RunOnce([this, ledState] {
+        SetLEDState(ledState);
+    });
 }
 
 void LED::SendMSG(const char* message) {
