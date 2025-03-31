@@ -233,7 +233,7 @@ void RobotContainer::ConfigureBindings() {
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 1.0;})
         );
 
-    (m_climberSubsystem.IsLeftCageHooked)
+    m_climberSubsystem.IsLeftCageHooked
         .OnTrue(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 1.0),
@@ -247,7 +247,7 @@ void RobotContainer::ConfigureBindings() {
             )
         );
 
-    (m_climberSubsystem.IsRightCageHooked)
+    m_climberSubsystem.IsRightCageHooked
         .OnTrue(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 1.0),
