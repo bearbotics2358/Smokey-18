@@ -99,14 +99,13 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool removeAlgae) {
 }
 
 frc2::CommandPtr ScoringSuperstructure::RemoveAlgaeL3() {
-    auto [coralAngle, algaeAngle] = m_elevatorMap[kElevatorAlgaeOnlyL3Position];
+    auto [_, algaeAngle] = m_elevatorMap[kElevatorAlgaeOnlyL3Position];
+
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorAlgaeOnlyL3Position),
-        m_coral.GoToAngle(coralAngle),
-
         frc2::cmd::Sequence(
-        m_algae.SetGoalAngle(kAlgaeExtendedAngle),
-        m_algae.Dispense()
+            m_algae.SetGoalAngle(kAlgaeExtendedAngle),
+            m_algae.Dispense()
         )
     );
 }
@@ -119,17 +118,6 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
         m_coral.GoToAngle(coralAngle),
         DispenseCoralAndMoveBack()
     ).AndThen(m_elevator.WaitUntilElevatorIsCloseEnoughToMove().WithTimeout(2.0_s));
-}
-
-frc2::CommandPtr ScoringSuperstructure::ScoreIntoProcessor() {
-    return frc2::cmd::Sequence(
-        frc2::cmd::Parallel(
-            m_elevator.GoToHeight(kElevatorProcessorPosition),
-            m_algae.SetGoalAngle(kAlgaeExtendedAngle)
-        ),
-        m_elevator.WaitUntilElevatorIsCloseEnoughToMove(),
-        m_algae.Dispense()
-    ).OnlyIf([this] { return m_algae.IsAlgaeStored(); });
 }
 
 frc2::CommandPtr ScoringSuperstructure::PrepareAndScoreIntoReef(ScoringSelector selectedScore) {
