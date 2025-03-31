@@ -79,6 +79,4 @@ private:
     void AddPathPlannerCommands();
     
     ReefSide m_reefSide = ReefSide::Left;
-
-    swerve::requests::PointWheelsAt point{};
 };
