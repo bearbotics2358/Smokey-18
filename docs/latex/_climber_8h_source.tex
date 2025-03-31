@@ -1,0 +1,77 @@
+\doxysection{Climber.\+h}
+\hypertarget{_climber_8h_source}{}\label{_climber_8h_source}\index{Smokey-\/18/src/main/include/subsystems/Climber.h@{Smokey-\/18/src/main/include/subsystems/Climber.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <frc2/command/SubsystemBase.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <frc2/command/Commands.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <ctre/phoenix6/TalonFX.hpp>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <units/length.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <units/velocity.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <units/acceleration.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <units/angle.h>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <frc/controller/ProfiledPIDController.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <frc/trajectory/TrapezoidProfile.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <subsystems/IClimberDataProvider.h>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <frc2/command/button/Trigger.h>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ kClimberMotor1Id\ =\ 32;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{constexpr}\ units::degree\_t\ kClimberStartAngle\ =\ 165.0\_deg;}
+\DoxyCodeLine{00023\ \textcolor{keyword}{constexpr}\ units::degree\_t\ kClimberEndAngle\ =\ 41.0\_deg;}
+\DoxyCodeLine{00024\ \textcolor{keyword}{constexpr}\ units::degree\_t\ kClimberStowAngle\ =\ 15.0\_deg;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ kClimberGearRatio\ =\ 1.0;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{class\ }Climber\ :\ \textcolor{keyword}{public}\ frc2::SubsystemBase\ \{}
+\DoxyCodeLine{00029\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ Climber(\mbox{\hyperlink{class_i_climber_data_provider}{IClimberDataProvider}}*\ dataProvider);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ Periodic()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ frc2::CommandPtr\ Climb();}
+\DoxyCodeLine{00034\ \ \ \ \ frc2::CommandPtr\ \mbox{\hyperlink{class_climber_a9919ef03c9863500b145b451c6df427a}{Extend}}();}
+\DoxyCodeLine{00035\ \ \ \ \ frc2::CommandPtr\ Stow();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ units::degree\_t\ CurrentAngle();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ frc2::CommandPtr\ StopClimber();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ frc2::Trigger\ IsLeftCageHooked\ =\ frc2::Trigger([\textcolor{keyword}{this}]\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_climberDataProvider-\/>IsLeftCageHooked();}
+\DoxyCodeLine{00043\ \ \ \ \ \});}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ frc2::Trigger\ IsRightCageHooked\ =\ frc2::Trigger([\textcolor{keyword}{this}]\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_climberDataProvider-\/>IsRightCageHooked();}
+\DoxyCodeLine{00047\ \ \ \ \ \});}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ SetMotorVoltage();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{class_i_climber_data_provider}{IClimberDataProvider}}*\ m\_climberDataProvider;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ ctre::phoenix6::hardware::TalonFX\ m\_climberMotor;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::turns\_per\_second\_t\ kMaxVelocity\ =\ 60\_deg\_per\_s;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::turns\_per\_second\_squared\_t\ kMaxAcceleration\ =\ 80\_deg\_per\_s\_sq;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ kP\ =\ 77.5;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ kI\ =\ 0.0;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ kD\ =\ 0.0;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ frc::TrapezoidProfile<units::turns>::Constraints\ m\_constraints\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ kMaxVelocity,\ kMaxAcceleration}
+\DoxyCodeLine{00064\ \ \ \ \ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ frc::ProfiledPIDController<units::turns>\ m\_climberPID\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ kP,\ kI,\ kD,\ m\_constraints}
+\DoxyCodeLine{00068\ \ \ \ \ \};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ units::degree\_t\ m\_setpointAngle\ =\ kClimberStowAngle;}
+\DoxyCodeLine{00071\ \};}
+
+\end{DoxyCode}

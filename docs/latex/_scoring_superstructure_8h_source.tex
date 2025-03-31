@@ -1,0 +1,85 @@
+\doxysection{Scoring\+Superstructure.\+h}
+\hypertarget{_scoring_superstructure_8h_source}{}\label{_scoring_superstructure_8h_source}\index{Smokey-\/18/src/main/include/subsystems/ScoringSuperstructure.h@{Smokey-\/18/src/main/include/subsystems/ScoringSuperstructure.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <frc2/command/Commands.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <frc2/command/SubsystemBase.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}subsystems/CoralSubsystem.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}subsystems/ElevatorSubsystem.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}subsystems/AlgaeSubsystem.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}subsystems/CommandSwerveDrivetrain.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }subsystems\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }ScoringSuperstructure\ :\ \textcolor{keyword}{public}\ frc2::SubsystemBase\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ ScoringSelector\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ L1,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ L2,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ L3AlgaeAndCoral,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ L3AlgaeOnly,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ L4}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ ScoringSuperstructure(\mbox{\hyperlink{class_elevator_subsystem}{ElevatorSubsystem}}\&\ elevator,\ \mbox{\hyperlink{class_coral_subsystem}{CoralSubsystem}}\&\ coralMech,\ \mbox{\hyperlink{class_algae_subsystem}{AlgaeSubsystem}}\&\ algaeMech,\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{CommandSwerveDrivetrain}}\&\ drivetrain);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ PrepareScoring(ScoringSelector\ selectedScore);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ PrepareAndScoreIntoReef(ScoringSelector\ selectedScore);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ScoreIntoReef();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ScoreIntoProcessor();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ToCollectPosition();}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ToStowPosition();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ DriveToReefForScoring();}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ BackUpAfterScoring();}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ StopDriving();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ CancelScore();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ WaitTillElevatorAtHeight();}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_elevator_subsystem}{ElevatorSubsystem}}\&\ m\_elevator;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_coral_subsystem}{CoralSubsystem}}\&\ m\_coral;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_algae_subsystem}{AlgaeSubsystem}}\&\ m\_algae;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{CommandSwerveDrivetrain}}\&\ m\_drivetrain;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ ScoringSelector\ m\_selectedScore\ =\ L1;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::second\_t\ kForwardTimeout\ =\ 0.5\_s;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::second\_t\ kBackupTimeout\ =\ 1\_s;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ swerve::requests::RobotCentric\ stopDriving\ =\ swerve::requests::RobotCentric\{\}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ .WithVelocityX(0\_mps)}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ .WithVelocityY(0\_mps)}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ .WithRotationalRate(0\_rad\_per\_s);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Values\ for\ the\ tuple\ are\ coral\ and\ algae\ angles.}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::map<units::inch\_t,\ std::tuple<units::degree\_t,\ units::degree\_t>>\ m\_elevatorMap\ =\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \{kElevatorStowPosition,\ std::make\_tuple(kCoralStow,\ kAlgaeStowAngle)\},}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \{kElevatorCollectPosition,\ std::make\_tuple(kCoralStow,\ kAlgaeStowAngle)\},}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \{kElevatorL1Position,\ std::make\_tuple(kCoralL1,\ kAlgaeStowAngle)\},}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \{kElevatorL2Position,\ std::make\_tuple(kCoralL2,\ kAlgaeStowAngle)\},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \{kElevatorL3Position,\ std::make\_tuple(kCoralL3,\ kAlgaeStowAngle)\},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \{kElevatorL4Position,\ std::make\_tuple(kCoralL4,\ kAlgaeStowAngle)\},}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ScoreReefL1();}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ScoreReefL2();}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ScoreReefL3(\textcolor{keywordtype}{bool}\ algaeOnly);}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ ScoreReefL4();}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ frc2::CommandPtr\ DispenseCoralAndMoveBack();}
+\DoxyCodeLine{00077\ \};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \}}
+
+\end{DoxyCode}

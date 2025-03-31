@@ -1,0 +1,193 @@
+\doxysection{Command\+Swerve\+Drivetrain.\+h}
+\hypertarget{_command_swerve_drivetrain_8h_source}{}\label{_command_swerve_drivetrain_8h_source}\index{Smokey-\/18/src/main/include/subsystems/CommandSwerveDrivetrain.h@{Smokey-\/18/src/main/include/subsystems/CommandSwerveDrivetrain.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}ctre/phoenix6/SignalLogger.hpp"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <frc/DriverStation.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <frc/Notifier.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <frc2/command/CommandPtr.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <frc2/command/SubsystemBase.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <frc2/command/sysid/SysIdRoutine.h>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}generated/TunerConstants.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{using\ namespace\ }ctre::phoenix6;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }subsystems\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_a7c7e962a40c66081e53b451aa3e46c51}{CommandSwerveDrivetrain}}\ :\ \textcolor{keyword}{public}\ frc2::SubsystemBase,\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_tuner_swerve_drivetrain_acb3919ca13bc9ce7c4ec8e283f60873a}{TunerSwerveDrivetrain}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::second\_t\ kSimLoopPeriod\ =\ 5\_ms;}
+\DoxyCodeLine{00023\ \ \ \ \ std::unique\_ptr<frc::Notifier>\ m\_simNotifier;}
+\DoxyCodeLine{00024\ \ \ \ \ units::second\_t\ m\_lastSimTime;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{/*\ Blue\ alliance\ sees\ forward\ as\ 0\ degrees\ (toward\ red\ alliance\ wall)\ */}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ frc::Rotation2d\ kBlueAlliancePerspectiveRotation\{0\_deg\};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{/*\ Red\ alliance\ sees\ forward\ as\ 180\ degrees\ (toward\ blue\ alliance\ wall)\ */}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ frc::Rotation2d\ kRedAlliancePerspectiveRotation\{180\_deg\};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/*\ Keep\ track\ if\ we've\ ever\ applied\ the\ operator\ perspective\ before\ or\ not\ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_hasAppliedOperatorPerspective\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00034\ \ \ \ \ swerve::requests::ApplyRobotSpeeds\ m\_pathApplyRobotSpeeds;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/*\ Swerve\ requests\ to\ apply\ during\ SysId\ characterization\ */}}
+\DoxyCodeLine{00037\ \ \ \ \ swerve::requests::SysIdSwerveTranslation\ m\_translationCharacterization;}
+\DoxyCodeLine{00038\ \ \ \ \ swerve::requests::SysIdSwerveSteerGains\ m\_steerCharacterization;}
+\DoxyCodeLine{00039\ \ \ \ \ swerve::requests::SysIdSwerveRotation\ m\_rotationCharacterization;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{/*\ SysId\ routine\ for\ characterizing\ translation.\ This\ is\ used\ to\ find\ PID\ gains\ for\ the\ drive\ motors.\ */}}
+\DoxyCodeLine{00042\ \ \ \ \ frc2::sysid::SysIdRoutine\ m\_sysIdRoutineTranslation\{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ frc2::sysid::Config\{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ std::nullopt,\ \textcolor{comment}{//\ Use\ default\ ramp\ rate\ (1\ V/s)}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ 4\_V,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reduce\ dynamic\ step\ voltage\ to\ 4\ V\ to\ prevent\ brownout}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ std::nullopt,\ \textcolor{comment}{//\ Use\ default\ timeout\ (10\ s)}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Log\ state\ with\ SignalLogger\ class}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ [](frc::sysid::State\ state)}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SignalLogger::WriteString(\textcolor{stringliteral}{"{}SysIdTranslation\_State"{}},\ frc::sysid::SysIdRoutineLog::StateEnumToString(state));}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ frc2::sysid::Mechanism\{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](units::volt\_t\ output)\ \{\ SetControl(m\_translationCharacterization.WithVolts(output));\ \},}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \{\},}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{this}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/*\ SysId\ routine\ for\ characterizing\ steer.\ This\ is\ used\ to\ find\ PID\ gains\ for\ the\ steer\ motors.\ */}}
+\DoxyCodeLine{00061\ \ \ \ \ frc2::sysid::SysIdRoutine\ m\_sysIdRoutineSteer\{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ frc2::sysid::Config\{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ std::nullopt,\ \textcolor{comment}{//\ Use\ default\ ramp\ rate\ (1\ V/s)}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ 7\_V,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ dynamic\ voltage\ of\ 7\ V}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ std::nullopt,\ \textcolor{comment}{//\ Use\ default\ timeout\ (10\ s)}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Log\ state\ with\ SignalLogger\ class}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ [](frc::sysid::State\ state)}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SignalLogger::WriteString(\textcolor{stringliteral}{"{}SysIdSteer\_State"{}},\ frc::sysid::SysIdRoutineLog::StateEnumToString(state));}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ frc2::sysid::Mechanism\{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](units::volt\_t\ output)\ \{\ SetControl(m\_steerCharacterization.WithVolts(output));\ \},}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \{\},}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{this}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ \ \ \ \ \};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ SysId\ routine\ for\ characterizing\ rotation.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ used\ to\ find\ PID\ gains\ for\ the\ FieldCentricFacingAngle\ HeadingController.}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ See\ the\ documentation\ of\ swerve::requests::SysIdSwerveRotation\ for\ info\ on\ importing\ the\ log\ to\ SysId.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00084\ \ \ \ \ frc2::sysid::SysIdRoutine\ m\_sysIdRoutineRotation\{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ frc2::sysid::Config\{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ This\ is\ in\ radians\ per\ second²,\ but\ SysId\ only\ supports\ "{}volts\ per\ second"{}\ */}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ units::constants::detail::PI\_VAL\ /\ 6\ *\ (1\_V\ /\ 1\_s),}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ This\ is\ in\ radians\ per\ second,\ but\ SysId\ only\ supports\ "{}volts"{}\ */}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ units::constants::detail::PI\_VAL\ *\ 1\_V,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ std::nullopt,\ \textcolor{comment}{//\ Use\ default\ timeout\ (10\ s)}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Log\ state\ with\ SignalLogger\ class}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ [](frc::sysid::State\ state)}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SignalLogger::WriteString(\textcolor{stringliteral}{"{}SysIdRotation\_State"{}},\ frc::sysid::SysIdRoutineLog::StateEnumToString(state));}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ frc2::sysid::Mechanism\{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](units::volt\_t\ output)}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ output\ is\ actually\ radians\ per\ second,\ but\ SysId\ only\ supports\ "{}volts"{}\ */}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetControl(m\_rotationCharacterization.WithRotationalRate(output\ *\ (1\_rad\_per\_s\ /\ 1\_V)));}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ also\ log\ the\ requested\ output\ for\ SysId\ */}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SignalLogger::WriteValue(\textcolor{stringliteral}{"{}Rotational\_Rate"{}},\ output\ *\ (1\_rad\_per\_s\ /\ 1\_V));}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \{\},}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{this}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/*\ The\ SysId\ routine\ to\ test\ */}}
+\DoxyCodeLine{00111\ \ \ \ \ frc2::sysid::SysIdRoutine\ *m\_sysIdRoutineToApply\ =\ \&m\_sysIdRoutineTranslation;}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{template}\ <std::same\_as<SwerveModuleConstants>...\ ModuleConstants>}
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_a7c7e962a40c66081e53b451aa3e46c51}{CommandSwerveDrivetrain}}(swerve::SwerveDrivetrainConstants\ \textcolor{keyword}{const}\ \&driveTrainConstants,\ ModuleConstants\ \textcolor{keyword}{const}\ \&...\ modules)\ :}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_tuner_swerve_drivetrain_acb3919ca13bc9ce7c4ec8e283f60873a}{TunerSwerveDrivetrain}}\{driveTrainConstants,\ modules...\}}
+\DoxyCodeLine{00127\ \ \ \ \ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (utils::IsSimulation())\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ StartSimThread();}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{template}\ <std::same\_as<SwerveModuleConstants>...\ ModuleConstants>}
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_a2e64964c211ba0bed80da64501758658}{CommandSwerveDrivetrain}}(}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ swerve::SwerveDrivetrainConstants\ \textcolor{keyword}{const}\ \&driveTrainConstants,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ units::hertz\_t\ odometryUpdateFrequency,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ ModuleConstants\ \textcolor{keyword}{const}\ \&...\ modules}
+\DoxyCodeLine{00151\ \ \ \ \ )\ :}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_tuner_swerve_drivetrain_acb3919ca13bc9ce7c4ec8e283f60873a}{TunerSwerveDrivetrain}}\{driveTrainConstants,\ odometryUpdateFrequency,\ modules...\}}
+\DoxyCodeLine{00153\ \ \ \ \ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (utils::IsSimulation())\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ StartSimThread();}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00157\ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{template}\ <std::same\_as<SwerveModuleConstants>...\ ModuleConstants>}
+\DoxyCodeLine{00175\ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_a3892ff275298d3388f94b5acc0efde76}{CommandSwerveDrivetrain}}(}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ swerve::SwerveDrivetrainConstants\ \textcolor{keyword}{const}\ \&driveTrainConstants,}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ units::hertz\_t\ odometryUpdateFrequency,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ std::array<double,\ 3>\ \textcolor{keyword}{const}\ \&odometryStandardDeviation,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ std::array<double,\ 3>\ \textcolor{keyword}{const}\ \&visionStandardDeviation,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ ModuleConstants\ \textcolor{keyword}{const}\ \&...\ modules}
+\DoxyCodeLine{00181\ \ \ \ \ )\ :}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_tuner_swerve_drivetrain_acb3919ca13bc9ce7c4ec8e283f60873a}{TunerSwerveDrivetrain}}\{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ driveTrainConstants,\ odometryUpdateFrequency,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ odometryStandardDeviation,\ visionStandardDeviation,\ modules...}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00186\ \ \ \ \ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (utils::IsSimulation())\ \{}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ StartSimThread();}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ RequestSupplier>}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}\ std::is\_lvalue\_reference\_v<std::invoke\_result\_t<RequestSupplier>>\ \&\&}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}(RequestSupplier\ req,\ \mbox{\hyperlink{class_tuner_swerve_drivetrain}{TunerSwerveDrivetrain}}\ \&drive)\ \{\ drive.SetControl(req());\ \}}
+\DoxyCodeLine{00205\ \ \ \ \ frc2::CommandPtr\ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_ac3c4ee883fbb80dfd9673014e18cee63}{ApplyRequest}}(RequestSupplier\ request)}
+\DoxyCodeLine{00206\ \ \ \ \ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Run([\textcolor{keyword}{this},\ request=std::move(request)]\ \{}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SetControl(request());}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ RequestSupplier>}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}\ std::is\_rvalue\_reference\_v<std::invoke\_result\_t<RequestSupplier>>\ \&\&}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}(RequestSupplier\ req,\ \mbox{\hyperlink{class_tuner_swerve_drivetrain}{TunerSwerveDrivetrain}}\ \&drive)\ \{\ drive.SetControl(req());\ \}}
+\DoxyCodeLine{00221\ \ \ \ \ frc2::CommandPtr\ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_aec7cf573473807636c7e6119fbecd5df}{ApplyRequest}}(RequestSupplier\ request)}
+\DoxyCodeLine{00222\ \ \ \ \ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Run([\textcolor{keyword}{this},\ request=std::move(request)]\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SetControl(request());}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00226\ \ \ \ \ \}}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordtype}{void}\ Periodic()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00237\ \ \ \ \ frc2::CommandPtr\ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_af403818c21ec3ebe0a3e65839e8e7e8d}{SysIdQuasistatic}}(frc2::sysid::Direction\ direction)}
+\DoxyCodeLine{00238\ \ \ \ \ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_sysIdRoutineToApply-\/>Quasistatic(direction);}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00249\ \ \ \ \ frc2::CommandPtr\ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain_a4421bfdeb6697f18512d8b0250f1ff70}{SysIdDynamic}}(frc2::sysid::Direction\ direction)}
+\DoxyCodeLine{00250\ \ \ \ \ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_sysIdRoutineToApply-\/>Dynamic(direction);}
+\DoxyCodeLine{00252\ \ \ \ \ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ frc::Pose2d\ GetPose();}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordtype}{void}\ ConfigureAutoBuilder();}
+\DoxyCodeLine{00256\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordtype}{void}\ StartSimThread();}
+\DoxyCodeLine{00258\ \};}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \}}
+
+\end{DoxyCode}

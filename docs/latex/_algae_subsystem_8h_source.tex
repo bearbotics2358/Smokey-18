@@ -1,0 +1,77 @@
+\doxysection{Algae\+Subsystem.\+h}
+\hypertarget{_algae_subsystem_8h_source}{}\label{_algae_subsystem_8h_source}\index{Smokey-\/18/src/main/include/subsystems/AlgaeSubsystem.h@{Smokey-\/18/src/main/include/subsystems/AlgaeSubsystem.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <frc2/command/CommandPtr.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <frc2/command/SubsystemBase.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <ctre/phoenix6/TalonFX.hpp>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <rev/SparkMax.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}subsystems/IAlgaeDataProvider.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <frc/controller/ProfiledPIDController.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <frc/controller/ElevatorFeedforward.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <frc/trajectory/TrapezoidProfile.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <frc/controller/ArmFeedforward.h>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <units/velocity.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <units/acceleration.h>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ kAlgaeMotorLeft\ =\ 49;}
+\DoxyCodeLine{00019\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ kAlgaeMotorRight\ =\ 50;}
+\DoxyCodeLine{00020\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ kAlgaePivot\ =\ 35;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{constexpr}\ units::degree\_t\ kAlgaeStowAngle\ =\ 150.0\_deg;}
+\DoxyCodeLine{00023\ \textcolor{keyword}{constexpr}\ units::degree\_t\ kAlgaeExtendedAngle\ =\ 90.0\_deg;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }AlgaeSubsystem\ :\ \textcolor{keyword}{public}\ frc2::SubsystemBase\ \{}
+\DoxyCodeLine{00026\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ AlgaeSubsystem(\mbox{\hyperlink{class_i_algae_data_provider}{IAlgaeDataProvider}}*\ dataProvider);}
+\DoxyCodeLine{00028\ \ \ \textcolor{keywordtype}{void}\ Periodic();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ frc2::CommandPtr\ Intake();}
+\DoxyCodeLine{00031\ \ \ frc2::CommandPtr\ Dispense();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \textcolor{keywordtype}{bool}\ IsAlgaeStored();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ frc2::CommandPtr\ SetGoalAngle(units::degree\_t\ angle);}
+\DoxyCodeLine{00036\ \ \ units::degree\_t\ CurrentAngle();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ GoToAngle();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ ctre::phoenix6::hardware::TalonFX\ m\_algaePivotMotor;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ rev::spark::SparkMax\ m\_algaeLeftMotor;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ rev::spark::SparkMax\ m\_algaeRightMotor;}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::turns\_per\_second\_t\ kMaxVelocity\ =\ 1.5\_tps;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::turns\_per\_second\_squared\_t\ kMaxAcceleration\ =\ 0.75\_tr\_per\_s\_sq;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ kP\ =\ 12;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ kI\ =\ 0.0;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ kD\ =\ 1.0;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::volt\_t\ kS\ =\ 0.25\_V;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ units::volt\_t\ kG\ =\ 0.0\_V;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ kV\ =\ 0.0\_V\ /\ 1.0\_rad\_per\_s;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ frc::TrapezoidProfile<units::turns>::Constraints\ m\_constraints\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ kMaxVelocity,\ kMaxAcceleration}
+\DoxyCodeLine{00058\ \ \ \ \ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ frc::ProfiledPIDController<units::turns>\ m\_algaePID\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ kP,\ kI,\ kD,\ m\_constraints}
+\DoxyCodeLine{00062\ \ \ \ \ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ frc::ArmFeedforward\ m\_algaeFeedForward\{kS,\ kG,\ kV\};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ units::degree\_t\ m\_setpointAngle\ =\ kAlgaeStowAngle;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ TOLERANCE\ =\ 1.0;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{class_i_algae_data_provider}{IAlgaeDataProvider}}*\ m\_algaeDataProvider;}
+\DoxyCodeLine{00071\ \};}
+
+\end{DoxyCode}

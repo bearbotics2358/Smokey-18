@@ -1,0 +1,87 @@
+\doxysection{Robot\+Container.\+h}
+\hypertarget{_robot_container_8h_source}{}\label{_robot_container_8h_source}\index{Smokey-\/18/src/main/include/RobotContainer.h@{Smokey-\/18/src/main/include/RobotContainer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ FIRST\ and\ other\ WPILib\ contributors.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Open\ Source\ Software;\ you\ can\ modify\ and/or\ share\ it\ under\ the\ terms\ of}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ the\ WPILib\ BSD\ license\ file\ in\ the\ root\ directory\ of\ this\ project.}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <frc/smartdashboard/SendableChooser.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <frc2/command/CommandPtr.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <frc2/command/button/CommandXboxController.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <frc2/command/button/CommandGenericHID.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}io/FeatherCanDecoder.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}subsystems/CommandSwerveDrivetrain.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}subsystems/CameraSubsystem.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}subsystems/ElevatorSubsystem.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}subsystems/CoralSubsystem.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}subsystems/Climber.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}subsystems/ScoringSuperstructure.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}subsystems/LED.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}Telemetry.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <frc2/command/RunCommand.h>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}subsystems/AlgaeSubsystem.h"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}commands/AlignWithReef.h"{}}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }RobotContainer\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ units::meters\_per\_second\_t\ m\_maxSpeed\ =\ TunerConstants::kSpeedAt12Volts;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ m\_speedMultiplier\ =\ 1.0;}
+\DoxyCodeLine{00028\ \ \ \ \ units::radians\_per\_second\_t\ m\_maxAngularRate\ =\ 0.75\_tps;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/*\ Setting\ up\ bindings\ for\ necessary\ control\ of\ the\ swerve\ drive\ platform\ */}}
+\DoxyCodeLine{00031\ \ \ \ \ swerve::requests::FieldCentric\ drive\ =\ swerve::requests::FieldCentric\{\}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ .WithDeadband(m\_maxSpeed\ *\ 0.1).WithRotationalDeadband(m\_maxAngularRate\ *\ 0.1)\ \textcolor{comment}{//\ Add\ a\ 10\%\ deadband}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);\ \textcolor{comment}{//\ Use\ open-\/loop\ control\ for\ drive\ motors}}
+\DoxyCodeLine{00034\ \ \ \ \ swerve::requests::SwerveDriveBrake\ brake\{\};}
+\DoxyCodeLine{00035\ \ \ \ \ swerve::requests::PointWheelsAt\ point\{\};}
+\DoxyCodeLine{00036\ \ \ \ \ swerve::requests::RobotCentric\ forwardStraight\ =\ swerve::requests::RobotCentric\{\}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);}
+\DoxyCodeLine{00038\ \ \ \ \ swerve::requests::RobotCentric\ strafe\ =\ swerve::requests::RobotCentric\{\}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ .WithVelocityX(0\_mps);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/*\ Note:\ This\ must\ be\ constructed\ before\ the\ drivetrain,\ otherwise\ we\ need\ to}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ define\ a\ destructor\ to\ un-\/register\ the\ telemetry\ from\ the\ drivetrain\ */}}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{class_telemetry}{Telemetry}}\ logger\{m\_maxSpeed\};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ frc2::CommandXboxController\ m\_driverJoystick\{0\};}
+\DoxyCodeLine{00047\ \ \ \ \ frc2::CommandXboxController\ m\_operatorJoystick\{1\};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ frc2::CommandGenericHID\ m\_gamepad\{4\};}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Robot.cpp\ owns\ the\ FeatherCanDecoder\ object}}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{class_feather_can_decoder}{FeatherCanDecoder}}*\ m\_featherCanDecoder;}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{class_l_e_d}{LED}}\ m\_LED;}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{class_camera_subsystem}{CameraSubsystem}}\ m\_cameraSubsystem;}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{class_elevator_subsystem}{ElevatorSubsystem}}\ m\_elevatorSubsystem;}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{class_coral_subsystem}{CoralSubsystem}}\ m\_coralSubsystem;}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{class_algae_subsystem}{AlgaeSubsystem}}\ m\_algaeSubsystem;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{class_climber}{Climber}}\ m\_climberSubsystem;}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_scoring_superstructure}{subsystems::ScoringSuperstructure}}\ m\_scoringSuperstructure;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems::CommandSwerveDrivetrain}}\ m\_drivetrain\{\mbox{\hyperlink{class_tuner_constants_abbe59b658724f13d56a2a9f903d151be}{TunerConstants::CreateDrivetrain}}()\};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{/*\ Path\ follower\ */}}
+\DoxyCodeLine{00066\ \ \ \ \ frc::SendableChooser<frc2::Command\ *>\ m\_autoChooser;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00069\ \ \ \ \ RobotContainer(\mbox{\hyperlink{class_feather_can_decoder}{FeatherCanDecoder}}*\ featherCanDecoder);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ frc2::Command\ *GetAutonomousCommand();}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ frc2::CommandPtr\ AddControllerRumble(frc::GenericHID::RumbleType\ rumbleType,\ \textcolor{keywordtype}{double}\ rumble);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ frc2::CommandPtr\ ResetRobotForTeleOp();}
+\DoxyCodeLine{00076\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ ConfigureBindings();}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ AddPathPlannerCommands();}
+\DoxyCodeLine{00079\ \ \ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ ReefSide\ m\_reefSide\ =\ ReefSide::Left;}
+\DoxyCodeLine{00081\ \};}
+
+\end{DoxyCode}

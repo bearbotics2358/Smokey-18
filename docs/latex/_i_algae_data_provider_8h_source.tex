@@ -1,0 +1,19 @@
+\doxysection{IAlgae\+Data\+Provider.\+h}
+\hypertarget{_i_algae_data_provider_8h_source}{}\label{_i_algae_data_provider_8h_source}\index{Smokey-\/18/src/main/include/subsystems/IAlgaeDataProvider.h@{Smokey-\/18/src/main/include/subsystems/IAlgaeDataProvider.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_i_algae_data_provider}{IAlgaeDataProvider}}\ \{}
+\DoxyCodeLine{00004\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{comment}{//\ Provide\ the\ angle\ of\ the\ algae\ intake/delivery\ mechanism\ in\ degrees}}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ GetAlgaeAngleDegrees()\ =\ 0;}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{//\ Provide\ the\ raw\ angle\ of\ the\ algae\ mechanism.\ Does\ not\ include\ any\ offsets.}}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ GetAlgaeRawAngleDegrees()\ =\ 0;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\ Return\ a\ simple\ boolean\ to\ indicate\ whether\ a\ piece\ of\ algae\ has\ been\ collected}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ IsAlgaeCollected()\ =\ 0;}
+\DoxyCodeLine{00013\ \};}
+
+\end{DoxyCode}

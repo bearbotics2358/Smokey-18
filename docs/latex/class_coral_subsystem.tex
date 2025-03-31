@@ -1,0 +1,59 @@
+\doxysection{Coral\+Subsystem Class Reference}
+\hypertarget{class_coral_subsystem}{}\label{class_coral_subsystem}\index{CoralSubsystem@{CoralSubsystem}}
+Inheritance diagram for Coral\+Subsystem\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_coral_subsystem}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_coral_subsystem_a9bea5b7eea60f447a99f2793eff125e0}\label{class_coral_subsystem_a9bea5b7eea60f447a99f2793eff125e0} 
+{\bfseries Coral\+Subsystem} (\mbox{\hyperlink{class_i_coral_intake_data_provider}{ICoral\+Intake\+Data\+Provider}} \texorpdfstring{$\ast$}{*}data\+Provider)
+\item 
+\Hypertarget{class_coral_subsystem_a3ce9ae751909cbc30d375bc2826d5011}\label{class_coral_subsystem_a3ce9ae751909cbc30d375bc2826d5011} 
+void {\bfseries Periodic} () override
+\item 
+\Hypertarget{class_coral_subsystem_a66ba337ab9af457a0bbbc8008e7846f1}\label{class_coral_subsystem_a66ba337ab9af457a0bbbc8008e7846f1} 
+void {\bfseries Set\+Intake\+Speed} (double speed)
+\item 
+\Hypertarget{class_coral_subsystem_ac884397d65d5dc6820add75d394aa1c0}\label{class_coral_subsystem_ac884397d65d5dc6820add75d394aa1c0} 
+void {\bfseries Set\+Pivot\+Speed} (double speed)
+\item 
+\Hypertarget{class_coral_subsystem_a9da8544f0e0387594121a8d293fb6138}\label{class_coral_subsystem_a9da8544f0e0387594121a8d293fb6138} 
+bool {\bfseries Coral\+Present} ()
+\item 
+frc2\+::\+Command\+Ptr \mbox{\hyperlink{class_coral_subsystem_ae296a90d3589d9743d9d9d3603dfa629}{Go\+To\+Angle}} (units\+::degree\+\_\+t angle)
+\item 
+\Hypertarget{class_coral_subsystem_afbf6a281352fba310f870f25c2e96188}\label{class_coral_subsystem_afbf6a281352fba310f870f25c2e96188} 
+frc2\+::\+Command\+Ptr {\bfseries Collect} ()
+\item 
+\Hypertarget{class_coral_subsystem_a34f7bbead6767d9e5d58f71174dec85f}\label{class_coral_subsystem_a34f7bbead6767d9e5d58f71174dec85f} 
+frc2\+::\+Command\+Ptr {\bfseries Dispense} ()
+\item 
+\Hypertarget{class_coral_subsystem_a29a5057e47bb2562d9d33bbd8661cf45}\label{class_coral_subsystem_a29a5057e47bb2562d9d33bbd8661cf45} 
+frc2\+::\+Command\+Ptr {\bfseries Stop\+Intake} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_coral_subsystem_ae296a90d3589d9743d9d9d3603dfa629}\index{CoralSubsystem@{CoralSubsystem}!GoToAngle@{GoToAngle}}
+\index{GoToAngle@{GoToAngle}!CoralSubsystem@{CoralSubsystem}}
+\doxysubsubsection{\texorpdfstring{GoToAngle()}{GoToAngle()}}
+{\footnotesize\ttfamily \label{class_coral_subsystem_ae296a90d3589d9743d9d9d3603dfa629} 
+frc2\+::\+Command\+Ptr Coral\+Subsystem\+::\+Go\+To\+Angle (\begin{DoxyParamCaption}\item[{units\+::degree\+\_\+t}]{target\+Angle}{}\end{DoxyParamCaption})}
+
+Set the desired setpoint angle for the coral scoring mechanism. This function only changes the saved setpoint. The Periodic function is responsible for tracking the setpoint and holding the motor at the angle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em target\+Angle} & The desired angle of the mechanism in degrees \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Smokey-\/18/src/main/include/subsystems/Coral\+Subsystem.\+h\item 
+Smokey-\/18/src/main/cpp/subsystems/Coral\+Subsystem.\+cpp\end{DoxyCompactItemize}

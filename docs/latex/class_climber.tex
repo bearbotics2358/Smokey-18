@@ -1,0 +1,82 @@
+\doxysection{Climber Class Reference}
+\hypertarget{class_climber}{}\label{class_climber}\index{Climber@{Climber}}
+Inheritance diagram for Climber\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_climber}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_climber_a751e3e48e590efe8bd70a704f94a204f}\label{class_climber_a751e3e48e590efe8bd70a704f94a204f} 
+{\bfseries Climber} (\mbox{\hyperlink{class_i_climber_data_provider}{IClimber\+Data\+Provider}} \texorpdfstring{$\ast$}{*}data\+Provider)
+\item 
+\Hypertarget{class_climber_a215428e022a8e3608b524961c63b3a7e}\label{class_climber_a215428e022a8e3608b524961c63b3a7e} 
+void {\bfseries Periodic} () override
+\item 
+\Hypertarget{class_climber_a251e157b9e52bd0ac022bcf986e9a2f7}\label{class_climber_a251e157b9e52bd0ac022bcf986e9a2f7} 
+frc2\+::\+Command\+Ptr {\bfseries Climb} ()
+\item 
+frc2\+::\+Command\+Ptr \mbox{\hyperlink{class_climber_a9919ef03c9863500b145b451c6df427a}{Extend}} ()
+\item 
+\Hypertarget{class_climber_a9521b0dea6f7131451e1e74708fe50ef}\label{class_climber_a9521b0dea6f7131451e1e74708fe50ef} 
+frc2\+::\+Command\+Ptr {\bfseries Stow} ()
+\item 
+\Hypertarget{class_climber_aba973665d73aacc39cc233997d4972aa}\label{class_climber_aba973665d73aacc39cc233997d4972aa} 
+units\+::degree\+\_\+t {\bfseries Current\+Angle} ()
+\item 
+\Hypertarget{class_climber_a1d0062fbf477c37262309d086c14efb2}\label{class_climber_a1d0062fbf477c37262309d086c14efb2} 
+frc2\+::\+Command\+Ptr {\bfseries Stop\+Climber} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+frc2\+::\+Trigger \mbox{\hyperlink{class_climber_a3db33289c1bc44362c9dec3850640748}{Is\+Left\+Cage\+Hooked}}
+\item 
+frc2\+::\+Trigger \mbox{\hyperlink{class_climber_aca0889e3c85950a2cd8d5fbb66e633ea}{Is\+Right\+Cage\+Hooked}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_climber_a9919ef03c9863500b145b451c6df427a}\index{Climber@{Climber}!Extend@{Extend}}
+\index{Extend@{Extend}!Climber@{Climber}}
+\doxysubsubsection{\texorpdfstring{Extend()}{Extend()}}
+{\footnotesize\ttfamily \label{class_climber_a9919ef03c9863500b145b451c6df427a} 
+frc2\+::\+Command\+Ptr Climber\+::\+Extend (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Prepare the climber by extending it to the Ready To Climb position 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_climber_a3db33289c1bc44362c9dec3850640748}\index{Climber@{Climber}!IsLeftCageHooked@{IsLeftCageHooked}}
+\index{IsLeftCageHooked@{IsLeftCageHooked}!Climber@{Climber}}
+\doxysubsubsection{\texorpdfstring{IsLeftCageHooked}{IsLeftCageHooked}}
+{\footnotesize\ttfamily \label{class_climber_a3db33289c1bc44362c9dec3850640748} 
+frc2\+::\+Trigger Climber\+::\+Is\+Left\+Cage\+Hooked}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ frc2::Trigger([\textcolor{keyword}{this}]\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_climberDataProvider-\/>IsLeftCageHooked();}
+\DoxyCodeLine{\ \ \ \ \})}
+
+\end{DoxyCode}
+\Hypertarget{class_climber_aca0889e3c85950a2cd8d5fbb66e633ea}\index{Climber@{Climber}!IsRightCageHooked@{IsRightCageHooked}}
+\index{IsRightCageHooked@{IsRightCageHooked}!Climber@{Climber}}
+\doxysubsubsection{\texorpdfstring{IsRightCageHooked}{IsRightCageHooked}}
+{\footnotesize\ttfamily \label{class_climber_aca0889e3c85950a2cd8d5fbb66e633ea} 
+frc2\+::\+Trigger Climber\+::\+Is\+Right\+Cage\+Hooked}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ frc2::Trigger([\textcolor{keyword}{this}]\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_climberDataProvider-\/>IsRightCageHooked();}
+\DoxyCodeLine{\ \ \ \ \})}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Smokey-\/18/src/main/include/subsystems/Climber.\+h\item 
+Smokey-\/18/src/main/cpp/subsystems/Climber.\+cpp\end{DoxyCompactItemize}

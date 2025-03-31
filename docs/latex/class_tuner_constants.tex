@@ -1,0 +1,110 @@
+\doxysection{Tuner\+Constants Class Reference}
+\hypertarget{class_tuner_constants}{}\label{class_tuner_constants}\index{TunerConstants@{TunerConstants}}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems\+::\+Command\+Swerve\+Drivetrain}} \mbox{\hyperlink{class_tuner_constants_abbe59b658724f13d56a2a9f903d151be}{Create\+Drivetrain}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_tuner_constants_aa469efbceab3a31cdea6564b5f5cafa9}\label{class_tuner_constants_aa469efbceab3a31cdea6564b5f5cafa9} 
+static const CANBus {\bfseries k\+CANBus} \{k\+CANBus\+Name, "{}./logs/example.\+hoot"{}\}
+\item 
+\Hypertarget{class_tuner_constants_a725d38e45a1a9876bb245be614e81d80}\label{class_tuner_constants_a725d38e45a1a9876bb245be614e81d80} 
+static constexpr units\+::meters\+\_\+per\+\_\+second\+\_\+t {\bfseries k\+Speed\+At12\+Volts} = 4.\+42\+\_\+mps
+\item 
+static constexpr swerve\+::\+Swerve\+Drivetrain\+Constants \mbox{\hyperlink{class_tuner_constants_af50eeb92162de4ccaacf753ade6504be}{Drivetrain\+Constants}}
+\item 
+static constexpr swerve\+::\+Swerve\+Module\+Constants \mbox{\hyperlink{class_tuner_constants_acd96fe234876ed90a639957576545953}{Front\+Left}}
+\item 
+static constexpr swerve\+::\+Swerve\+Module\+Constants \mbox{\hyperlink{class_tuner_constants_ad620af9372212a2fddcb56e1d0524dc7}{Front\+Right}}
+\item 
+static constexpr swerve\+::\+Swerve\+Module\+Constants \mbox{\hyperlink{class_tuner_constants_a07fdf4f1fbafb187aaefdc181a64bd4f}{Back\+Left}}
+\item 
+static constexpr swerve\+::\+Swerve\+Module\+Constants \mbox{\hyperlink{class_tuner_constants_a4652396dca1ee693f68a0ed8cec2a5fe}{Back\+Right}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_tuner_constants_abbe59b658724f13d56a2a9f903d151be}\index{TunerConstants@{TunerConstants}!CreateDrivetrain@{CreateDrivetrain}}
+\index{CreateDrivetrain@{CreateDrivetrain}!TunerConstants@{TunerConstants}}
+\doxysubsubsection{\texorpdfstring{CreateDrivetrain()}{CreateDrivetrain()}}
+{\footnotesize\ttfamily \label{class_tuner_constants_abbe59b658724f13d56a2a9f903d151be} 
+\mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems\+::\+Command\+Swerve\+Drivetrain}} Tuner\+Constants\+::\+Create\+Drivetrain (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Creates a Command\+Swerve\+Drivetrain instance. This should only be called once in your robot program. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_tuner_constants_a07fdf4f1fbafb187aaefdc181a64bd4f}\index{TunerConstants@{TunerConstants}!BackLeft@{BackLeft}}
+\index{BackLeft@{BackLeft}!TunerConstants@{TunerConstants}}
+\doxysubsubsection{\texorpdfstring{BackLeft}{BackLeft}}
+{\footnotesize\ttfamily \label{class_tuner_constants_a07fdf4f1fbafb187aaefdc181a64bd4f} 
+swerve\+::\+Swerve\+Module\+Constants Tuner\+Constants\+::\+Back\+Left\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ ConstantCreator.CreateModuleConstants(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kBackLeftSteerMotorId,\ kBackLeftDriveMotorId,\ kBackLeftEncoderId,\ kBackLeftEncoderOffset,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kBackLeftXPos,\ kBackLeftYPos,\ kInvertLeftSide,\ kBackLeftSteerMotorInverted,\ kBackLeftEncoderInverted)}
+
+\end{DoxyCode}
+\Hypertarget{class_tuner_constants_a4652396dca1ee693f68a0ed8cec2a5fe}\index{TunerConstants@{TunerConstants}!BackRight@{BackRight}}
+\index{BackRight@{BackRight}!TunerConstants@{TunerConstants}}
+\doxysubsubsection{\texorpdfstring{BackRight}{BackRight}}
+{\footnotesize\ttfamily \label{class_tuner_constants_a4652396dca1ee693f68a0ed8cec2a5fe} 
+swerve\+::\+Swerve\+Module\+Constants Tuner\+Constants\+::\+Back\+Right\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ ConstantCreator.CreateModuleConstants(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kBackRightSteerMotorId,\ kBackRightDriveMotorId,\ kBackRightEncoderId,\ kBackRightEncoderOffset,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kBackRightXPos,\ kBackRightYPos,\ kInvertRightSide,\ kBackRightSteerMotorInverted,\ kBackRightEncoderInverted)}
+
+\end{DoxyCode}
+\Hypertarget{class_tuner_constants_af50eeb92162de4ccaacf753ade6504be}\index{TunerConstants@{TunerConstants}!DrivetrainConstants@{DrivetrainConstants}}
+\index{DrivetrainConstants@{DrivetrainConstants}!TunerConstants@{TunerConstants}}
+\doxysubsubsection{\texorpdfstring{DrivetrainConstants}{DrivetrainConstants}}
+{\footnotesize\ttfamily \label{class_tuner_constants_af50eeb92162de4ccaacf753ade6504be} 
+swerve\+::\+Swerve\+Drivetrain\+Constants Tuner\+Constants\+::\+Drivetrain\+Constants\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ swerve::SwerveDrivetrainConstants\{\}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ .WithCANBusName(kCANBusName)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ .WithPigeon2Id(kPigeonId)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ .WithPigeon2Configs(pigeonConfigs)}
+
+\end{DoxyCode}
+\Hypertarget{class_tuner_constants_acd96fe234876ed90a639957576545953}\index{TunerConstants@{TunerConstants}!FrontLeft@{FrontLeft}}
+\index{FrontLeft@{FrontLeft}!TunerConstants@{TunerConstants}}
+\doxysubsubsection{\texorpdfstring{FrontLeft}{FrontLeft}}
+{\footnotesize\ttfamily \label{class_tuner_constants_acd96fe234876ed90a639957576545953} 
+swerve\+::\+Swerve\+Module\+Constants Tuner\+Constants\+::\+Front\+Left\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ ConstantCreator.CreateModuleConstants(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kFrontLeftSteerMotorId,\ kFrontLeftDriveMotorId,\ kFrontLeftEncoderId,\ kFrontLeftEncoderOffset,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kFrontLeftXPos,\ kFrontLeftYPos,\ kInvertLeftSide,\ kFrontLeftSteerMotorInverted,\ kFrontLeftEncoderInverted)}
+
+\end{DoxyCode}
+\Hypertarget{class_tuner_constants_ad620af9372212a2fddcb56e1d0524dc7}\index{TunerConstants@{TunerConstants}!FrontRight@{FrontRight}}
+\index{FrontRight@{FrontRight}!TunerConstants@{TunerConstants}}
+\doxysubsubsection{\texorpdfstring{FrontRight}{FrontRight}}
+{\footnotesize\ttfamily \label{class_tuner_constants_ad620af9372212a2fddcb56e1d0524dc7} 
+swerve\+::\+Swerve\+Module\+Constants Tuner\+Constants\+::\+Front\+Right\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ ConstantCreator.CreateModuleConstants(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kFrontRightSteerMotorId,\ kFrontRightDriveMotorId,\ kFrontRightEncoderId,\ kFrontRightEncoderOffset,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kFrontRightXPos,\ kFrontRightYPos,\ kInvertRightSide,\ kFrontRightSteerMotorInverted,\ kFrontRightEncoderInverted)}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Smokey-\/18/src/main/include/generated/Tuner\+Constants.\+h\item 
+Smokey-\/18/src/main/cpp/generated/Tuner\+Constants.\+cpp\end{DoxyCompactItemize}

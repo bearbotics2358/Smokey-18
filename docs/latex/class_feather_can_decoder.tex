@@ -1,0 +1,251 @@
+\doxysection{Feather\+Can\+Decoder Class Reference}
+\hypertarget{class_feather_can_decoder}{}\label{class_feather_can_decoder}\index{FeatherCanDecoder@{FeatherCanDecoder}}
+Inheritance diagram for Feather\+Can\+Decoder\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.728395cm]{class_feather_can_decoder}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_feather_can_decoder_a7b09a0a86f4a1b6760826c9adc7c828c}\label{class_feather_can_decoder_a7b09a0a86f4a1b6760826c9adc7c828c} 
+void {\bfseries Update} ()
+\item 
+float \mbox{\hyperlink{class_feather_can_decoder_ac8cbbd5047d1a0eb20fe473f55b2e144}{Get\+Coral\+Intake\+Angle\+Degrees}} () override
+\item 
+float \mbox{\hyperlink{class_feather_can_decoder_ac4834d4ca16e2aef9ba0c1b799501386}{Get\+Coral\+Intake\+Raw\+Angle\+Degrees}} () override
+\item 
+bool \mbox{\hyperlink{class_feather_can_decoder_a8fb3fb6e8998f5cf6105bb4e57ff5382}{Is\+Coral\+Angle\+Valid}} () override
+\item 
+bool \mbox{\hyperlink{class_feather_can_decoder_a74788bd6490dee4f5b70f866910b322e}{Is\+Coral\+Collected}} () override
+\item 
+float \mbox{\hyperlink{class_feather_can_decoder_a84a98631aa68625245d7e1739ccd06da}{Get\+Algae\+Angle\+Degrees}} () override
+\item 
+float \mbox{\hyperlink{class_feather_can_decoder_af8b93a7b253baeaf3f499ccc751e0566}{Get\+Algae\+Raw\+Angle\+Degrees}} () override
+\item 
+bool \mbox{\hyperlink{class_feather_can_decoder_aefa3253c6eef6fc1bb097d62e000c670}{Is\+Algae\+Collected}} () override
+\item 
+float \mbox{\hyperlink{class_feather_can_decoder_ae96caa0d6114a6935f4a6252a096ecb0}{Get\+Climber\+Angle\+Degrees}} () override
+\item 
+float \mbox{\hyperlink{class_feather_can_decoder_aac2fc93cbd813ff41bbeae01f20dd18a}{Get\+Climber\+Raw\+Angle\+Degrees}} () override
+\item 
+bool \mbox{\hyperlink{class_feather_can_decoder_a37e8d55ef0c8520832f43b60122acb8e}{Is\+Left\+Cage\+Hooked}} () override
+\item 
+bool \mbox{\hyperlink{class_feather_can_decoder_ab6202b706df08135ff5a3a8592a1c35d}{Is\+Right\+Cage\+Hooked}} () override
+\item 
+\Hypertarget{class_feather_can_decoder_a3014636e549dcbd1aa3375589144d949}\label{class_feather_can_decoder_a3014636e549dcbd1aa3375589144d949} 
+void {\bfseries Unpack\+Climber\+CANData} ()
+\item 
+double \mbox{\hyperlink{class_feather_can_decoder_a94bcb8ad169900e4fd7c8ecda5c9cc37}{Get\+Belly\+Pan\+Left\+Distance}} () override
+\item 
+double \mbox{\hyperlink{class_feather_can_decoder_aee84c1d2b387ce78ed433c579f6468c4}{Get\+Belly\+Pan\+Right\+Distance}} () override
+\item 
+\Hypertarget{class_feather_can_decoder_a02984c7ec5b9dde1a351f45b8c113eb1}\label{class_feather_can_decoder_a02984c7ec5b9dde1a351f45b8c113eb1} 
+void {\bfseries Unpack\+Belly\+Pan\+CANData} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_feather_can_decoder_a89dcbb252939e484da175b9804facf17}\label{class_feather_can_decoder_a89dcbb252939e484da175b9804facf17} 
+const int {\bfseries k\+CANRead\+Timeout\+Ms} = 100
+\item 
+\Hypertarget{class_feather_can_decoder_ad0c5bf616f10d77384b1710557b73540}\label{class_feather_can_decoder_ad0c5bf616f10d77384b1710557b73540} 
+const int {\bfseries k\+Coral\+Device\+ID} = 1
+\item 
+\Hypertarget{class_feather_can_decoder_a19e9976fe552762181c9210c20073c5d}\label{class_feather_can_decoder_a19e9976fe552762181c9210c20073c5d} 
+const int {\bfseries k\+Coral\+APIId} = 1
+\item 
+\Hypertarget{class_feather_can_decoder_a99a0ec826b5bda4bbc9e2a7f264d2f92}\label{class_feather_can_decoder_a99a0ec826b5bda4bbc9e2a7f264d2f92} 
+const int {\bfseries k\+Coral\+Proximity\+Threshold} = 1500
+\item 
+\Hypertarget{class_feather_can_decoder_a9c2c2a9aca0d31f49f7eade6387978ac}\label{class_feather_can_decoder_a9c2c2a9aca0d31f49f7eade6387978ac} 
+const double {\bfseries k\+Coral\+Angle\+Offset\+Degrees} = -\/258
+\item 
+\Hypertarget{class_feather_can_decoder_ae48af4ddb528a6d102c8c0f748a5f543}\label{class_feather_can_decoder_ae48af4ddb528a6d102c8c0f748a5f543} 
+const int {\bfseries k\+Algae\+Device\+ID} = 2
+\item 
+\Hypertarget{class_feather_can_decoder_a4c58c845f3de084c11fe1020f3ae990e}\label{class_feather_can_decoder_a4c58c845f3de084c11fe1020f3ae990e} 
+const int {\bfseries k\+Algae\+APIId} = 2
+\item 
+\Hypertarget{class_feather_can_decoder_a6780c9c987d3a575e784ec34262221c5}\label{class_feather_can_decoder_a6780c9c987d3a575e784ec34262221c5} 
+const int {\bfseries k\+Algae\+Proximity\+Threshold} = 1500
+\item 
+\Hypertarget{class_feather_can_decoder_a5b2b175e02186df01bc3e51c9c1c9a18}\label{class_feather_can_decoder_a5b2b175e02186df01bc3e51c9c1c9a18} 
+const double {\bfseries k\+Algae\+Angle\+Offset\+Degrees} = 47.\+5
+\item 
+\Hypertarget{class_feather_can_decoder_ae0dabc8526e82ae2c30cb78dfa735163}\label{class_feather_can_decoder_ae0dabc8526e82ae2c30cb78dfa735163} 
+const int {\bfseries k\+Climber\+Device\+ID} = 3
+\item 
+\Hypertarget{class_feather_can_decoder_a1d45dc5c38b9a60702511920d2ed2e6e}\label{class_feather_can_decoder_a1d45dc5c38b9a60702511920d2ed2e6e} 
+const int {\bfseries k\+Climber\+APIId} = 3
+\item 
+\Hypertarget{class_feather_can_decoder_a7e5767f6e59db03c742f2badb05a39d5}\label{class_feather_can_decoder_a7e5767f6e59db03c742f2badb05a39d5} 
+const double {\bfseries k\+Climber\+Angle\+Offset\+Degrees} = -\/368.\+5
+\item 
+\Hypertarget{class_feather_can_decoder_aee9999f4bbb620bbcb2c61e88bca1144}\label{class_feather_can_decoder_aee9999f4bbb620bbcb2c61e88bca1144} 
+const int {\bfseries k\+Climber\+Proximity\+Threshold} = 1500
+\item 
+\Hypertarget{class_feather_can_decoder_ae5d4be425d8cedf74b81798ed0ae5c9c}\label{class_feather_can_decoder_ae5d4be425d8cedf74b81798ed0ae5c9c} 
+const int {\bfseries k\+Belly\+Pan\+Device\+ID} = 4
+\item 
+\Hypertarget{class_feather_can_decoder_a72e8ca10c8e212b146823f099fd0016f}\label{class_feather_can_decoder_a72e8ca10c8e212b146823f099fd0016f} 
+float {\bfseries m\+\_\+climber\+Angle\+Degrees}
+\item 
+\Hypertarget{class_feather_can_decoder_af776dd2bc4c906033e431ca351b0e160}\label{class_feather_can_decoder_af776dd2bc4c906033e431ca351b0e160} 
+bool {\bfseries m\+\_\+right\+Proximity}
+\item 
+\Hypertarget{class_feather_can_decoder_af13c5a3eec32c337155c3838f59bb47e}\label{class_feather_can_decoder_af13c5a3eec32c337155c3838f59bb47e} 
+bool {\bfseries m\+\_\+left\+Proximity}
+\item 
+\Hypertarget{class_feather_can_decoder_a7f4f8a976b733f624a433fe52cdf397b}\label{class_feather_can_decoder_a7f4f8a976b733f624a433fe52cdf397b} 
+frc\+::\+CAN {\bfseries m\+\_\+climber\+CAN}
+\item 
+\Hypertarget{class_feather_can_decoder_a975b27fbdfded252293ffed2f0dc338c}\label{class_feather_can_decoder_a975b27fbdfded252293ffed2f0dc338c} 
+double {\bfseries m\+\_\+right\+Belly\+Pan\+Distance}
+\item 
+\Hypertarget{class_feather_can_decoder_ab1ae66b641772f33a293903c95c48874}\label{class_feather_can_decoder_ab1ae66b641772f33a293903c95c48874} 
+double {\bfseries m\+\_\+left\+Belly\+Pan\+Distance}
+\item 
+\Hypertarget{class_feather_can_decoder_a8c07b7d9a10a9e0cf11ab8e1c0549458}\label{class_feather_can_decoder_a8c07b7d9a10a9e0cf11ab8e1c0549458} 
+frc\+::\+CAN {\bfseries m\+\_\+belly\+Pan\+CAN}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_feather_can_decoder_a84a98631aa68625245d7e1739ccd06da}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetAlgaeAngleDegrees@{GetAlgaeAngleDegrees}}
+\index{GetAlgaeAngleDegrees@{GetAlgaeAngleDegrees}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetAlgaeAngleDegrees()}{GetAlgaeAngleDegrees()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_a84a98631aa68625245d7e1739ccd06da} 
+float Feather\+Can\+Decoder\+::\+Get\+Algae\+Angle\+Degrees (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_algae_data_provider}{IAlgae\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_af8b93a7b253baeaf3f499ccc751e0566}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetAlgaeRawAngleDegrees@{GetAlgaeRawAngleDegrees}}
+\index{GetAlgaeRawAngleDegrees@{GetAlgaeRawAngleDegrees}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetAlgaeRawAngleDegrees()}{GetAlgaeRawAngleDegrees()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_af8b93a7b253baeaf3f499ccc751e0566} 
+float Feather\+Can\+Decoder\+::\+Get\+Algae\+Raw\+Angle\+Degrees (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_algae_data_provider}{IAlgae\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_a94bcb8ad169900e4fd7c8ecda5c9cc37}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetBellyPanLeftDistance@{GetBellyPanLeftDistance}}
+\index{GetBellyPanLeftDistance@{GetBellyPanLeftDistance}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetBellyPanLeftDistance()}{GetBellyPanLeftDistance()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_a94bcb8ad169900e4fd7c8ecda5c9cc37} 
+double Feather\+Can\+Decoder\+::\+Get\+Belly\+Pan\+Left\+Distance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_belly_pan_data_provider}{IBelly\+Pan\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_aee84c1d2b387ce78ed433c579f6468c4}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetBellyPanRightDistance@{GetBellyPanRightDistance}}
+\index{GetBellyPanRightDistance@{GetBellyPanRightDistance}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetBellyPanRightDistance()}{GetBellyPanRightDistance()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_aee84c1d2b387ce78ed433c579f6468c4} 
+double Feather\+Can\+Decoder\+::\+Get\+Belly\+Pan\+Right\+Distance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_belly_pan_data_provider}{IBelly\+Pan\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_ae96caa0d6114a6935f4a6252a096ecb0}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetClimberAngleDegrees@{GetClimberAngleDegrees}}
+\index{GetClimberAngleDegrees@{GetClimberAngleDegrees}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetClimberAngleDegrees()}{GetClimberAngleDegrees()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_ae96caa0d6114a6935f4a6252a096ecb0} 
+float Feather\+Can\+Decoder\+::\+Get\+Climber\+Angle\+Degrees (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_climber_data_provider}{IClimber\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_aac2fc93cbd813ff41bbeae01f20dd18a}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetClimberRawAngleDegrees@{GetClimberRawAngleDegrees}}
+\index{GetClimberRawAngleDegrees@{GetClimberRawAngleDegrees}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetClimberRawAngleDegrees()}{GetClimberRawAngleDegrees()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_aac2fc93cbd813ff41bbeae01f20dd18a} 
+float Feather\+Can\+Decoder\+::\+Get\+Climber\+Raw\+Angle\+Degrees (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_climber_data_provider}{IClimber\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_ac8cbbd5047d1a0eb20fe473f55b2e144}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetCoralIntakeAngleDegrees@{GetCoralIntakeAngleDegrees}}
+\index{GetCoralIntakeAngleDegrees@{GetCoralIntakeAngleDegrees}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetCoralIntakeAngleDegrees()}{GetCoralIntakeAngleDegrees()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_ac8cbbd5047d1a0eb20fe473f55b2e144} 
+float Feather\+Can\+Decoder\+::\+Get\+Coral\+Intake\+Angle\+Degrees (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_coral_intake_data_provider}{ICoral\+Intake\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_ac4834d4ca16e2aef9ba0c1b799501386}\index{FeatherCanDecoder@{FeatherCanDecoder}!GetCoralIntakeRawAngleDegrees@{GetCoralIntakeRawAngleDegrees}}
+\index{GetCoralIntakeRawAngleDegrees@{GetCoralIntakeRawAngleDegrees}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{GetCoralIntakeRawAngleDegrees()}{GetCoralIntakeRawAngleDegrees()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_ac4834d4ca16e2aef9ba0c1b799501386} 
+float Feather\+Can\+Decoder\+::\+Get\+Coral\+Intake\+Raw\+Angle\+Degrees (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_coral_intake_data_provider}{ICoral\+Intake\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_aefa3253c6eef6fc1bb097d62e000c670}\index{FeatherCanDecoder@{FeatherCanDecoder}!IsAlgaeCollected@{IsAlgaeCollected}}
+\index{IsAlgaeCollected@{IsAlgaeCollected}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{IsAlgaeCollected()}{IsAlgaeCollected()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_aefa3253c6eef6fc1bb097d62e000c670} 
+bool Feather\+Can\+Decoder\+::\+Is\+Algae\+Collected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_algae_data_provider}{IAlgae\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_a8fb3fb6e8998f5cf6105bb4e57ff5382}\index{FeatherCanDecoder@{FeatherCanDecoder}!IsCoralAngleValid@{IsCoralAngleValid}}
+\index{IsCoralAngleValid@{IsCoralAngleValid}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{IsCoralAngleValid()}{IsCoralAngleValid()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_a8fb3fb6e8998f5cf6105bb4e57ff5382} 
+bool Feather\+Can\+Decoder\+::\+Is\+Coral\+Angle\+Valid (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_coral_intake_data_provider}{ICoral\+Intake\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_a74788bd6490dee4f5b70f866910b322e}\index{FeatherCanDecoder@{FeatherCanDecoder}!IsCoralCollected@{IsCoralCollected}}
+\index{IsCoralCollected@{IsCoralCollected}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{IsCoralCollected()}{IsCoralCollected()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_a74788bd6490dee4f5b70f866910b322e} 
+bool Feather\+Can\+Decoder\+::\+Is\+Coral\+Collected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_coral_intake_data_provider}{ICoral\+Intake\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_a37e8d55ef0c8520832f43b60122acb8e}\index{FeatherCanDecoder@{FeatherCanDecoder}!IsLeftCageHooked@{IsLeftCageHooked}}
+\index{IsLeftCageHooked@{IsLeftCageHooked}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{IsLeftCageHooked()}{IsLeftCageHooked()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_a37e8d55ef0c8520832f43b60122acb8e} 
+bool Feather\+Can\+Decoder\+::\+Is\+Left\+Cage\+Hooked (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_climber_data_provider}{IClimber\+Data\+Provider}}.
+
+\Hypertarget{class_feather_can_decoder_ab6202b706df08135ff5a3a8592a1c35d}\index{FeatherCanDecoder@{FeatherCanDecoder}!IsRightCageHooked@{IsRightCageHooked}}
+\index{IsRightCageHooked@{IsRightCageHooked}!FeatherCanDecoder@{FeatherCanDecoder}}
+\doxysubsubsection{\texorpdfstring{IsRightCageHooked()}{IsRightCageHooked()}}
+{\footnotesize\ttfamily \label{class_feather_can_decoder_ab6202b706df08135ff5a3a8592a1c35d} 
+bool Feather\+Can\+Decoder\+::\+Is\+Right\+Cage\+Hooked (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_climber_data_provider}{IClimber\+Data\+Provider}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Smokey-\/18/src/main/include/io/Feather\+Can\+Decoder.\+h\item 
+Smokey-\/18/src/main/cpp/io/Feather\+Can\+Decoder.\+cpp\end{DoxyCompactItemize}

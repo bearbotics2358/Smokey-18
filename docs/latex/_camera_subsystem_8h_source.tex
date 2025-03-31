@@ -1,0 +1,51 @@
+\doxysection{Camera\+Subsystem.\+h}
+\hypertarget{_camera_subsystem_8h_source}{}\label{_camera_subsystem_8h_source}\index{Smokey-\/18/src/main/include/subsystems/CameraSubsystem.h@{Smokey-\/18/src/main/include/subsystems/CameraSubsystem.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <frc2/command/CommandPtr.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <frc2/command/SubsystemBase.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <frc/smartdashboard/SmartDashboard.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <frc/apriltag/AprilTagFieldLayout.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}photon/PhotonCamera.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}photon/PhotonUtils.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}photon/PhotonPoseEstimator.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}subsystems/CommandSwerveDrivetrain.h"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }CameraSubsystem\ :\ \textcolor{keyword}{public}\ frc2::SubsystemBase\ \{}
+\DoxyCodeLine{00016\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ CameraSubsystem(\mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems::CommandSwerveDrivetrain}}*\ drivetrain);}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{keywordtype}{void}\ updateData();}
+\DoxyCodeLine{00020\ \ \ \textcolor{keywordtype}{bool}\ visibleTargets();}
+\DoxyCodeLine{00021\ \ \ units::meter\_t\ getStrafeTransformation();}
+\DoxyCodeLine{00022\ \ \ units::meter\_t\ getForwardTransformation();}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{double}\ getDistance();}
+\DoxyCodeLine{00024\ \ \ units::degree\_t\ getZRotation();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ std::optional<int>\ GetTargetTagId();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keywordtype}{void}\ Periodic()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \textcolor{comment}{//\ Components\ (e.g.\ motor\ controllers\ and\ sensors)\ should\ generally\ be}}
+\DoxyCodeLine{00032\ \ \ \textcolor{comment}{//\ declared\ private\ and\ exposed\ only\ through\ public\ methods.}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ photon::PhotonPipelineResult\ result;}
+\DoxyCodeLine{00035\ \ \ photon::PhotonTrackedTarget\ bestTarget;}
+\DoxyCodeLine{00036\ \ \ frc::Transform3d\ transformation;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ frc::AprilTagFieldLayout\ aprilTagFieldLayout\ =\ frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025Reefscape);}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\ \ \#define\ CAMERA\_NAME\ "{}limelight3"{}}}
+\DoxyCodeLine{00040\ \ \ photon::PhotonCamera\ limelightCamera\{CAMERA\_NAME\};}
+\DoxyCodeLine{00041\ \ \ std::unique\_ptr<photon::PhotonPoseEstimator>\ m\_poseEstimator;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems::CommandSwerveDrivetrain}}*\ m\_drivetrain;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \};}
+
+\end{DoxyCode}

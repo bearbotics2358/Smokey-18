@@ -1,0 +1,66 @@
+\doxysection{Align\+With\+Reef Class Reference}
+\hypertarget{class_align_with_reef}{}\label{class_align_with_reef}\index{AlignWithReef@{AlignWithReef}}
+Inheritance diagram for Align\+With\+Reef\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_align_with_reef}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_align_with_reef_aff4a5a15b8efb332454c71d6b9a0f78d}{Align\+With\+Reef}} (\mbox{\hyperlink{class_camera_subsystem}{Camera\+Subsystem}} \texorpdfstring{$\ast$}{*}camera, \mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems\+::\+Command\+Swerve\+Drivetrain}} \texorpdfstring{$\ast$}{*}drivetrain, Reef\+Side reef\+Side)
+\item 
+\Hypertarget{class_align_with_reef_ab13c0e69be489c0d9f5b1a2c6d6518a3}\label{class_align_with_reef_ab13c0e69be489c0d9f5b1a2c6d6518a3} 
+void {\bfseries Initialize} () override
+\item 
+\Hypertarget{class_align_with_reef_af74f27716a11636b296191db5f8a87b4}\label{class_align_with_reef_af74f27716a11636b296191db5f8a87b4} 
+void {\bfseries Execute} () override
+\item 
+\Hypertarget{class_align_with_reef_a7cead21b7e387ac208d1496f68cfabc8}\label{class_align_with_reef_a7cead21b7e387ac208d1496f68cfabc8} 
+bool {\bfseries Is\+Finished} () override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+swerve\+::requests\+::\+Robot\+Centric \mbox{\hyperlink{class_align_with_reef_a698827d1d3c015bf78b59f718ee48ac7}{robot\+Oriented}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_align_with_reef_aff4a5a15b8efb332454c71d6b9a0f78d}\index{AlignWithReef@{AlignWithReef}!AlignWithReef@{AlignWithReef}}
+\index{AlignWithReef@{AlignWithReef}!AlignWithReef@{AlignWithReef}}
+\doxysubsubsection{\texorpdfstring{AlignWithReef()}{AlignWithReef()}}
+{\footnotesize\ttfamily \label{class_align_with_reef_aff4a5a15b8efb332454c71d6b9a0f78d} 
+Align\+With\+Reef\+::\+Align\+With\+Reef (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_camera_subsystem}{Camera\+Subsystem}} \texorpdfstring{$\ast$}{*}}]{camera}{, }\item[{\mbox{\hyperlink{classsubsystems_1_1_command_swerve_drivetrain}{subsystems\+::\+Command\+Swerve\+Drivetrain}} \texorpdfstring{$\ast$}{*}}]{drivetrain}{, }\item[{Reef\+Side}]{reef\+Side}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Creates a new Example\+Command.
+
+
+\begin{DoxyParams}{Parameters}
+{\em camera} & The subsystem used by this command. \\
+\hline
+{\em drivetrain} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_align_with_reef_a698827d1d3c015bf78b59f718ee48ac7}\index{AlignWithReef@{AlignWithReef}!robotOriented@{robotOriented}}
+\index{robotOriented@{robotOriented}!AlignWithReef@{AlignWithReef}}
+\doxysubsubsection{\texorpdfstring{robotOriented}{robotOriented}}
+{\footnotesize\ttfamily \label{class_align_with_reef_a698827d1d3c015bf78b59f718ee48ac7} 
+swerve\+::requests\+::\+Robot\+Centric Align\+With\+Reef\+::robot\+Oriented}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ swerve::requests::RobotCentric\{\}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Smokey-\/18/src/main/include/commands/Align\+With\+Reef.\+h\item 
+Smokey-\/18/src/main/cpp/commands/Align\+With\+Reef.\+cpp\end{DoxyCompactItemize}
