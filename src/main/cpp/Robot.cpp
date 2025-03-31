@@ -41,7 +41,7 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
   }
 
-  frc2::CommandScheduler::GetInstance().Schedule(m_container.ResetRobotForTeleOp());
+  // frc2::CommandScheduler::GetInstance().Schedule(m_container.ResetRobotForTeleOp());
 }
 
 void Robot::TeleopPeriodic() {}
