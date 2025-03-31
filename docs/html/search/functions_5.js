@@ -1,6 +1,0 @@
-var searchData=
-[
-  ['telemeterize_0',['Telemeterize',['../class_telemetry.html#a8725e4b0514dc7021d3e46db08d3371f',1,'Telemetry']]],
-  ['telemetry_1',['Telemetry',['../class_telemetry.html#a288dded9cb9535abcb597582307022a9',1,'Telemetry']]],
-  ['tunerswervedrivetrain_2',['TunerSwerveDrivetrain',['../class_tuner_swerve_drivetrain.html#acb3919ca13bc9ce7c4ec8e283f60873a',1,'TunerSwerveDrivetrain::TunerSwerveDrivetrain(swerve::SwerveDrivetrainConstants const &amp;driveTrainConstants, ModuleConstants const &amp;... modules)'],['../class_tuner_swerve_drivetrain.html#aa351625c47db0d2095ac08c12d56639f',1,'TunerSwerveDrivetrain::TunerSwerveDrivetrain(swerve::SwerveDrivetrainConstants const &amp;driveTrainConstants, units::hertz_t odometryUpdateFrequency, ModuleConstants const &amp;... modules)'],['../class_tuner_swerve_drivetrain.html#a708b8a8355195a6b563fe6eece167ec7',1,'TunerSwerveDrivetrain::TunerSwerveDrivetrain(swerve::SwerveDrivetrainConstants const &amp;driveTrainConstants, units::hertz_t odometryUpdateFrequency, std::array&lt; double, 3 &gt; const &amp;odometryStandardDeviation, std::array&lt; double, 3 &gt; const &amp;visionStandardDeviation, ModuleConstants const &amp;... modules)']]]
-];
