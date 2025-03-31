@@ -20,7 +20,7 @@ jobs:
           doxygen ./Doxyfile
 
       - name: Deploy to GitHub Pages
-        uses: VG-Fish/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs/html
           github_token: ${{ secrets.GITHUB_TOKEN }}
