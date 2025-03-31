@@ -62,7 +62,7 @@ bool FeatherCanDecoder::IsCoralCollected() {
 }
 
 float FeatherCanDecoder::GetAlgaeAngleDegrees() {
-    return -(m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees);
+    return m_algaeAngleDegrees - kAlgaeAngleOffsetDegrees;
 }
 
 float FeatherCanDecoder::GetAlgaeRawAngleDegrees() {
@@ -119,7 +119,7 @@ void FeatherCanDecoder::UnpackCoralCANData() {
 void FeatherCanDecoder::UnpackAlgaeCANData() {
     frc::CANData data;
 
-    bool isAlgaeDataValid = m_algaeCAN.ReadPacketNew(kAlgaeAPIId, &data);
+    bool isAlgaeDataValid = m_algaeCAN.ReadPacketTimeout(kAlgaeAPIId, kCANReadTimeoutMs, &data);
     frc::SmartDashboard::PutBoolean("is algae data valid", isAlgaeDataValid);
 
     if (isAlgaeDataValid) {
@@ -136,6 +136,8 @@ void FeatherCanDecoder::UnpackAlgaeCANData() {
             m_algaeCollected = proximity > kAlgaeProximityThreshold;
         }
     }
+
+    m_algaeAngleValid = isAlgaeDataValid;
 }
 
 void FeatherCanDecoder::UnpackClimberCANData() {
