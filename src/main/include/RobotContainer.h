@@ -71,6 +71,8 @@ public:
     frc2::Command *GetAutonomousCommand();
 
     frc2::CommandPtr AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble);
+
+    frc2::CommandPtr ResetRobotForTeleOp();
 private:
     void ConfigureBindings();
     void AddPathPlannerCommands();

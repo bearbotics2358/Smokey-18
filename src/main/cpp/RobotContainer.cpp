@@ -262,6 +262,10 @@ void RobotContainer::ConfigureBindings() {
         );
 }
 
+frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
+    return m_scoringSuperstructure.CancelScore();
+}
+
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
