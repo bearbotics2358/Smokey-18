@@ -270,6 +270,12 @@ frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
     return m_scoringSuperstructure.CancelScore();
 }
 
+void RobotContainer::ResetRobotForAutonomous() {
+    m_drivetrain.ApplyRequest([this]() -> auto&& {
+        return point.WithModuleDirection(frc::Rotation2d(0_deg));
+    });
+}
+
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
