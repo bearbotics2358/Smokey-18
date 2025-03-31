@@ -72,10 +72,13 @@ public:
 
     frc2::CommandPtr AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble);
 
+    void ResetRobotForAutonomous();
     frc2::CommandPtr ResetRobotForTeleOp();
 private:
     void ConfigureBindings();
     void AddPathPlannerCommands();
     
     ReefSide m_reefSide = ReefSide::Left;
+
+    swerve::requests::PointWheelsAt point{};
 };
