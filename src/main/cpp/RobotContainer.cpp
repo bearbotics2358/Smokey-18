@@ -269,7 +269,7 @@ frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
 void RobotContainer::ResetRobotForAutonomous() {
     if (m_cameraSubsystem.visibleTargets()) {
         m_drivetrain.ApplyRequest([this]() -> auto&& {
-            return point.WithModuleDirection(m_cameraSubsystem.GetRotation2d());
+            return point.WithModuleDirection(frc::Rotation2d(0_deg));
         });
     }
 }
