@@ -22,6 +22,14 @@ m_climberDataProvider(dataProvider)
     m_climberMotor.GetPosition().WaitForUpdate(20_ms);
 
     m_climberPID.EnableContinuousInput(-180.0_deg, 180.0_deg);
+
+    IsLeftCageHooked = frc2::Trigger([this] {
+        return m_climberDataProvider->IsLeftCageHooked();
+    });
+
+    IsRightCageHooked = frc2::Trigger([this] {
+        return m_climberDataProvider->IsRightCageHooked();
+    });
 }
 
 void Climber::Periodic() {
