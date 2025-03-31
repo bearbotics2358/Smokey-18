@@ -29,7 +29,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr PrepareAndScoreIntoReef(ScoringSelector selectedScore);
 
         frc2::CommandPtr ScoreIntoReef();
-        frc2::CommandPtr ScoreIntoProcessor();
+        frc2::CommandPtr RemoveAlgaeL3();
 
         frc2::CommandPtr ToCollectPosition();
         frc2::CommandPtr ToStowPosition();
@@ -41,6 +41,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr CancelScore();
 
         frc2::CommandPtr WaitTillElevatorAtHeight();
+        
     private:
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;
@@ -65,6 +66,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
             {kElevatorL1Position, std::make_tuple(kCoralL1, kAlgaeStowAngle)},
             {kElevatorL2Position, std::make_tuple(kCoralL2, kAlgaeStowAngle)},
             {kElevatorL3Position, std::make_tuple(kCoralL3, kAlgaeStowAngle)},
+            {kElevatorAlgaeOnlyL3Position, std::make_tuple(kCoralStow, kAlgaeExtendedAngle)},
             {kElevatorL4Position, std::make_tuple(kCoralL4, kAlgaeStowAngle)},
         };
 

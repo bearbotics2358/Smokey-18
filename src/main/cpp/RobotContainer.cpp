@@ -84,7 +84,11 @@ void RobotContainer::ConfigureBindings() {
         AddControllerRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0)
     );
 
-    m_driverJoystick.X().WhileTrue(m_scoringSuperstructure.ScoreIntoProcessor());
+    m_driverJoystick.X().OnTrue(
+        m_scoringSuperstructure.RemoveAlgaeL3()
+    ).OnFalse(
+        m_scoringSuperstructure.ToStowPosition()
+    );
 
     // **** Xbox Trigger & Bumper Buttons **** //
     m_driverJoystick.RightTrigger()
@@ -262,6 +266,16 @@ void RobotContainer::ConfigureBindings() {
         );
 }
 
+frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
+    return m_scoringSuperstructure.CancelScore();
+}
+
+void RobotContainer::ResetRobotForAutonomous() {
+    m_drivetrain.ApplyRequest([this]() -> auto&& {
+        return point.WithModuleDirection(frc::Rotation2d(0_deg));
+    });
+}
+
 frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     return m_autoChooser.GetSelected();
@@ -297,10 +311,6 @@ void RobotContainer::AddPathPlannerCommands() {
     NamedCommands::registerCommand(
         "ScoreL3AndRemoveAlgae",
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
-    );
-    NamedCommands::registerCommand(
-        "ScoreAlgae",
-        std::move(m_scoringSuperstructure.ScoreIntoProcessor())
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",

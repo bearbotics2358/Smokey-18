@@ -7,7 +7,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 DriveBackAfterScore::DriveBackAfterScore(subsystems::CommandSwerveDrivetrain* drivetrain, units::inch_t distance)
-    : m_drivetrain{drivetrain}, 
+    : m_drivetrain{drivetrain},
     m_backwardDistance{distance} {
     AddRequirements(m_drivetrain);
 }
