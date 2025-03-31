@@ -24,4 +24,4 @@ jobs:
         with:
           folder: docs/html
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
+          branch: main
