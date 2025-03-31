@@ -26,15 +26,18 @@ public:
 private:
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
-    swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
-        .WithVelocityY(0_mps)
-        .WithRotationalRate(0_rad_per_s);
-
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
     static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
+
+    // Apply a slight shift to the left while driving back to pull out an algae
+    static constexpr units::meters_per_second_t kLeftShift = 0.3_mps;
+
+    swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
+        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+        .WithVelocityY(kLeftShift)
+        .WithRotationalRate(0_rad_per_s);
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 

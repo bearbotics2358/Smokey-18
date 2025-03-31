@@ -15,8 +15,7 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
-constexpr int kAlgaeMotorLeft = 49;
-constexpr int kAlgaeMotorRight = 50;
+constexpr int kAlgaeMotor = 49;
 constexpr int kAlgaePivot = 35;
 
 constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
@@ -40,14 +39,13 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
     ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
 
-    rev::spark::SparkMax m_algaeLeftMotor;
-    // rev::spark::SparkMax m_algaeRightMotor;
+    rev::spark::SparkMax m_algaeMotor;
 
     static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
-    static constexpr double kP = 12;
+    static constexpr double kP = 15.0;
     static constexpr double kI = 0.0;
-    static constexpr double kD = 1.0;
+    static constexpr double kD = 0.0;
 
     static constexpr units::volt_t kS = 0.25_V;
     static constexpr units::volt_t kG = 0.0_V;
