@@ -31,13 +31,10 @@ private:
     static constexpr double kD = 0.0;
     static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
 
-    // Apply a slight shift to the left while driving back to pull out an algae
-    static constexpr units::degrees_per_second_t kLeftRotate = 3_deg_per_s;
-
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
         .WithVelocityY(0_mps)
-        .WithRotationalRate(kLeftRotate);
+        .WithRotationalRate(0_deg_per_s);
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 

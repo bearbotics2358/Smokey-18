@@ -52,9 +52,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         void SetMotorVoltage();
 
-        frc2::Trigger IsHeightAboveThreshold = frc2::Trigger([this] {
-            return GetElevatorHeightAboveThreshold();
-        });
+        frc2::Trigger IsHeightAboveThreshold;
 
         frc2::CommandPtr WaitUntilElevatorIsCloseEnoughToMove();
     private:

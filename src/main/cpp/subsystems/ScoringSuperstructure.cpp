@@ -54,7 +54,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {
         std::pair{L1, ScoreReefL1()},
         std::pair{L2, ScoreReefL2()},
         std::pair{L3AlgaeAndCoral, ScoreReefL3(true)},
-        std::pair{L3AlgaeOnly, ScoreReefL3(true)},
+        std::pair{L3AlgaeOnly, RemoveAlgaeL3()},
         std::pair{L4, ScoreReefL4()});
 }
 
@@ -106,8 +106,9 @@ frc2::CommandPtr ScoringSuperstructure::RemoveAlgaeL3() {
         frc2::cmd::Sequence(
             m_algae.SetGoalAngle(kAlgaeExtendedAngle),
             m_algae.Dispense()
-        )
-    );
+        ),
+        DriveForwardToScore(&m_drivetrain, 9_in).WithTimeout(2.0_s)
+    ).AndThen(DriveBackAfterScore(&m_drivetrain).WithTimeout(2.0_s));
 }
 
 frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
