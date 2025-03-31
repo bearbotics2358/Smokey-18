@@ -85,11 +85,7 @@ void RobotContainer::ConfigureBindings() {
     );
 
     m_driverJoystick.X().OnTrue(
-        // @todo Move these controls to the ScoringSuperstructure
-        frc2::cmd::Parallel(
-            m_elevatorSubsystem.GoToHeight(kElevatorAlgaeOnlyL3Position),
-            m_algaeSubsystem.SetGoalAngle(kAlgaeExtendedAngle).AndThen(m_algaeSubsystem.Dispense())
-        )
+        m_scoringSuperstructure.RemoveAlgaeL3()
     ).OnFalse(
         m_scoringSuperstructure.ToStowPosition()
     );
@@ -309,10 +305,6 @@ void RobotContainer::AddPathPlannerCommands() {
     NamedCommands::registerCommand(
         "ScoreL3AndRemoveAlgae",
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
-    );
-    NamedCommands::registerCommand(
-        "ScoreAlgae",
-        std::move(m_scoringSuperstructure.ScoreIntoProcessor())
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
