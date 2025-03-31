@@ -33,8 +33,6 @@ private:
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage); // Use open-loop control for drive motors
     swerve::requests::SwerveDriveBrake brake{};
     swerve::requests::PointWheelsAt point{};
-    swerve::requests::RobotCentric forwardStraight = swerve::requests::RobotCentric{}
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
     swerve::requests::RobotCentric strafe = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
         .WithVelocityX(0_mps);
