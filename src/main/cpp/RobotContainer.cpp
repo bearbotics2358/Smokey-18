@@ -179,6 +179,13 @@ void RobotContainer::ConfigureBindings() {
         })
     ));
 
+    m_operatorJoystick.RightBumper().OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.ToCollectPosition(),
+        frc2::cmd::RunOnce([this] {
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
+        })
+    ));
+
     // **** Xbox Dpad Buttons **** //
     m_operatorJoystick.POVDown().OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
