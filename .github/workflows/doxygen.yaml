@@ -10,18 +10,23 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Generate Doxygen Docs
+      - name: Install Doxygen and Graphviz
         run: |
-          sudo apt-get update && sudo apt-get install -y doxygen graphviz
-          doxygen ./Doxyfile
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Generate Doxygen Documentation
+        run: doxygen ./Doxyfile
+
+      - name: Upload Artifact for Pages Deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./html
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: html
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
+        uses: actions/deploy-pages@v4
