@@ -98,6 +98,19 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool removeAlgae) {
     );
 }
 
+frc2::CommandPtr ScoringSuperstructure::RemoveAlgaeL3() {
+    auto [coralAngle, algaeAngle] = m_elevatorMap[kElevatorAlgaeOnlyL3Position];
+    return frc2::cmd::Parallel(
+        m_elevator.GoToHeight(kElevatorAlgaeOnlyL3Position),
+        m_coral.GoToAngle(coralAngle),
+
+        frc2::cmd::Sequence(
+        m_algae.SetGoalAngle(kAlgaeExtendedAngle),
+        m_algae.Dispense()
+        )
+    );
+}
+
 frc2::CommandPtr ScoringSuperstructure::ScoreReefL4() {
     auto [coralAngle, algaeAngle] = m_elevatorMap[kElevatorL4Position];
 

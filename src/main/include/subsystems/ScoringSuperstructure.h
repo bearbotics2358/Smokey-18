@@ -65,12 +65,14 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
             {kElevatorL1Position, std::make_tuple(kCoralL1, kAlgaeStowAngle)},
             {kElevatorL2Position, std::make_tuple(kCoralL2, kAlgaeStowAngle)},
             {kElevatorL3Position, std::make_tuple(kCoralL3, kAlgaeStowAngle)},
+            {kElevatorAlgaeOnlyL3Position, std::make_tuple(kCoralStow, kAlgaeExtendedAngle)},
             {kElevatorL4Position, std::make_tuple(kCoralL4, kAlgaeStowAngle)},
         };
 
         frc2::CommandPtr ScoreReefL1();
         frc2::CommandPtr ScoreReefL2();
         frc2::CommandPtr ScoreReefL3(bool algaeOnly);
+        frc2::CommandPtr RemoveAlgaeL3();
         frc2::CommandPtr ScoreReefL4();
 
         frc2::CommandPtr DispenseCoralAndMoveBack();
