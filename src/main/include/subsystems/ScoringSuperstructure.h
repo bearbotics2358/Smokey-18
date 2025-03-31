@@ -41,6 +41,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr CancelScore();
 
         frc2::CommandPtr WaitTillElevatorAtHeight();
+        
+        frc2::CommandPtr RemoveAlgaeL3();
     private:
         ElevatorSubsystem& m_elevator;
         CoralSubsystem& m_coral;
@@ -72,7 +74,6 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr ScoreReefL1();
         frc2::CommandPtr ScoreReefL2();
         frc2::CommandPtr ScoreReefL3(bool algaeOnly);
-        frc2::CommandPtr RemoveAlgaeL3();
         frc2::CommandPtr ScoreReefL4();
 
         frc2::CommandPtr DispenseCoralAndMoveBack();
