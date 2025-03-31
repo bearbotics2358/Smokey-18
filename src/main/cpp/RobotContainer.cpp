@@ -307,10 +307,6 @@ void RobotContainer::AddPathPlannerCommands() {
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
     );
     NamedCommands::registerCommand(
-        "ScoreAlgae",
-        std::move(m_scoringSuperstructure.ScoreIntoProcessor())
-    );
-    NamedCommands::registerCommand(
         "AlignWithReefLeft",
         std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(4_s))
     );
