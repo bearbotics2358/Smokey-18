@@ -1,0 +1,27 @@
+name: Deploy Doxygen Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Doxygen Docs
+        run: |
+          sudo apt-get update && sudo apt-get install -y doxygen graphviz
+          doxygen ./Doxyfile
+
+      - name: Deploy to GitHub Pages
+        uses: VG-Fish/github-pages-deploy-action@v4
+        with:
+          folder: docs/html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
