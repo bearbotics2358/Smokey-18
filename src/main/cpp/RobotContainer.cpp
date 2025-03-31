@@ -141,39 +141,41 @@ void RobotContainer::ConfigureBindings() {
     //         |_|
 
     // **** Xbox A, B, X, & Y Button **** //
-    m_operatorJoystick.Y().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L4),
+    m_operatorJoystick.Y().OnTrue(
+        frc2::cmd::Parallel(
+            m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L4),
+            frc2::cmd::RunOnce([this] {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
+            })
+        ));
+
+    m_operatorJoystick.X().OnTrue(
+        frc2::cmd::Parallel(
+            m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral),
+            frc2::cmd::RunOnce([this] {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+            })
+        ));
+                                                                                                                                                                            
+    m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
         })
     ));
 
-    m_operatorJoystick.X().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
-        })
-    ));
-                                                                                                                                                                            
-    m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
+    m_operatorJoystick.A().OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L2),
         frc2::cmd::RunOnce([this] {
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
         })
     ));
 
-    m_operatorJoystick.A().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.ToCollectPosition(),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
-        })
-    ));
-
     // **** Xbox Trigger & Bumper Buttons **** //
     m_operatorJoystick.RightTrigger().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
+        m_scoringSuperstructure.ToCollectPosition(),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
         })
     ));
 
@@ -210,6 +212,13 @@ void RobotContainer::ConfigureBindings() {
             m_reefSide = ReefSide::Left;
         })
     );
+
+    m_operatorJoystick.POVUp().OnTrue(frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+        }),
+        m_climberSubsystem.Extend()
+    ));
 
     // m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
     //     m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
