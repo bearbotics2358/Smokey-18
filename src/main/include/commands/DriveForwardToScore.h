@@ -34,7 +34,7 @@ private:
     static constexpr double kP = 0.9;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
-    static constexpr units::meters_per_second_t kMaxVelocity = 1.25_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 

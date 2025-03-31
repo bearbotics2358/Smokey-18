@@ -82,7 +82,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         static constexpr double kI = 0.5;
         static constexpr double kD = 2.0;
         static constexpr units::volt_t kS = 0.325_V;
-        static constexpr units::volt_t kG = 0.25_V;
+        static constexpr units::volt_t kG = 0.35_V;
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {

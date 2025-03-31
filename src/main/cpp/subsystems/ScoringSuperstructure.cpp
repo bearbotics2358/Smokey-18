@@ -53,7 +53,7 @@ frc2::CommandPtr ScoringSuperstructure::ScoreIntoReef() {
         },
         std::pair{L1, ScoreReefL1()},
         std::pair{L2, ScoreReefL2()},
-        std::pair{L3AlgaeAndCoral, ScoreReefL3(false)},
+        std::pair{L3AlgaeAndCoral, ScoreReefL3(true)},
         std::pair{L3AlgaeOnly, ScoreReefL3(true)},
         std::pair{L4, ScoreReefL4()});
 }
@@ -78,22 +78,21 @@ frc2::CommandPtr ScoringSuperstructure::ScoreReefL2() {
     );
 }
 
-frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool algaeOnly) {
+frc2::CommandPtr ScoringSuperstructure::ScoreReefL3(bool removeAlgae) {
     auto [coralAngle, algaeAngle] = m_elevatorMap[kElevatorL3Position];
 
     return frc2::cmd::Parallel(
         m_elevator.GoToHeight(kElevatorL3Position),
         m_coral.GoToAngle(coralAngle),
 
-        // @note Disabling all algae for Friday
-        // frc2::cmd::Either(
-        //     frc2::cmd::Sequence(
-        //         m_algae.SetGoalAngle(kAlgaeExtendedAngle),
-        //         m_algae.Intake()
-        //     ),
-        //     m_algae.SetGoalAngle(algaeAngle),
-        //     [this, algaeOnly] { return algaeOnly; }
-        // ),
+        frc2::cmd::Either(
+            frc2::cmd::Sequence(
+                m_algae.SetGoalAngle(kAlgaeExtendedAngle),
+                m_algae.Dispense()
+            ),
+            m_algae.SetGoalAngle(kAlgaeStowAngle),
+            [this, removeAlgae] { return removeAlgae; }
+        ),
 
         DispenseCoralAndMoveBack()
     );
