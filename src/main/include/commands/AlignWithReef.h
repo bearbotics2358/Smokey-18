@@ -6,6 +6,10 @@
  * @file AlignWithReef.h
  */
 
+/**
+ * @file AlignWithReef.h
+ */
+
 #pragma once
 
 #include <frc2/command/Command.h>
@@ -27,7 +31,7 @@
 enum ReefSide {
     Left,
     Right
-};
+}; /**< An enum representing the two sides of the reef, left or right. */
 
 /**
  * @brief A class to align the robot to the best april tag found by the camera.
@@ -37,9 +41,10 @@ class AlignWithReef
 public:
     /**
      * @brief The constructor that takes in a pointer to the camera and drive subsystems and the side of the reef to align to.
-     * @param camera The camera subsystem.
-     * @param drivetrain The drivetrain.
-     * @param reefSide The side of the reef to align to.
+     *
+     * @param[in] camera The camera subsystem.
+     * @param[in] drivetrain The drivetrain.
+     * @param[in] reefSide The side of the reef to align to.
      */
     explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, ReefSide reefSide);
 
