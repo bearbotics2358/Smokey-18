@@ -2,10 +2,6 @@
  * @file DriveBackAfterScore.h
  */
 
-/**
- * @file DriveBackAfterScore.h
- */
-
 #pragma once
 
 #include <frc2/command/Command.h>
@@ -21,9 +17,6 @@
 class DriveBackAfterScore
     : public frc2::CommandHelper<frc2::Command, DriveBackAfterScore> {
 public:
-    /**
-     * @brief The default backward distance is 6 inches.
-     */
     /**
      * @brief The default backward distance is 6 inches.
      */
