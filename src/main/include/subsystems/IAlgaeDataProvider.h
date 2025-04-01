@@ -1,13 +1,26 @@
+/**
+ * @file IAlgaeDataProvider.h
+ */
+
 #pragma once
 
+/**
+ * @brief Contains all the functions necessary for the algae arm.
+ */
 class IAlgaeDataProvider {
 public:
-    // Provide the angle of the algae intake/delivery mechanism in degrees
+    /**
+     * @brief Provide the angle of the algae intake/delivery mechanism in degrees
+     */
     virtual float GetAlgaeAngleDegrees() = 0;
 
-    // Provide the raw angle of the algae mechanism. Does not include any offsets.
+    /** 
+     * @brief Provide the raw angle of the algae mechanism. Does not include any offsets.
+     */ 
     virtual float GetAlgaeRawAngleDegrees() = 0;
 
-    // Return a simple boolean to indicate whether a piece of algae has been collected
+    /**
+     * @brief Return a simple boolean to indicate whether a piece of algae has been collected
+     */
     virtual bool IsAlgaeCollected() = 0;
 };
