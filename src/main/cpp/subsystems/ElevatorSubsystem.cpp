@@ -36,9 +36,7 @@ m_elevatorMotor2(kElevatorMotor2Id)
         // The REV magnetic limit switch is Active-low so a false from the Get() call means the
         // elevator is at the bottom
         return !m_elevatorLimitSwitch.Get();
-    });
-
-    IsMagneticLimitSwitchActive
+    })
         .OnTrue(
             frc2::cmd::RunOnce([this] {
                 frc::SmartDashboard::PutBoolean("Elevator Limit Switch", true);

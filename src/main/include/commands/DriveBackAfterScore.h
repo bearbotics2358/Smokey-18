@@ -29,7 +29,7 @@ private:
     static constexpr double kP = 1.0;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
-    static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
