@@ -75,6 +75,10 @@ bool FeatherCanDecoder::IsAlgaeCollected() {
     return false;
 }
 
+bool FeatherCanDecoder::IsAlgaeAngleValid() {
+    return m_algaeAngleValid;
+}
+
 float FeatherCanDecoder::GetClimberAngleDegrees() {
     return m_climberAngleDegrees - kClimberAngleOffsetDegrees;
 }
