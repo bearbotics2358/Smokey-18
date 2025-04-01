@@ -6,10 +6,6 @@
  * @file AlignWithReef.h
  */
 
-/**
- * @file AlignWithReef.h
- */
-
 #pragma once
 
 #include <frc2/command/Command.h>
