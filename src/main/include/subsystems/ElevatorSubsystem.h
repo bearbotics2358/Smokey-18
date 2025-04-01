@@ -65,11 +65,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
         frc::DigitalInput m_elevatorLimitSwitch{kLimitSwitchId};
 
-        frc2::Trigger IsMagneticLimitSwitchActive = frc2::Trigger([this] {
-            // The REV magnetic limit switch is Active-low so a false from the Get() call means the
-            // elevator is at the bottom
-            return !m_elevatorLimitSwitch.Get();
-        });
+        frc2::Trigger IsMagneticLimitSwitchActive;
 
         static constexpr units::inch_t kSetpointTolerance = 0.5_in;
         static constexpr units::inch_t kCloseEnoughToMove = 4_in;
