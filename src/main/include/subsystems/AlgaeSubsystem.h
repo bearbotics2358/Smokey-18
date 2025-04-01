@@ -44,7 +44,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
     double m_relEncoderOffsetDegrees = 0.0;
     void GoToAngle();
 
-    ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
+    rev::spark::SparkMax m_algaePivotMotor;
     rev::spark::SparkRelativeEncoder m_algaePivotEncoder;
 
     rev::spark::SparkMax m_algaeMotor;

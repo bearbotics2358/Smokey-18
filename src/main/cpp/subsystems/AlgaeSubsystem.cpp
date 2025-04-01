@@ -6,11 +6,11 @@
 #include <frc2/command/Commands.h>
 
 AlgaeSubsystem::AlgaeSubsystem(IAlgaeDataProvider* dataProvider):
-m_algaePivotMotor(kAlgaePivot),
+m_algaePivotMotor(kAlgaePivot, rev::spark::SparkMax::MotorType::kBrushless),
 m_algaeMotor{kAlgaeMotor, rev::spark::SparkLowLevel::MotorType::kBrushless},
 m_algaeDataProvider(dataProvider),
 //todo switch m_algaeMotor to m_algaePivotMotor
-m_algaePivotEncoder(m_algaeMotor.GetEncoder())
+m_algaePivotEncoder(m_algaePivotMotor.GetEncoder())
 {
 }
 
