@@ -37,9 +37,9 @@ class AlignWithReef
 public:
     /**
      * @brief The constructor that takes in a pointer to the camera and drive subsystems and the side of the reef to align to.
-     * @param[in] camera The camera subsystem.
-     * @param[in] drivetrain The drivetrain.
-     * @param[in] reefSide The side of the reef to align to.
+     * @param camera The camera subsystem.
+     * @param drivetrain The drivetrain.
+     * @param reefSide The side of the reef to align to.
      */
     explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, ReefSide reefSide);
 
