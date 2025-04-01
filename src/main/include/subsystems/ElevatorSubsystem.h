@@ -47,7 +47,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc2::CommandPtr GoToHeight(units::inch_t height);
 
         const units::inch_t WHEEL_RADIUS = 1.325_in;
-        // 9 to 1
         const double GEAR_RATIO = 9.0;
 
         void SetMotorVoltage();
@@ -80,7 +79,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
-            kMaxVelocity, kMaxAcceleration};
+            kMaxVelocity, kMaxAcceleration
+        };
 
         frc::ProfiledPIDController<units::meters> m_elevatorPID{
             kP, kI, kD, m_constraints
