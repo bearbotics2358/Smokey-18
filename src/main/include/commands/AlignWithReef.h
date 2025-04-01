@@ -20,10 +20,14 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
+/**
+ * @var ReefSide
+ * @brief An enum representing the two sides of the reef, left or right.
+ */
 enum ReefSide {
     Left,
     Right
-}; /**< An enum representing the two sides of the reef, left or right. */
+};
 
 /**
  * @brief A class to align the robot to the best april tag found by the camera.
