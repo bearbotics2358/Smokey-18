@@ -71,6 +71,10 @@ units::meter_t CameraSubsystem::getForwardTransformation() {
     return transformation.X();
 }
 
+frc::Rotation2d CameraSubsystem::GetRotation2d() {
+    return transformation.Rotation().ToRotation2d();
+}
+
 void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
 

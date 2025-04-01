@@ -22,6 +22,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   units::meter_t getForwardTransformation();
   double getDistance();
   units::degree_t getZRotation();
+  frc::Rotation2d GetRotation2d();
 
   std::optional<int> GetTargetTagId();
 
