@@ -15,7 +15,8 @@
  * @brief This class is used for parsing sensor values.
  * @details This class parses CAN messages to extract sensor values (proximity sensors, etc.).
  * The CAN messages are created through custom hardware that integrates multiple sensors 
- * and releases their values as CAN messages.
+ * and releases their values as CAN messages. A timeout of 100 milliseconds exist,
+ * which is used for the Is...Valid() functions.
  */
 class FeatherCanDecoder:
 public ICoralIntakeDataProvider,
