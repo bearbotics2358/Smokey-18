@@ -1,3 +1,6 @@
+/**
+ * @file AlgaeSubsystem.h
+ */
 
 #pragma once
 
@@ -15,7 +18,14 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
+/**
+ * @brief The CAN ID for the intake motor.
+ */
 constexpr int kAlgaeMotor = 49;
+
+/**
+ * @brief The CAN ID for the pivot motor.
+ */
 constexpr int kAlgaePivot = 35;
 
 constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
@@ -26,11 +36,21 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);
   void Periodic();
 
+  /**
+   * @brief Runs the algae intake motor **counter-clockwise.**
+   */
   frc2::CommandPtr Intake();
+
+  /**
+   * @brief Runs the algae intake motor **clockwise.**
+   */
   frc2::CommandPtr Dispense();
 
   bool IsAlgaeStored();
 
+  /**
+   * @brief Sets the goal angle the algae arm should reach.
+   */
   frc2::CommandPtr SetGoalAngle(units::degree_t angle);
   units::degree_t CurrentAngle();
 
