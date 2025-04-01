@@ -26,11 +26,12 @@ void AlgaeSubsystem::Periodic() {
             m_relEncoderOffsetDegrees = m_algaeDataProvider->GetAlgaeRawAngleDegrees();
         }
 
-        double pid_calculation = m_algaePID.Calculate(m_algaeDataProvider->GetAlgaeAngleDegrees(), m_setpointAngle);
+        double pid_calculation = m_algaePID.Calculate(units::turn_t{m_algaeDataProvider->GetAlgaeAngleDegrees() / 360.0}, units::turn_t{m_setpointAngle / 360.0});
         frc::SmartDashboard::PutNumber("Algae PID", pid_calculation);
         SetPivotSpeed(pid_calculation);
     } else {
-        double fallback_pid_calculation = m_algaePID.Calculate(GetAngleDegreesFallback().value(), m_setpointAngle);
+        double fallback_pid_calculation = m_algaePID.Calculate(units::turn_t{GetAngleDegreesFallback().value() / 360.0}, units::turn_t{m_setpointAngle / 360.0});
+
         frc::SmartDashboard::PutNumber("Algae Neo 550 PID", fallback_pid_calculation);
         // @todo Enable this after validating that the calculated angles are correct
         // SetPivotSpeed(fallback_pid_calculation);

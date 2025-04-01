@@ -18,7 +18,7 @@
 constexpr int kAlgaeMotor = 49;
 constexpr int kAlgaePivot = 35;
 
-constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
+constexpr units::degree_t kAlgaeStowAngle = 150_deg;
 constexpr units::degree_t kAlgaeExtendedAngle = 90.0_deg;
 
 class AlgaeSubsystem : public frc2::SubsystemBase {
