@@ -31,6 +31,9 @@ constexpr int kAlgaePivot = 35;
 constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
 constexpr units::degree_t kAlgaeExtendedAngle = 90.0_deg;
 
+/**
+ * @brief This subsystem deals with removing algae from the reef.
+ */
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);

@@ -1,3 +1,7 @@
+/**
+ * @file CameraSubsystem.h
+ */
+
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
@@ -12,6 +16,9 @@
 
 #include "subsystems/CommandSwerveDrivetrain.h"
 
+/**
+ * @brief This subsystem uses PhotonVision and a Limelight 3 to recognize AprilTags.
+ */
 class CameraSubsystem : public frc2::SubsystemBase {
  public:
   CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain);
