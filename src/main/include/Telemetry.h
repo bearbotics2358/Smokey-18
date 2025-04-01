@@ -71,6 +71,8 @@ public:
         ctre::phoenix6::SignalLogger::Start();
     }
 
-    /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
+    /** 
+     * @brief Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger.
+     */
     void Telemeterize(subsystems::CommandSwerveDrivetrain::SwerveDriveState const &state);
 };
