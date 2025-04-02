@@ -44,7 +44,9 @@ void Robot::TeleopInit() {
   frc2::CommandScheduler::GetInstance().Schedule(m_container.ResetRobotForTeleOp());
 }
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  m_container.ConfigureBindings();
+}
 
 void Robot::TeleopExit() {}
 
@@ -52,7 +54,9 @@ void Robot::TestInit() {
   frc2::CommandScheduler::GetInstance().CancelAll();
 }
 
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {
+  m_container.ConfigureTestModeBindings();
+}
 
 void Robot::TestExit() {}
 

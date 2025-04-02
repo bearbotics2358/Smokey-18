@@ -20,6 +20,7 @@
 #include <frc2/command/RunCommand.h>
 #include "subsystems/AlgaeSubsystem.h"
 #include "commands/AlignWithReef.h"
+#include <frc2/command/button/Trigger.h>
 
 class RobotContainer {
 private:
@@ -74,10 +75,10 @@ public:
     frc2::CommandPtr ResetRobotForTeleOp();
 
     void ConfigureBindings();
+    void ConfigureTestModeBindings();
     
 private:
     void AddPathPlannerCommands();
-    void ConfigureTestModeBindings();
     
     ReefSide m_reefSide = ReefSide::Left;
 };

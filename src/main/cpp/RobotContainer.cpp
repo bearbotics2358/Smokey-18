@@ -31,8 +31,6 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
 
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
-
-    ConfigureBindings();
 }
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble) {
