@@ -43,6 +43,9 @@ constexpr units::degree_t kClimberStowAngle = 15.0_deg;
 
 const double kClimberGearRatio = 1.0;
 
+/**
+ * @brief This subsystem controls the climber mechanism.
+ */
 class Climber : public frc2::SubsystemBase {
 public:
     Climber(IClimberDataProvider* dataProvider);
