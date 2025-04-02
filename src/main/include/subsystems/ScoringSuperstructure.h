@@ -1,3 +1,7 @@
+/**
+ * @file ScoringSuperstructure.h
+ */
+
 #pragma once
 
 #include <frc2/command/Commands.h>
@@ -10,10 +14,22 @@
 #include <map>
 #include <tuple>
 
+/**
+ * @note This namespace solely contains the ScoringSuperstructure class.
+ */
 namespace subsystems {
 
+/**
+ * @brief This subsystem aggregates multiple subsystems to easily create command compositions
+ * that perform robot actions like scoring a coral.
+ * @details This subsystem includes the @ref Elevator, 
+ * @ref Coral, @ref Algae, and @ref CommandSwerveDrivetrain subsystems.
+ */
 class ScoringSuperstructure : public frc2::SubsystemBase {
     public:
+        /**
+         * @brief This enum details all the possible reef scoring states.
+         */
         enum ScoringSelector {
             L1,
             L2,
@@ -25,21 +41,68 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         ScoringSuperstructure(ElevatorSubsystem& elevator, CoralSubsystem& coralMech, AlgaeSubsystem& algaeMech, 
                               CommandSwerveDrivetrain& drivetrain);
 
+        /**
+         * @brief This function is intended to be called by the operator controller to 
+         * save the desired scoring setpoint, which is **not** immediately executed.
+         * @note Only the driver controller is allowed to execute the scoring sequence,
+         * and the driver calls the saved scoring sequence.
+         */
         frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
+
+        /**
+         * @brief This function saves and immediately executes the scoring sequence.
+         * @attention This function is only meant to be called during **autonomous**. 
+         */
         frc2::CommandPtr PrepareAndScoreIntoReef(ScoringSelector selectedScore);
 
+        /**
+         * @brief This function executes the saved scoring sequence and automatically
+         * selects the appropriate function.
+         */
         frc2::CommandPtr ScoreIntoReef();
-        frc2::CommandPtr RemoveAlgaeL3();
 
+        /**
+         * @brief This function will be called when
+         * @ref ScoringSelector::L3AlgaeOnly is inputted into
+         * @ref ScoringSuperstructure::PrepareScoring.
+         */
+        frc2::CommandPtr RemoveAlgaeL3();
+        
+        /**
+         * @brief This function moves the robot to its collect coral position.
+         */
         frc2::CommandPtr ToCollectPosition();
+
+        /**
+         * @brief This function moves the robot to its stow position.
+         */
         frc2::CommandPtr ToStowPosition();
 
+        /**
+         * @deprecated This function is unused and will be removed.
+         */
         frc2::CommandPtr DriveToReefForScoring();
+
+        /**
+         * @deprecated This function is unused and will be removed.
+         */
         frc2::CommandPtr BackUpAfterScoring();
+
+        /**
+         * @brief This function stops the swerves.
+         */
         frc2::CommandPtr StopDriving();
 
+        /**
+         * @brief This function will be called when the driver wants to stop the 
+         * current scoring sequence.
+         */
         frc2::CommandPtr CancelScore();
 
+        /**
+         * @brief This function returns the Elevator's `WaitTillElevatorAtHeight()` 
+         * function.
+         */
         frc2::CommandPtr WaitTillElevatorAtHeight();
         
     private:
