@@ -119,9 +119,16 @@ public:
 
     frc2::Command *GetAutonomousCommand();
 
+    /**
+     * @brief This function adds controller rumble to the driver controller.
+     */
     frc2::CommandPtr AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble);
 
+    /**
+     * @brief This function will point the swerves straight to speed up autos.
+     */
     void ResetRobotForAutonomous();
+
     frc2::CommandPtr ResetRobotForTeleOp();
 private:
     void ConfigureBindings();
