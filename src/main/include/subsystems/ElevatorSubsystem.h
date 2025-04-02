@@ -1,3 +1,7 @@
+/**
+ * @file ElevatorSubsystem.h
+ */
+
 #pragma once
 
 #include <frc2/command/Commands.h>
@@ -16,46 +20,104 @@
 
 #include <frc2/command/button/Trigger.h>
 
+/**
+ * @brief The CAN ID of one of the elevator motors.
+ */
 constexpr int kElevatorMotor1Id = 36;
+
+/**
+ * @brief The CAN ID of the other the elevator motors.
+ */
 constexpr int kElevatorMotor2Id = 37;
+
+/**
+ * @brief The CAN ID of the elevator limit switch.
+ */
 constexpr int kLimitSwitchId = 0;
 
-// @todo Assign these to real values when we know the distances
 constexpr units::inch_t kElevatorCollectPosition = 0_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
 constexpr units::inch_t kElevatorL2Position = 13_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
+/**
+ * @brief The elevator height in inches for removing algae in between the 
+ * L3 and L4 reef bars.
+ */
 constexpr units::inch_t kElevatorAlgaeOnlyL3Position = 44_in;
 constexpr units::inch_t kElevatorL4Position = 61.5_in;
 
+/**
+ * @brief Slows the speed of the elevator down. 
+ * @attention This variable should only be used for testing purposes.
+ */
 constexpr float kSlowElevator = 0.6;
 
+/**
+ * @brief The robot will automatically drive slower if the the elevator is above this height.
+ * @attention This threshold is _only_ applied during teleop.
+ */
 constexpr units::inch_t kHeightThreshold = 20_in;
 
+/**
+ * @brief Represents the subsystem that controls the elevator.
+ */
 class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         ElevatorSubsystem();
 
         void Periodic() override;
+
+        /**
+         * @brief Prints out the elevator height to plot in Elastic Dashboard.
+         * @details To see the variable `position` as a graph (located inside the function code), 
+         * first deploy the robot code to a robot. Then, Click on the WPILIB icon in the top right 
+         * corner of your screen. Search `WPILIB: Start Tool` and click `Elastic`.
+         * Click `Add Widget` at the top of the screen and look for `Smart Dashboard` to find `Elevator Motor Position`.
+         * Alternatively, use the search widget to find `Elevator Motor Position`.
+         * Drag the Elevator widget onto the screen into a empty position. You should see a green highlight.
+         * Right click on the widget -> `Show As` -> `Graph`. To resize the graph, drag on the outlines of the widget.
+         */
         void PlotElevatorPosition();
 
         units::inch_t CurrentHeight();
 
+        /**
+         * @brief This function was intended to save the height the elevator should go to.
+         * @deprecated This function is unused and will be removed.
+         */
         void PrepareElevator(units::inch_t newPosition);
         frc2::CommandPtr GoToHeight(units::inch_t height);
-
+        
+        /**
+         * @brief The radius of the spools that spin the wires that help move the elevator.
+         * @note Because the spools are curved, this variable represents the approximate
+         * average radius of the spools.
+         */
         const units::inch_t WHEEL_RADIUS = 1.325_in;
-        // 9 to 1
         const double GEAR_RATIO = 9.0;
 
+        /**
+         * @brief Sets the voltage of the elevator motors, which is calculated based off of PID.
+         * @attention This function is not meant to be called directly and must be called
+         * periodically.
+         */
         void SetMotorVoltage();
 
+        /**
+         * @brief Triggers when the elevator is above the @ref kHeightThreshold.
+         */
         frc2::Trigger IsHeightAboveThreshold = frc2::Trigger([this] {
             return GetElevatorHeightAboveThreshold();
         });
 
+        /**
+         * @brief This `frc2::CommandPtr` is meant to be used in command compositions that 
+         * require the elevator to be at a certain height before executing actions.
+         * @details This `frc2::CommandPtr` will wait until the robot can safely move
+         * while the elevator is moving.
+         */
         frc2::CommandPtr WaitUntilElevatorIsCloseEnoughToMove();
     private:
 
