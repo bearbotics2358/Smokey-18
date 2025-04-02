@@ -2,6 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/**
+ * @file AlignWithReef.h
+ */
+
 #pragma once
 
 #include <frc2/command/Command.h>
@@ -16,25 +20,44 @@
 #include <units/velocity.h>
 #include <units/acceleration.h>
 
- enum ReefSide {
+/**
+ * @var ReefSide
+ * @brief An enum representing the two sides of the reef, left or right.
+ */
+enum ReefSide {
     Left,
     Right
 };
 
+/**
+ * @brief A class to align the robot to the best april tag found by the camera.
+ */
 class AlignWithReef
     : public frc2::CommandHelper<frc2::Command, AlignWithReef> {
 public:
     /**
-     * Creates a new ExampleCommand.
-     *
-     * @param camera The subsystem used by this command.
-     * @param drivetrain
+     * @brief The constructor that takes in a pointer to the camera and drive subsystems and the side of the reef to align to.
+     * @param[in] camera The camera subsystem.
+     * @param[in] drivetrain The drivetrain.
+     * @param[in] reefSide The side of the reef to align to.
      */
     explicit AlignWithReef(CameraSubsystem* camera, subsystems::CommandSwerveDrivetrain* drivetrain, ReefSide reefSide);
+
     void Initialize() override;
+    /**
+     * @details Runs until IsFinished returns true. Doesn't run at all if no april tags are present.
+     */
     void Execute() override;
+    /**
+     * @details Stops the command when there are no april tags present or 
+     * when the robot is within the forward, strafe, and rotation tolerances.
+     */
     bool IsFinished() override;
 
+    /**
+     * @details This swerve request ensures the robot only moves in a robot oriented fashion,
+     * where X is forward and Y is side to side.
+     */
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
     
@@ -69,6 +92,9 @@ private:
     const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
 
+    /**
+     * @brief Used for desired robot orientation at the end of alignment (in degrees).
+     */
     const std::map<int, units::degree_t> kTagAngleMap = {
         {6, 120_deg},
         {7, 180_deg},

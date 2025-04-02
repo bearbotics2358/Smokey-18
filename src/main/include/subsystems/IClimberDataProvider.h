@@ -1,14 +1,31 @@
+/**
+ * @file IClimberDataProvider.h
+ */
+
 #pragma once
 
+/**
+ * @brief Contains all the functions necessary for the climber mechanism.
+ */
 class IClimberDataProvider {
 public:
-    // Provide the angle of the climber intake/delivery mechanism in degrees
+    /** 
+     * @brief Provide the angle of the climber intake/delivery mechanism in degrees.
+     */ 
     virtual float GetClimberAngleDegrees() = 0;
 
-    // Provide the raw angle of the climber mechanism. Does not include any offsets.
+    /**
+     * @brief Provide the raw angle of the climber mechanism. Does not include any offsets.
+     */ 
     virtual float GetClimberRawAngleDegrees() = 0;
 
-    // Return a simple boolean to indicate whether a piece of climber has collected the cage
+    /**
+     * @brief Return a simple boolean to indicate whether the right part of climber has collected the cage.
+     */ 
     virtual bool IsRightCageHooked() = 0;
+
+    /**
+     * @brief Return a simple boolean to indicate whether the left part of climber has collected the cage.
+     */ 
     virtual bool IsLeftCageHooked() = 0;
 };

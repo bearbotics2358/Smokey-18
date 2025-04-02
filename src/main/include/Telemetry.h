@@ -1,3 +1,7 @@
+/**
+ * @file Telemetry.h
+ */
+
 #pragma once
 
 #include "ctre/phoenix6/SignalLogger.hpp"
@@ -12,6 +16,9 @@
 
 #include "subsystems/CommandSwerveDrivetrain.h"
 
+/**
+ * @brief This class updates the swerves' telemetry for use in simulations.
+ */
 class Telemetry {
 private:
     units::meters_per_second_t m_maxSpeed;
@@ -71,6 +78,8 @@ public:
         ctre::phoenix6::SignalLogger::Start();
     }
 
-    /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
+    /** 
+     * @brief Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger.
+     */
     void Telemeterize(subsystems::CommandSwerveDrivetrain::SwerveDriveState const &state);
 };

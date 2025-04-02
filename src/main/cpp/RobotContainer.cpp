@@ -156,16 +156,16 @@ void RobotContainer::ConfigureBindings() {
     ));
                                                                                                                                                                             
     m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L2),
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
         })
     ));
 
     m_operatorJoystick.A().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.ToCollectPosition(),
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L2),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
         })
     ));
 
@@ -210,6 +210,13 @@ void RobotContainer::ConfigureBindings() {
             m_reefSide = ReefSide::Left;
         })
     );
+
+    m_operatorJoystick.POVUp().OnTrue(frc2::cmd::Parallel(
+        frc2::cmd::RunOnce([this] {
+            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+        }),
+        m_climberSubsystem.Extend()
+    ));
 
     // m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
     //     m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
