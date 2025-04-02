@@ -1,3 +1,7 @@
+/**
+ * @file RobotContainer.h
+ */
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -21,31 +25,78 @@
 #include "subsystems/AlgaeSubsystem.h"
 #include "commands/AlignWithReef.h"
 
+/**
+ * @brief This class is where all of the subsystems are included and commands are 
+ * binded to triggers.
+ */
 class RobotContainer {
 private:
+    /**
+     * @brief Max robot speed.
+     */
     units::meters_per_second_t m_maxSpeed = TunerConstants::kSpeedAt12Volts;
+
+    /**
+     * @brief This multiplier is intended to change the robot's speed during teleop if 
+     * certain conditions are met, like the driver pressing slow mode or the elevator
+     * above a certain height threshold.
+     */
     double m_speedMultiplier = 1.0;
+
+    /**
+     * @brief Max robot angular speed.
+     */
     units::radians_per_second_t m_maxAngularRate = 0.75_tps;
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
+    /**
+     * @brief Setting up bindings for necessary control of the swerve drive platform 
+     * @details This variable moves the robot using the drivetrain's default command.
+     * @note A 10% joystick deadband is added, along with open loop control.
+     */
     swerve::requests::FieldCentric drive = swerve::requests::FieldCentric{}
-        .WithDeadband(m_maxSpeed * 0.1).WithRotationalDeadband(m_maxAngularRate * 0.1) // Add a 10% deadband
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage); // Use open-loop control for drive motors
+        .WithDeadband(m_maxSpeed * 0.1).WithRotationalDeadband(m_maxAngularRate * 0.1)
+        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
+    
+    /**
+     * @brief This variable will immediately place the swerve drives in a X direction to rapidly slow
+     * down the robot.
+     */
     swerve::requests::SwerveDriveBrake brake{};
+
+    /**
+     * @brief This variable will not drive the swerves forward; instead only the angle of the
+     * swerve drives will change.
+     */
     swerve::requests::PointWheelsAt point{};
+
+    /**
+     * @brief This variable will move the robot side to side.
+     */
     swerve::requests::RobotCentric strafe = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
         .WithVelocityX(0_mps);
 
-    /* Note: This must be constructed before the drivetrain, otherwise we need to
-     *       define a destructor to un-register the telemetry from the drivetrain */
+    /**
+     * @brief Logs the swerve drive data, allowing for robot simulation.
+     * @note This must be constructed before the drivetrain, otherwise we need to
+     * define a destructor to un-register the telemetry from the drivetrain 
+     */
     Telemetry logger{m_maxSpeed};
 
+    /**
+     * @brief The Driver Xbox Controller.
+     */
     frc2::CommandXboxController m_driverJoystick{0};
+
+    /**
+     * @brief The Operator Xbox Controller.
+     */
     frc2::CommandXboxController m_operatorJoystick{1};
     // frc2::CommandGenericHID m_gamepad{4};
 
-    // Robot.cpp owns the FeatherCanDecoder object
+    /**
+     * @note Robot.cpp owns the FeatherCanDecoder object
+     */ 
     FeatherCanDecoder* m_featherCanDecoder;
     LED m_LED;
     CameraSubsystem m_cameraSubsystem;
