@@ -330,3 +330,48 @@ void RobotContainer::AddPathPlannerCommands() {
         std::move(m_scoringSuperstructure.WaitTillElevatorAtHeight())
     );
 }
+
+
+
+void RobotContainer::ConfigureTestModeBindings() {
+    
+    // Joystick Test Controls
+
+    if (fabs(m_driverJoystick.GetLeftX()) > 0.2) 
+        {m_elevatorSubsystem.MoveElevator(units::volt_t(m_driverJoystick.GetLeftX()));}
+    else
+        {m_elevatorSubsystem.MoveElevator(0_V);};
+
+    if (fabs(m_driverJoystick.GetRightX()) > 0.2) 
+        {m_climberSubsystem.MoveClimber(units::volt_t(m_driverJoystick.GetRightX()));}
+    else
+        {m_climberSubsystem.MoveClimber(0_V);};
+
+
+    // D-Pad Test Controls
+        if ((m_driverJoystick.POVUp().Get() || m_driverJoystick.POVDown().Get()) == true) {
+            m_driverJoystick.POVUp().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaePivotMotor(0.2_V);}));
+            m_driverJoystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaePivotMotor(-0.2_V);}));}
+        else 
+            {frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaePivotMotor(0_V);});}
+
+        if ((m_driverJoystick.POVLeft().Get() || m_driverJoystick.POVRight().Get()) == true) {
+            m_driverJoystick.POVLeft().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaeMotor(0.2);}));
+            m_driverJoystick.POVRight().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaeMotor(-0.2);}));}
+        else 
+            {frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaeMotor(0);});}
+
+
+    // A, B, X, and Y Test Controls
+        if ((m_driverJoystick.Y().Get() || m_driverJoystick.A().Get()) == true) {
+            m_driverJoystick.Y().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetPivotSpeed(0.2);}));
+            m_driverJoystick.A().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetPivotSpeed(-0.2);}));}
+        else
+            {frc2::cmd::RunOnce([this] {m_coralSubsystem.SetPivotSpeed(0);});}
+
+        if ((m_driverJoystick.X().Get() || m_driverJoystick.Y().Get()) == true) {
+            m_driverJoystick.X().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetIntakeSpeed(0.2);}));
+            m_driverJoystick.Y().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetIntakeSpeed(-0.2);}));}
+        else
+            {frc2::cmd::RunOnce([this] {m_coralSubsystem.SetIntakeSpeed(0);});}
+};

@@ -76,3 +76,7 @@ frc2::CommandPtr Climber::StopClimber() {
         m_climberMotor.StopMotor();
     });
 }
+
+void Climber::MoveClimber(units::volt_t MotorSpeed) {
+    m_climberMotor.SetVoltage(MotorSpeed);
+};

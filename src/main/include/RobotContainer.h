@@ -72,9 +72,12 @@ public:
 
     void ResetRobotForAutonomous();
     frc2::CommandPtr ResetRobotForTeleOp();
-private:
+
     void ConfigureBindings();
+    
+private:
     void AddPathPlannerCommands();
+    void ConfigureTestModeBindings();
     
     ReefSide m_reefSide = ReefSide::Left;
 };

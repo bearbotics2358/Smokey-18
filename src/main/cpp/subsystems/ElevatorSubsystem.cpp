@@ -99,6 +99,11 @@ void ElevatorSubsystem::SetMotorVoltage() {
     frc::SmartDashboard::PutBoolean("Elevator At Height", m_closeEnoughToMove);
 }
 
+void ElevatorSubsystem::MoveElevator(units::volt_t MotorSpeed) {
+    m_elevatorMotor1.SetVoltage(MotorSpeed);
+    m_elevatorMotor2.SetVoltage(MotorSpeed);
+};
+
 frc2::CommandPtr ElevatorSubsystem::GoToHeight(units::inch_t height) {
     return frc2::cmd::RunOnce([this, height] {
         m_setpointHeight = height;

@@ -70,3 +70,11 @@ void AlgaeSubsystem::GoToAngle() {
 bool AlgaeSubsystem::IsAlgaeStored() {
     return m_algaeDataProvider->IsAlgaeCollected();
 }
+
+void AlgaeSubsystem::MoveAlgaePivotMotor(units::volt_t MotorSpeed) {
+    m_algaePivotMotor.SetVoltage(MotorSpeed);
+};
+
+void AlgaeSubsystem::MoveAlgaeMotor(double MotorSpeed) {
+    m_algaeMotor.Set(MotorSpeed);
+};
