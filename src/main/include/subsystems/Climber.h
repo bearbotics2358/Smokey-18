@@ -1,3 +1,7 @@
+/**
+ * @file Climber.h
+ */
+
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
@@ -17,10 +21,24 @@
 
 #include <frc2/command/button/Trigger.h>
 
+/**
+ * @brief The CAN ID of the climber motor.
+ */
 constexpr int kClimberMotor1Id = 32;
 
+/**
+ * @brief The angle when the climber fully extended.
+ */
 constexpr units::degree_t kClimberStartAngle = 165.0_deg;
+
+/**
+ * @brief The angle to end at for deep climbing.
+ */
 constexpr units::degree_t kClimberEndAngle = 41.0_deg;
+
+/**
+ * @brief The angle at the start of the match.
+ */
 constexpr units::degree_t kClimberStowAngle = 15.0_deg;
 
 const double kClimberGearRatio = 1.0;
@@ -30,18 +48,38 @@ public:
     Climber(IClimberDataProvider* dataProvider);
     void Periodic() override;
 
+    /**
+     * @brief Moves the climber to @ref kClimberEndAngle.
+     */
     frc2::CommandPtr Climb();
+
+    /**
+     * @brief Moves the climber to @ref kClimberStartAngle.
+     */
     frc2::CommandPtr Extend();
+
+    /**
+     * @brief Moves the climber to @ref kClimberStowAngle.
+     */
     frc2::CommandPtr Stow();
 
     units::degree_t CurrentAngle();
 
+    /**
+     * @brief Stops the climber motor.
+     */
     frc2::CommandPtr StopClimber();
 
+    /**
+     * @brief Triggers when the proximity sensor detects the left side of the climber.
+     */
     frc2::Trigger IsLeftCageHooked = frc2::Trigger([this] {
         return m_climberDataProvider->IsLeftCageHooked();
     });
 
+    /**
+     * @brief Triggers when the proximity sensor detects the right side of the climber.
+     */
     frc2::Trigger IsRightCageHooked = frc2::Trigger([this] {
         return m_climberDataProvider->IsRightCageHooked();
     });
