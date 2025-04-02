@@ -1,6 +1,8 @@
-#pragma once
+/**
+ * @file LED.h
+ */
 
-// LED.h - Control LED lights representing desired game piece
+#pragma once
 
 #include <frc/SerialPort.h>
 
@@ -31,14 +33,30 @@ namespace ArduinoConstants {
     };
 }
 
+/**
+ * @brief This class controls LED lights for different situations. 
+ * See @ref ArduinoConstants::RIO_MESSAGES for these situations.
+ */
 class LED : public frc2::SubsystemBase {
 public:
     LED();
     ~LED() override;
 
+    /**
+     * @brief Reads and sends messages to the Arduino board (that's connected to the RoboRio)
+     * to change the LED patterns for different situations.
+     */
     void Periodic() override;
-
+    
+    /**
+     * @brief Changes the current LED state.
+     * @param ledState The desired LED state to change to.
+     */
     void SetLEDState(ArduinoConstants::RIO_MESSAGES ledState);
+
+    /**
+     * @brief The `frc2::CommandPtr` version of @ref LED::SetLEDState.
+     */
     frc2::CommandPtr SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES ledState);
 
 private:
