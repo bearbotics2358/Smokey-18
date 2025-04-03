@@ -186,13 +186,6 @@ void RobotContainer::ConfigureBindings() {
         })
     ));
 
-    m_operatorJoystick.RightBumper().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.ToCollectPosition(),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
-        })
-    ));
-
     // **** Xbox Dpad Buttons **** //
     m_operatorJoystick.POVDown().OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
@@ -219,13 +212,6 @@ void RobotContainer::ConfigureBindings() {
             m_reefSide = ReefSide::Left;
         })
     );
-
-    m_operatorJoystick.POVUp().OnTrue(frc2::cmd::Parallel(
-        frc2::cmd::RunOnce([this] {
-            m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
-        }),
-        m_climberSubsystem.Extend()
-    ));
 
     // m_gamepad.Button(9).OnTrue(frc2::cmd::Parallel(
     //     m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
