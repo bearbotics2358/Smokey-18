@@ -20,7 +20,7 @@
 constexpr int kClimberMotor1Id = 32;
 
 constexpr units::degree_t kClimberStartAngle = 165.0_deg;
-constexpr units::degree_t kClimberEndAngle = 41.0_deg;
+constexpr units::degree_t kClimberEndAngle = 43.0_deg;
 constexpr units::degree_t kClimberStowAngle = 15.0_deg;
 
 const double kClimberGearRatio = 1.0;
