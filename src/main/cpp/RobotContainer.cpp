@@ -333,43 +333,112 @@ void RobotContainer::AddPathPlannerCommands() {
 
 void RobotContainer::ConfigureTestModeBindings() {
     
-    // Joystick Test Controls
+    // Trigger Test Controls
+    m_driverJoystick.RightTrigger().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_elevatorSubsystem.MoveElevator(0.5_V); })
+    );
+    m_driverJoystick.LeftTrigger().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_elevatorSubsystem.MoveElevator(-0.5_V); })
+    );
 
-    if (fabs(m_driverJoystick.GetLeftX()) > 0.2) 
-        {m_elevatorSubsystem.MoveElevator(units::volt_t(m_driverJoystick.GetLeftX()));}
-    else
-        {m_elevatorSubsystem.MoveElevator(0_V);};
+    m_driverJoystick.LeftTrigger().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.RightTrigger().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_elevatorSubsystem.MoveElevator(0_V);
+                })
+            );
+        })
+    );
 
-    if (fabs(m_driverJoystick.GetRightX()) > 0.2) 
-        {m_climberSubsystem.MoveClimber(units::volt_t(m_driverJoystick.GetRightX()));}
-    else
-        {m_climberSubsystem.MoveClimber(0_V);};
+
+    m_driverJoystick.RightBumper().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_climberSubsystem.MoveClimber(0.5_V); })
+    );
+    m_driverJoystick.LeftBumper().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_climberSubsystem.MoveClimber(-0.5_V); })
+    );
+
+    m_driverJoystick.LeftBumper().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.RightBumper().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_climberSubsystem.MoveClimber(0_V);
+                })
+            );
+        })
+    );
 
 
     // D-Pad Test Controls
-        if ((m_driverJoystick.POVUp().Get() || m_driverJoystick.POVDown().Get()) == true) {
-            m_driverJoystick.POVUp().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaePivotMotor(0.2_V);}));
-            m_driverJoystick.POVDown().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaePivotMotor(-0.2_V);}));}
-        else 
-            {frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaePivotMotor(0_V);});}
+    m_driverJoystick.POVUp().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaePivotMotor(0.2_V);})
+    );
+    m_driverJoystick.POVDown().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaePivotMotor(-0.2_V);})
+    );
 
-        if ((m_driverJoystick.POVLeft().Get() || m_driverJoystick.POVRight().Get()) == true) {
-            m_driverJoystick.POVLeft().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaeMotor(0.2);}));
-            m_driverJoystick.POVRight().OnTrue(frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaeMotor(-0.2);}));}
-        else 
-            {frc2::cmd::RunOnce([this] {m_algaeSubsystem.MoveAlgaeMotor(0);});}
+    m_driverJoystick.POVUp().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.POVDown().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_algaeSubsystem.MoveAlgaePivotMotor(0_V);
+                })
+            );
+        })
+    );
 
+
+    m_driverJoystick.POVLeft().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaeMotor(0.2);})
+    );
+    m_driverJoystick.POVRight().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaeMotor(-0.2);})
+    );
+
+    m_driverJoystick.POVLeft().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.POVRight().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_algaeSubsystem.MoveAlgaeMotor(0);
+                })
+            );
+        })
+    );
 
     // A, B, X, and Y Test Controls
-        if ((m_driverJoystick.Y().Get() || m_driverJoystick.A().Get()) == true) {
-            m_driverJoystick.Y().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetPivotSpeed(0.2);}));
-            m_driverJoystick.A().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetPivotSpeed(-0.2);}));}
-        else
-            {frc2::cmd::RunOnce([this] {m_coralSubsystem.SetPivotSpeed(0);});}
+    m_driverJoystick.Y().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetPivotSpeed(0.2);})
+    );
+    m_driverJoystick.A().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetPivotSpeed(-0.2);})
+    );
 
-        if ((m_driverJoystick.X().Get() || m_driverJoystick.Y().Get()) == true) {
-            m_driverJoystick.X().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetIntakeSpeed(0.2);}));
-            m_driverJoystick.Y().OnTrue(frc2::cmd::RunOnce([this] {m_coralSubsystem.SetIntakeSpeed(-0.2);}));}
-        else
-            {frc2::cmd::RunOnce([this] {m_coralSubsystem.SetIntakeSpeed(0);});}
+    m_driverJoystick.Y().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.A().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_coralSubsystem.SetPivotSpeed(0);
+                })
+            );
+        })
+    );
+    
+
+    m_driverJoystick.X().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetIntakeSpeed(0.2);})
+    );
+    m_driverJoystick.B().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetIntakeSpeed(-0.2);})
+    );
+
+    m_driverJoystick.X().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.B().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_coralSubsystem.SetIntakeSpeed(0);
+                })
+            );
+        })
+    );
 };
