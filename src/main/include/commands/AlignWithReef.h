@@ -37,7 +37,7 @@ public:
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
-    
+
 private:
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
@@ -54,17 +54,17 @@ private:
 
     static constexpr double kRotationP = 0.05;
     static constexpr double kRotationI = 0.0;
-    static constexpr double kRotationD = 0.0;
+    static constexpr double kRotationD = 0.001;
     frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    static constexpr units::meters_per_second_t kMaxVelocity = 1.75_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.5_mps;
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(3_in);
     const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
     const units::degree_t kRotationTolerance = 2_deg;
 
-    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(30_in);
+    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(32_in);
     const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(-1_in);
     const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;

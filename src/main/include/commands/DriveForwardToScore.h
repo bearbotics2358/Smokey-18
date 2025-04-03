@@ -10,7 +10,7 @@
 class DriveForwardToScore
     : public frc2::CommandHelper<frc2::Command, DriveForwardToScore> {
 public:
-    static constexpr units::inch_t kDefaultDistance = 7.5_in;
+    static constexpr units::inch_t kDefaultDistance = 9.5_in;
 
     explicit DriveForwardToScore(
         subsystems::CommandSwerveDrivetrain* drivetrain,
