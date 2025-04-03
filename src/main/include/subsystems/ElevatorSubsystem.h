@@ -21,14 +21,14 @@ constexpr int kElevatorMotor2Id = 37;
 constexpr int kLimitSwitchId = 0;
 
 // @todo Assign these to real values when we know the distances
-constexpr units::inch_t kElevatorCollectPosition = 0_in;
+constexpr units::inch_t kElevatorCollectPosition = 1.5_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
 constexpr units::inch_t kElevatorL2Position = 13_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
 constexpr units::inch_t kElevatorAlgaeOnlyL3Position = 44_in;
-constexpr units::inch_t kElevatorL4Position = 61.5_in;
+constexpr units::inch_t kElevatorL4Position = 60_in;
 
 constexpr float kSlowElevator = 0.6;
 
@@ -47,14 +47,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc2::CommandPtr GoToHeight(units::inch_t height);
 
         const units::inch_t WHEEL_RADIUS = 1.325_in;
-        // 9 to 1
         const double GEAR_RATIO = 9.0;
 
         void SetMotorVoltage();
 
-        frc2::Trigger IsHeightAboveThreshold = frc2::Trigger([this] {
-            return GetElevatorHeightAboveThreshold();
-        });
+        frc2::Trigger IsHeightAboveThreshold;
 
         frc2::CommandPtr WaitUntilElevatorIsCloseEnoughToMove();
     private:
@@ -67,11 +64,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         ctre::phoenix6::hardware::TalonFX m_elevatorMotor2;
         frc::DigitalInput m_elevatorLimitSwitch{kLimitSwitchId};
 
-        frc2::Trigger IsMagneticLimitSwitchActive = frc2::Trigger([this] {
-            // The REV magnetic limit switch is Active-low so a false from the Get() call means the
-            // elevator is at the bottom
-            return !m_elevatorLimitSwitch.Get();
-        });
+        frc2::Trigger IsMagneticLimitSwitchActive;
 
         static constexpr units::inch_t kSetpointTolerance = 0.5_in;
         static constexpr units::inch_t kCloseEnoughToMove = 4_in;
@@ -86,7 +79,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         static constexpr auto kV = 0.0_V / 1.0_mps;
 
         frc::TrapezoidProfile<units::meters>::Constraints m_constraints {
-            kMaxVelocity, kMaxAcceleration};
+            kMaxVelocity, kMaxAcceleration
+        };
 
         frc::ProfiledPIDController<units::meters> m_elevatorPID{
             kP, kI, kD, m_constraints

@@ -10,7 +10,7 @@
 class DriveForwardToScore
     : public frc2::CommandHelper<frc2::Command, DriveForwardToScore> {
 public:
-    static constexpr units::inch_t kDefaultDistance = 7.5_in;
+    static constexpr units::inch_t kDefaultDistance = 9.5_in;
 
     explicit DriveForwardToScore(
         subsystems::CommandSwerveDrivetrain* drivetrain,
@@ -34,7 +34,7 @@ private:
     static constexpr double kP = 0.9;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
-    static constexpr units::meters_per_second_t kMaxVelocity = 1.0_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 0.75_mps;
 
     frc::PIDController m_XAlignmentPID {kP, kI, kD};
 
