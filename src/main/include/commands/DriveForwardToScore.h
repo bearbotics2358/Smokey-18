@@ -26,6 +26,8 @@ public:
 private:
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
+    swerve::requests::PointWheelsAt point{};
+
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
         .WithVelocityY(0_mps)
