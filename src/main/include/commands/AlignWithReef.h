@@ -34,6 +34,7 @@ public:
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
+    void End(bool interrupted) override;
 
     swerve::requests::RobotCentric robotOriented = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage);
@@ -68,6 +69,7 @@ private:
     const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(-1_in);
     const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
+    ReefSide m_reefSide;
 
     const std::map<int, units::degree_t> kTagAngleMap = {
         {6, 120_deg},
