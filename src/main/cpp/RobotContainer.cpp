@@ -278,9 +278,7 @@ frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
 }
 
 void RobotContainer::ResetRobotForAutonomous() {
-    m_drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d(0_deg));
-    });
+    m_drivetrain.SetControl(point.WithModuleDirection(frc::Rotation2d(0_deg)));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()
