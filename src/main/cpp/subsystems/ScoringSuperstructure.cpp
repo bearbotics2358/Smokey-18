@@ -137,7 +137,8 @@ frc2::CommandPtr ScoringSuperstructure::ToCollectPosition() {
             m_elevator.GoToHeight(kElevatorCollectPosition),
             frc2::cmd::Sequence(
                 m_coral.GoToAngle(kCoralCollect),
-                m_coral.Collect()
+                m_coral.Collect(),
+                ToStowPosition()
             )
         ),
         [this] { return m_algae.IsAlgaeStored(); }
