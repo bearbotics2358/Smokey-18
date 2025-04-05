@@ -61,9 +61,9 @@ void RobotContainer::ConfigureBindings() {
 
     m_drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 
-    //   _____       _                   _____            _             _ _             ____        _   _                  
-    //  |  __ \     (_)                 / ____|          | |           | | |           |  _ \      | | | |                 
-    //  | |  | |_ __ ___   _____ _ __  | |     ___  _ __ | |_ _ __ ___ | | | ___ _ __  | |_) |_   _| |_| |_ ___  _ __  ___ 
+    //   _____       _                   _____            _             _ _             ____        _   _
+    //  |  __ \     (_)                 / ____|          | |           | | |           |  _ \      | | | |
+    //  | |  | |_ __ ___   _____ _ __  | |     ___  _ __ | |_ _ __ ___ | | | ___ _ __  | |_) |_   _| |_| |_ ___  _ __  ___
     //  | |  | | '__| \ \ / / _ \ '__| | |    / _ \| '_ \| __| '__/ _ \| | |/ _ \ '__| |  _ <| | | | __| __/ _ \| '_ \/ __|
     //  | |__| | |  | |\ V /  __/ |    | |___| (_) | | | | |_| | | (_) | | |  __/ |    | |_) | |_| | |_| || (_) | | | \__ \
     //  |_____/|_|  |_| \_/ \___|_|     \_____\___/|_| |_|\__|_|  \___/|_|_|\___|_|    |____/ \__,_|\__|\__\___/|_| |_|___/
@@ -131,13 +131,13 @@ void RobotContainer::ConfigureBindings() {
         })
     );
 
-    //    ____                       _                _____            _             _ _             ____        _   _                  
-    //   / __ \                     | |              / ____|          | |           | | |           |  _ \      | | | |                 
-    //  | |  | |_ __   ___ _ __ __ _| |_ ___  _ __  | |     ___  _ __ | |_ _ __ ___ | | | ___ _ __  | |_) |_   _| |_| |_ ___  _ __  ___ 
+    //    ____                       _                _____            _             _ _             ____        _   _
+    //   / __ \                     | |              / ____|          | |           | | |           |  _ \      | | | |
+    //  | |  | |_ __   ___ _ __ __ _| |_ ___  _ __  | |     ___  _ __ | |_ _ __ ___ | | | ___ _ __  | |_) |_   _| |_| |_ ___  _ __  ___
     //  | |  | | '_ \ / _ \ '__/ _` | __/ _ \| '__| | |    / _ \| '_ \| __| '__/ _ \| | |/ _ \ '__| |  _ <| | | | __| __/ _ \| '_ \/ __|
     //  | |__| | |_) |  __/ | | (_| | || (_) | |    | |___| (_) | | | | |_| | | (_) | | |  __/ |    | |_) | |_| | |_| || (_) | | | \__ \
     //   \____/| .__/ \___|_|  \__,_|\__\___/|_|     \_____\___/|_| |_|\__|_|  \___/|_|_|\___|_|    |____/ \__,_|\__|\__\___/|_| |_|___/
-    //         | |                                                                                                                      
+    //         | |
     //         |_|
 
     // **** Xbox A, B, X, & Y Button **** //
@@ -156,7 +156,7 @@ void RobotContainer::ConfigureBindings() {
                 m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
             })
         ));
-                                                                                                                                                                            
+
     m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
         frc2::cmd::RunOnce([this] {
@@ -227,15 +227,15 @@ void RobotContainer::ConfigureBindings() {
     //     })
     // ));
 
-    //    _____          _                    _______   _                         ____  _           _ _                 
-    //   / ____|        | |                  |__   __| (_)                       |  _ \(_)         | (_)                
-    //  | |    _   _ ___| |_ ___  _ __ ___      | |_ __ _  __ _  __ _  ___ _ __  | |_) |_ _ __   __| |_ _ __   __ _ ___ 
+    //    _____          _                    _______   _                         ____  _           _ _
+    //   / ____|        | |                  |__   __| (_)                       |  _ \(_)         | (_)
+    //  | |    _   _ ___| |_ ___  _ __ ___      | |_ __ _  __ _  __ _  ___ _ __  | |_) |_ _ __   __| |_ _ __   __ _ ___
     //  | |   | | | / __| __/ _ \| '_ ` _ \     | | '__| |/ _` |/ _` |/ _ \ '__| |  _ <| | '_ \ / _` | | '_ \ / _` / __|
     //  | |___| |_| \__ \ || (_) | | | | | |    | | |  | | (_| | (_| |  __/ |    | |_) | | | | | (_| | | | | | (_| \__ \
     //   \_____\__,_|___/\__\___/|_| |_| |_|    |_|_|  |_|\__, |\__, |\___|_|    |____/|_|_| |_|\__,_|_|_| |_|\__, |___/
-    //                                                     __/ | __/ |                                         __/ |    
-    //                                                    |___/ |___/                                         |___/     
-    
+    //                                                     __/ | __/ |                                         __/ |
+    //                                                    |___/ |___/                                         |___/
+
     (m_elevatorSubsystem.IsHeightAboveThreshold || m_driverJoystick.LeftBumper())
         .OnTrue(
             frc2::cmd::RunOnce([this] {m_speedMultiplier = 0.1;})
@@ -248,13 +248,13 @@ void RobotContainer::ConfigureBindings() {
         .OnTrue(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 1.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE)
             )
         )
         .OnFalse(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 0.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE)
             )
         );
 
@@ -262,13 +262,13 @@ void RobotContainer::ConfigureBindings() {
         .OnTrue(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 1.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE)
             )
         )
         .OnFalse(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 0.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE)
             )
         );
 }
@@ -278,9 +278,7 @@ frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
 }
 
 void RobotContainer::ResetRobotForAutonomous() {
-    m_drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d(0_deg));
-    });
+    m_drivetrain.SetControl(point.WithModuleDirection(frc::Rotation2d(0_deg)));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

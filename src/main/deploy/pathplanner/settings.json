@@ -14,7 +14,7 @@
   "robotTrackwidth": 0.5588,
   "driveWheelRadius": 0.045212,
   "driveGearing": 6.746031746031747,
-  "maxDriveSpeed": 1.0,
+  "maxDriveSpeed": 4.46,
   "driveMotorType": "falcon500",
   "driveCurrentLimit": 120.0,
   "wheelCOF": 1.1,

@@ -5,39 +5,51 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 5.0
+            "pathName": "Top-20"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Bottom-22"
+            "pathName": "20-Collect"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "22-12"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
+            "name": "Collect"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "12-17"
+            "pathName": "Collect-19"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         }
       ]

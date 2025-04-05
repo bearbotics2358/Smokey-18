@@ -20,15 +20,14 @@ constexpr int kElevatorMotor1Id = 36;
 constexpr int kElevatorMotor2Id = 37;
 constexpr int kLimitSwitchId = 0;
 
-// @todo Assign these to real values when we know the distances
-constexpr units::inch_t kElevatorCollectPosition = 1.5_in;
+constexpr units::inch_t kElevatorCollectPosition = 2.75_in;
 constexpr units::inch_t kElevatorStowPosition = 0_in;
 constexpr units::inch_t kElevatorProcessorPosition = 10_in;
 constexpr units::inch_t kElevatorL1Position = 0_in;
 constexpr units::inch_t kElevatorL2Position = 13_in;
 constexpr units::inch_t kElevatorL3Position = 28_in;
 constexpr units::inch_t kElevatorAlgaeOnlyL3Position = 44_in;
-constexpr units::inch_t kElevatorL4Position = 60_in;
+constexpr units::inch_t kElevatorL4Position = 60.75_in;
 
 constexpr float kSlowElevator = 0.6;
 

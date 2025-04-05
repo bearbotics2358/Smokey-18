@@ -5,8 +5,8 @@
 #include "commands/AlignWithReef.h"
 
 AlignWithReef::AlignWithReef(
-    CameraSubsystem* camera, 
-    subsystems::CommandSwerveDrivetrain* drivetrain, 
+    CameraSubsystem* camera,
+    subsystems::CommandSwerveDrivetrain* drivetrain,
     ReefSide reefSide
 ): m_camera{camera}, m_drivetrain{drivetrain} {
     // Register that this command requires the subsystem.
@@ -18,6 +18,8 @@ AlignWithReef::AlignWithReef(
     } else {
         m_strafeSetpoint = kStrafeRightReefSetpoint;
     }
+
+    m_reefSide = reefSide;
 
     m_rotationalPID.EnableContinuousInput(-180.0, 180.0);
 }
@@ -74,6 +76,12 @@ bool AlignWithReef::IsFinished() {
         return true;
     }
 
+    if (false == m_camera->visibleTargets() && m_reefSide == ReefSide::Right) {
+        // Right alignment has a tendency to lose the tag and drift to the right.
+        // When the bot loses tag visibility when doing right alignment, end the command
+        return true;
+    }
+
     units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
     units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
     units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
@@ -84,4 +92,10 @@ bool AlignWithReef::IsFinished() {
     return (strafe_diff < kStrafeTolerance
                 && forward_diff < kForwardTolerance
                 && rotational_diff < kRotationTolerance);
+}
+
+void AlignWithReef::End(bool interrupted) {
+    m_drivetrain->SetControl(robotOriented.WithVelocityX(0_mps)
+                                          .WithVelocityY(0_mps)
+                                          .WithRotationalRate(0_rad_per_s));
 }

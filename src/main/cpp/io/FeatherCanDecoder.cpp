@@ -39,8 +39,8 @@ void FeatherCanDecoder::Update() {
     UnpackClimberCANData();
     frc::SmartDashboard::PutNumber("Raw Angle of Climber FeatherCan", GetClimberRawAngleDegrees());
     frc::SmartDashboard::PutNumber("Angle of Climber FeatherCan", GetClimberAngleDegrees());
-    frc::SmartDashboard::PutBoolean("Climber Collected?", m_rightProximity);
-    frc::SmartDashboard::PutBoolean("Climber Collected?", m_leftProximity);
+    frc::SmartDashboard::PutBoolean("Climber Right Collected?", m_rightProximity);
+    frc::SmartDashboard::PutBoolean("Climber Left Collected?", m_leftProximity);
 
     UnpackBellyPanCANData();
 }

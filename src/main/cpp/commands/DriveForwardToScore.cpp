@@ -7,13 +7,14 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 DriveForwardToScore::DriveForwardToScore(subsystems::CommandSwerveDrivetrain* drivetrain, units::inch_t distance)
-    : m_drivetrain{drivetrain}, 
+    : m_drivetrain{drivetrain},
     m_forwardDistance{distance} {
     AddRequirements(m_drivetrain);
 }
 
 void DriveForwardToScore::Initialize() {
     m_initialPose = m_drivetrain->GetPose();
+    m_drivetrain->SetControl(point.WithModuleDirection(frc::Rotation2d(0_deg)));
 }
 
 void DriveForwardToScore::Execute() {
