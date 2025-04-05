@@ -32,6 +32,10 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
 
+    m_cameraRightlightState = frc2::Trigger([this] {
+        return m_cameraRinglight;
+    });
+
     ConfigureBindings();
 }
 
@@ -186,7 +190,12 @@ void RobotContainer::ConfigureBindings() {
         })
     ));
 
-    // **** Xbox Dpad Buttons **** //
+    m_operatorJoystick.LeftTrigger().OnTrue(frc2::cmd::RunOnce([this] {
+            m_cameraRinglight = !m_cameraRinglight;
+        })
+    );
+
+    // **** Xbox Dpad Butto ns **** //
     m_operatorJoystick.POVDown().OnTrue(frc2::cmd::Parallel(
         frc2::cmd::RunOnce([this] {
             m_drivetrain.ConfigNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -271,6 +280,10 @@ void RobotContainer::ConfigureBindings() {
                 m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE)
             )
         );
+
+    m_cameraRightlightState
+        .OnTrue(m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CAMERA_RING))
+        .OnFalse(m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CAMERA_RING_OFF));
 }
 
 frc2::CommandPtr RobotContainer::ResetRobotForTeleOp() {
@@ -319,11 +332,11 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(2.5_s))
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(1.75_s))
     );
     NamedCommands::registerCommand(
         "AlignWithReefRight",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(2.5_s))
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(1.75_s))
     );
     NamedCommands::registerCommand(
         "WaitTillElevatorAtHeight",
