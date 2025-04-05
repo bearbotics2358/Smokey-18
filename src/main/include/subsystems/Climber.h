@@ -34,6 +34,8 @@ public:
     frc2::CommandPtr Extend();
     frc2::CommandPtr Stow();
 
+    void MoveClimber(units::volt_t MotorSpeed);
+
     units::degree_t CurrentAngle();
 
     frc2::CommandPtr StopClimber();
