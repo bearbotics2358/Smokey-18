@@ -319,11 +319,11 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(4_s))
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(2.5_s))
     );
     NamedCommands::registerCommand(
         "AlignWithReefRight",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(4_s))
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(2.5_s))
     );
     NamedCommands::registerCommand(
         "WaitTillElevatorAtHeight",
