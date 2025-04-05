@@ -139,39 +139,41 @@ void RobotContainer::ConfigureBindings() {
     //         |_|
 
     // **** Xbox A, B, X, & Y Button **** //
-    m_operatorJoystick.Y().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L4),
+    m_operatorJoystick.Y().OnTrue(
+        frc2::cmd::Parallel(
+            m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L4),
+            frc2::cmd::RunOnce([this] {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
+            })
+        ));
+
+    m_operatorJoystick.X().OnTrue(
+        frc2::cmd::Parallel(
+            m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral),
+            frc2::cmd::RunOnce([this] {
+                m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
+            })
+        ));
+                                                                                                                                                                            
+    m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
+        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::IDK);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
         })
     ));
 
-    m_operatorJoystick.X().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3);
-        })
-    ));
-                                                                                                                                                                            
-    m_operatorJoystick.B().OnTrue(frc2::cmd::Parallel(
+    m_operatorJoystick.A().OnTrue(frc2::cmd::Parallel(
         m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L2),
         frc2::cmd::RunOnce([this] {
             m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L2);
         })
     ));
 
-    m_operatorJoystick.A().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.ToCollectPosition(),
-        frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L1);
-        })
-    ));
-
     // **** Xbox Trigger & Bumper Buttons **** //
     m_operatorJoystick.RightTrigger().OnTrue(frc2::cmd::Parallel(
-        m_scoringSuperstructure.PrepareScoring(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly),
+        m_scoringSuperstructure.ToCollectPosition(),
         frc2::cmd::RunOnce([this] {
-            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::ELEVATOR_L3_ALGAE);
+            m_LED.SetLEDState(ArduinoConstants::RIO_MESSAGES::MSG_IDLE);
         })
     ));
 
@@ -244,13 +246,13 @@ void RobotContainer::ConfigureBindings() {
         .OnTrue(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 1.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE)
             )
         )
         .OnFalse(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kLeftRumble, 0.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE)
             )
         );
 
@@ -258,13 +260,13 @@ void RobotContainer::ConfigureBindings() {
         .OnTrue(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 1.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_TRUE)
             )
         )
         .OnFalse(
             frc2::cmd::Parallel(
                 AddControllerRumble(frc::GenericHID::RumbleType::kRightRumble, 0.0),
-                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE)
+                m_LED.SetLEDStateCommand(ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE)
             )
         );
 }
@@ -328,8 +330,6 @@ void RobotContainer::AddPathPlannerCommands() {
         std::move(m_scoringSuperstructure.WaitTillElevatorAtHeight())
     );
 }
-
-
 
 void RobotContainer::ConfigureTestModeBindings() {
     
@@ -442,3 +442,4 @@ void RobotContainer::ConfigureTestModeBindings() {
         })
     );
 };
+}

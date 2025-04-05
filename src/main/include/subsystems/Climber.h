@@ -20,7 +20,7 @@
 constexpr int kClimberMotor1Id = 32;
 
 constexpr units::degree_t kClimberStartAngle = 165.0_deg;
-constexpr units::degree_t kClimberEndAngle = 41.0_deg;
+constexpr units::degree_t kClimberEndAngle = 43.0_deg;
 constexpr units::degree_t kClimberStowAngle = 15.0_deg;
 
 const double kClimberGearRatio = 1.0;
@@ -40,13 +40,9 @@ public:
 
     frc2::CommandPtr StopClimber();
 
-    frc2::Trigger IsLeftCageHooked = frc2::Trigger([this] {
-        return m_climberDataProvider->IsLeftCageHooked();
-    });
+    frc2::Trigger IsLeftCageHooked;
 
-    frc2::Trigger IsRightCageHooked = frc2::Trigger([this] {
-        return m_climberDataProvider->IsRightCageHooked();
-    });
+    frc2::Trigger IsRightCageHooked;
 
 private:
     void SetMotorVoltage();
