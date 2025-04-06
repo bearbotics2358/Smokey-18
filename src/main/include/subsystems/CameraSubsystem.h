@@ -36,7 +36,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   photon::PhotonTrackedTarget bestTarget;
   frc::Transform3d transformation;
 
-  frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025Reefscape);
+  frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025ReefscapeWelded);
   #define CAMERA_NAME "limelight3"
   photon::PhotonCamera limelightCamera{CAMERA_NAME};
   std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;

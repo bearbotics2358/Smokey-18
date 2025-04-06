@@ -46,7 +46,7 @@ private:
     std::optional<int> m_targetTagId;
     units::degree_t m_targetDegrees;
 
-    static constexpr double kP = 2.0;
+    static constexpr double kP = 1.75;
     static constexpr double kI = 0.0;
     static constexpr double kD = 0.0;
 
