@@ -319,7 +319,7 @@ void RobotContainer::AddPathPlannerCommands() {
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
     );
     NamedCommands::registerCommand(
-        "ScoreL3",
+        "ScoreL3AndRemoveAlgae",
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
     );
     NamedCommands::registerCommand(
@@ -327,8 +327,8 @@ void RobotContainer::AddPathPlannerCommands() {
         std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L4))
     );
     NamedCommands::registerCommand(
-        "ScoreL3AndRemoveAlgae",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
+        "L3RemoveAlgae",
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeOnly))
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
