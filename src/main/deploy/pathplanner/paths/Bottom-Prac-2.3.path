@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1666761363636364,
-        "y": 1.0783948863636363
+        "x": 1.1267897727272727,
+        "y": 0.9986221590909088
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4166672146926989,
-        "y": 1.0805069365222815
+        "x": 1.376780851056335,
+        "y": 1.000734209249554
       },
       "isLocked": false,
       "linkedName": "Bottom-Prac-2"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -130.3141001604973
+    "rotation": -126.15818543980839
   },
   "useDefaultConstraints": true
 }
