@@ -29,6 +29,9 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr Intake();
   frc2::CommandPtr Dispense();
 
+  void MoveAlgaePivotMotor(units::volt_t MotorSpeed);
+  void MoveAlgaeMotor(double MotorSpeed);
+
   bool IsAlgaeStored();
 
   frc2::CommandPtr SetGoalAngle(units::degree_t angle);

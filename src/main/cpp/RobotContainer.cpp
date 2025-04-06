@@ -31,8 +31,6 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
 
     m_autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &m_autoChooser);
-
-    ConfigureBindings();
 }
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble) {
@@ -329,4 +327,117 @@ void RobotContainer::AddPathPlannerCommands() {
         "WaitTillElevatorAtHeight",
         std::move(m_scoringSuperstructure.WaitTillElevatorAtHeight())
     );
+}
+
+void RobotContainer::ConfigureTestModeBindings() {
+    
+    // Trigger Test Controls
+    m_driverJoystick.RightTrigger().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_elevatorSubsystem.MoveElevator(0.5_V); })
+    );
+    m_driverJoystick.LeftTrigger().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_elevatorSubsystem.MoveElevator(-0.5_V); })
+    );
+
+    m_driverJoystick.LeftTrigger().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.RightTrigger().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_elevatorSubsystem.MoveElevator(0_V);
+                })
+            );
+        })
+    );
+
+
+    m_driverJoystick.RightBumper().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_climberSubsystem.MoveClimber(0.5_V); })
+    );
+    m_driverJoystick.LeftBumper().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_climberSubsystem.MoveClimber(-0.5_V); })
+    );
+
+    m_driverJoystick.LeftBumper().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.RightBumper().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_climberSubsystem.MoveClimber(0_V);
+                })
+            );
+        })
+    );
+
+
+    // D-Pad Test Controls
+    m_driverJoystick.POVUp().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaePivotMotor(0.2_V);})
+    );
+    m_driverJoystick.POVDown().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaePivotMotor(-0.2_V);})
+    );
+
+    m_driverJoystick.POVUp().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.POVDown().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_algaeSubsystem.MoveAlgaePivotMotor(0_V);
+                })
+            );
+        })
+    );
+
+
+    m_driverJoystick.POVLeft().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaeMotor(0.2);})
+    );
+    m_driverJoystick.POVRight().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_algaeSubsystem.MoveAlgaeMotor(-0.2);})
+    );
+
+    m_driverJoystick.POVLeft().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.POVRight().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_algaeSubsystem.MoveAlgaeMotor(0);
+                })
+            );
+        })
+    );
+
+    // A, B, X, and Y Test Controls
+    m_driverJoystick.Y().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetPivotSpeed(0.2);})
+    );
+    m_driverJoystick.A().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetPivotSpeed(-0.2);})
+    );
+
+    m_driverJoystick.Y().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.A().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_coralSubsystem.SetPivotSpeed(0);
+                })
+            );
+        })
+    );
+    
+
+    m_driverJoystick.X().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetIntakeSpeed(0.2);})
+    );
+    m_driverJoystick.B().WhileTrue(frc2::cmd::RunOnce( [this] {
+        m_coralSubsystem.SetIntakeSpeed(-0.2);})
+    );
+
+    m_driverJoystick.X().OnFalse(
+        frc2::cmd::RunOnce( [this] {
+            m_driverJoystick.B().OnFalse(
+                frc2::cmd::RunOnce( [this] {
+                    m_coralSubsystem.SetIntakeSpeed(0);
+                })
+            );
+        })
+    );
+};
 }

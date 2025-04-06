@@ -37,6 +37,8 @@ void Robot::AutonomousPeriodic() {}
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
+  m_container.ConfigureBindings();
+
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
@@ -48,6 +50,7 @@ void Robot::TeleopExit() {}
 
 void Robot::TestInit() {
   frc2::CommandScheduler::GetInstance().CancelAll();
+  m_container.ConfigureTestModeBindings();
 }
 
 void Robot::TestPeriodic() {}

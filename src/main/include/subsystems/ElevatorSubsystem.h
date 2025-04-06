@@ -42,6 +42,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         units::inch_t CurrentHeight();
 
+        void MoveElevator(units::volt_t MotorSpeed);
+
         void PrepareElevator(units::inch_t newPosition);
         frc2::CommandPtr GoToHeight(units::inch_t height);
 
