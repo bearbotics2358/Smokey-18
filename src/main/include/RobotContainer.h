@@ -75,6 +75,9 @@ public:
 private:
     void ConfigureBindings();
     void AddPathPlannerCommands();
-    
+
     ReefSide m_reefSide = ReefSide::Left;
+
+    bool m_cameraRinglight = false;
+    frc2::Trigger m_cameraRightlightState;
 };

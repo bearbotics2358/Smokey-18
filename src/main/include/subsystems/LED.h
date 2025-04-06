@@ -28,6 +28,8 @@ namespace ArduinoConstants {
         CLIMB_LEFT_FALSE = 9,
         CLIMB_RIGHT_TRUE = 10,
         CLIMB_RIGHT_FALSE = 11,
+        CAMERA_RING = 12,
+        CAMERA_RING_OFF = 13,
     };
 }
 

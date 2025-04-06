@@ -75,6 +75,8 @@ void LED::Periodic() {
       case ArduinoConstants::RIO_MESSAGES::CLIMB_LEFT_FALSE:    message = "9\r\n";  break;
       case ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_TRUE:    message = "10\r\n"; break;
       case ArduinoConstants::RIO_MESSAGES::CLIMB_RIGHT_FALSE:   message = "11\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::CAMERA_RING:         message = "12\r\n"; break;
+      case ArduinoConstants::RIO_MESSAGES::CAMERA_RING_OFF:     message = "13\r\n"; break;
       default:
         std::printf("Unknown LED command: %d\n", static_cast<int>(m_LEDCurrentCommand));
         break;
