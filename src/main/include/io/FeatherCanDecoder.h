@@ -49,6 +49,7 @@ public:
     float GetAlgaeAngleDegrees() override;
     float GetAlgaeRawAngleDegrees() override;
     bool IsAlgaeCollected() override;
+    bool IsAlgaeAngleValid() override;
 
     // **** IClimberDataProvider interface functions **** //
     float m_climberAngleDegrees;

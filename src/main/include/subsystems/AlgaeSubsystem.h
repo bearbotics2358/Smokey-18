@@ -18,13 +18,15 @@
 constexpr int kAlgaeMotor = 49;
 constexpr int kAlgaePivot = 35;
 
-constexpr units::degree_t kAlgaeStowAngle = 150.0_deg;
+constexpr units::degree_t kAlgaeStowAngle = 150_deg;
 constexpr units::degree_t kAlgaeExtendedAngle = 90.0_deg;
 
 class AlgaeSubsystem : public frc2::SubsystemBase {
  public:
   AlgaeSubsystem(IAlgaeDataProvider* dataProvider);
   void Periodic();
+
+  void SetPivotSpeed(double speed);
 
   frc2::CommandPtr Intake();
   frc2::CommandPtr Dispense();
@@ -35,9 +37,15 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
   units::degree_t CurrentAngle();
 
  private:
+    static constexpr double kNeoCountsPerRev = 42;
+    static constexpr double kAlgaePivotGearRatio = 125.0;
+
+
+    double m_relEncoderOffsetDegrees = 0.0;
     void GoToAngle();
 
-    ctre::phoenix6::hardware::TalonFX m_algaePivotMotor;
+    rev::spark::SparkMax m_algaePivotMotor;
+    rev::spark::SparkRelativeEncoder m_algaePivotEncoder;
 
     rev::spark::SparkMax m_algaeMotor;
 
@@ -55,15 +63,17 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
         kMaxVelocity, kMaxAcceleration
     };
 
-    frc::ProfiledPIDController<units::turns> m_algaePID {
+    frc::ProfiledPIDController<units::turn> m_algaePID {
         kP, kI, kD, m_constraints
     };
 
     frc::ArmFeedforward m_algaeFeedForward{kS, kG, kV};
 
-    units::degree_t m_setpointAngle = kAlgaeStowAngle;
+    units::turn_t m_setpointAngle = kAlgaeStowAngle;
 
     static constexpr double TOLERANCE = 1.0;
 
     IAlgaeDataProvider* m_algaeDataProvider;
+
+    units::degree_t GetAngleDegreesFallback();
 };

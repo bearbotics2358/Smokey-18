@@ -10,4 +10,7 @@ public:
 
     // Return a simple boolean to indicate whether a piece of algae has been collected
     virtual bool IsAlgaeCollected() = 0;
+
+
+    virtual bool IsAlgaeAngleValid() = 0;
 };
