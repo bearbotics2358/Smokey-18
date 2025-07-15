@@ -6,9 +6,11 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
 
-#include "photon/PhotonCamera.h"
-#include "photon/PhotonUtils.h"
-#include "photon/PhotonPoseEstimator.h"
+// #include "photon/PhotonCamera.h"
+// #include "photon/PhotonUtils.h"
+// #include "photon/PhotonPoseEstimator.h"
+
+#include "subsystems/LimelightHelpers.h"
 
 #include "subsystems/CommandSwerveDrivetrain.h"
 
@@ -32,7 +34,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  photon::PhotonPipelineResult result;
+  LimelightHelpers::FiducialResultClass result;
   photon::PhotonTrackedTarget bestTarget;
   frc::Transform3d transformation;
 
@@ -40,6 +42,9 @@ class CameraSubsystem : public frc2::SubsystemBase {
   #define CAMERA_NAME "limelight3"
   photon::PhotonCamera limelightCamera{CAMERA_NAME};
   std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;
+
+
+  const std::string kLimelight4 = "limelight";
 
   subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
