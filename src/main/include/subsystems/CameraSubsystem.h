@@ -22,8 +22,6 @@ class CameraSubsystem : public frc2::SubsystemBase {
   bool visibleTargets();
   units::meter_t getStrafeTransformation();
   units::meter_t getForwardTransformation();
-  double getDistance();
-  units::degree_t getZRotation();
   frc::Rotation2d GetRotation2d();
 
   std::optional<int> GetTargetTagId();
@@ -34,14 +32,13 @@ class CameraSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  LimelightHelpers::FiducialResultClass result;
-  photon::PhotonTrackedTarget bestTarget;
+  // photon::PhotonTrackedTarget bestTarget;
   frc::Transform3d transformation;
 
   frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025ReefscapeWelded);
   #define CAMERA_NAME "limelight3"
-  photon::PhotonCamera limelightCamera{CAMERA_NAME};
-  std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;
+  // photon::PhotonCamera limelightCamera{CAMERA_NAME};
+  // std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;
 
 
   const std::string kLimelight4 = "limelight";
