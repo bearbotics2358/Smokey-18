@@ -4,8 +4,8 @@
 CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain) {
     m_drivetrain = drivetrain;
     frc::Transform3d robotToCam = 
-        frc::Transform3d(frc::Translation3d(-2.5625_in, 0_in, 12.5_in),
-            frc::Rotation3d(0_rad, 15_deg, 0_rad));
+        frc::Transform3d(frc::Translation3d(13.4375_in, 15_in, 0_in),
+            frc::Rotation3d(0_rad, 0_rad, 45_deg));
     m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 }
 
@@ -55,11 +55,11 @@ double CameraSubsystem::getDistance() {
 }
 
 units::meter_t CameraSubsystem::getStrafeTransformation() {
-    return transformation.Y() - 0.38_m;
+    return transformation.Y();
 }
 
 units::meter_t CameraSubsystem::getForwardTransformation() {
-    return transformation.X() + 0.41_m;
+    return transformation.X();
 }
 
 void CameraSubsystem::Periodic() {
