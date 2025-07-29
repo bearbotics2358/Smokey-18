@@ -12,11 +12,14 @@ CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain
 void CameraSubsystem::updateData() {
     if (visibleTargets()) {
 
+        std::vector<double> botPose = nt::NetworkTableInstance::GetDefault().GetTable(kLimelight4)->GetNumberArray("botpose",std::vector<double>(6));
+        frc::SmartDashboard::PutNumber("Tag Distance", units::inch_t(botPose[9]).value());
+
         std::vector<double> targetPose = LimelightHelpers::getBotpose_TargetSpace(kLimelight4);
 
-        transformation = frc::Transform3d(units::meter_t(targetPose.at(2)),
+        transformation = frc::Transform3d(units::meter_t(botPose[9]),
                                           units::meter_t(targetPose.at(0)),
-                                          units::meter_t(targetPose.at(1)),
+                                          units::meter_t(targetPose.at(2)),
                                           frc::Rotation3d(units::angle::radian_t(targetPose.at(5)),
                                                           units::angle::radian_t(targetPose.at(4)),
                                                           units::angle::radian_t(targetPose.at(3))));
