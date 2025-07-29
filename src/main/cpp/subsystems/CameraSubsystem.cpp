@@ -12,11 +12,11 @@ CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain
 void CameraSubsystem::updateData() {
     if (visibleTargets()) {
 
-        std::vector<double> targetPose = LimelightHelpers::getTargetPose_RobotSpace(kLimelight4);
+        std::vector<double> targetPose = LimelightHelpers::getBotpose_TargetSpace(kLimelight4);
 
-        transformation = frc::Transform3d(units::meter_t(targetPose.at(0)),
+        transformation = frc::Transform3d(units::meter_t(targetPose.at(2)),
+                                          units::meter_t(targetPose.at(0)),
                                           units::meter_t(targetPose.at(1)),
-                                          units::meter_t(targetPose.at(2)),
                                           frc::Rotation3d(units::angle::radian_t(targetPose.at(5)),
                                                           units::angle::radian_t(targetPose.at(4)),
                                                           units::angle::radian_t(targetPose.at(3))));
@@ -59,6 +59,7 @@ frc::Rotation2d CameraSubsystem::GetRotation2d() {
 void CameraSubsystem::Periodic() {
     updateData();
 
+    frc::SmartDashboard::PutNumber("Raw Forward Transformation", LimelightHelpers::getBotpose_TargetSpace(kLimelight4).at(1) * 39.37);
     frc::SmartDashboard::PutNumber("Robot X Position", m_drivetrain->GetPose().X().value());
     frc::SmartDashboard::PutNumber("Robot Y Position", m_drivetrain->GetPose().Y().value());
     frc::SmartDashboard::PutNumber("Robot Rotation", m_drivetrain->GetPose().Rotation().Degrees().value());

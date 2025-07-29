@@ -44,7 +44,7 @@ void AlignWithReef::Execute() {
     double forward = m_XAlignmentPID.Calculate(m_camera->getForwardTransformation().value(), kDistanceFromReefSetpoint.value());
     forward = std::clamp(forward, -1.0, 1.0);
 
-    units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
+    units::meter_t forward_diff = -units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
     if (forward_diff < kForwardTolerance) {
         forward = 0.0;
     }

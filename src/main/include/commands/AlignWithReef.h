@@ -58,7 +58,7 @@ private:
     static constexpr double kRotationD = 0.001;
     frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    static constexpr units::meters_per_second_t kMaxVelocity = 1.5_mps;
+    static constexpr units::meters_per_second_t kMaxVelocity = 0.5_mps;
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(3_in);
