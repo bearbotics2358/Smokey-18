@@ -29,7 +29,7 @@ void AlignWithReef::Initialize() {
 
     // If a target tag exists and it is in the reef tag list, then we should attempt to align to it
     if (m_targetTagId && kTagAngleMap.contains(m_targetTagId.value())) {
-        m_targetDegrees = kTagAngleMap.at(m_targetTagId.value());
+        m_targetDegrees = kTagAngleMap.at(m_targetTagId.value()) - 45_deg;
     } else {
         m_targetTagId = std::nullopt;
     }

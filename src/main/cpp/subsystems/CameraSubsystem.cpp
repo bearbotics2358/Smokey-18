@@ -45,15 +45,6 @@ bool CameraSubsystem::visibleTargets() {
     return result.HasTargets();
 }
 
-//returns the Z rotation needed to get to the best target as a double
-units::degree_t CameraSubsystem::getZRotation() {
-    if (result.HasTargets()) {
-        return units::degree_t(bestTarget.GetYaw());
-    } else {
-        return 0_deg;
-    }
-}
-
 // meters
 double CameraSubsystem::getDistance() {
     if (result.HasTargets()) {
@@ -64,15 +55,11 @@ double CameraSubsystem::getDistance() {
 }
 
 units::meter_t CameraSubsystem::getStrafeTransformation() {
-    return transformation.Y();
+    return transformation.Y() - 0.38_m;
 }
 
 units::meter_t CameraSubsystem::getForwardTransformation() {
-    return transformation.X();
-}
-
-frc::Rotation2d CameraSubsystem::GetRotation2d() {
-    return transformation.Rotation().ToRotation2d();
+    return transformation.X() + 0.41_m;
 }
 
 void CameraSubsystem::Periodic() {
