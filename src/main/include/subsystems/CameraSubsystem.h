@@ -10,6 +10,8 @@
 #include "photon/PhotonUtils.h"
 #include "photon/PhotonPoseEstimator.h"
 
+#include "subsystems/LimelightHelpers.h"
+
 #include "subsystems/CommandSwerveDrivetrain.h"
 
 class CameraSubsystem : public frc2::SubsystemBase {
@@ -18,13 +20,18 @@ class CameraSubsystem : public frc2::SubsystemBase {
 
   void updateData();
   bool visibleTargets();
+  bool lVisibleTargets();
   units::meter_t getStrafeTransformation();
+  units::meter_t lGetStrafeTransformation();
   units::meter_t getForwardTransformation();
+  units::meter_t lGetForwardTransformation();
   double getDistance();
   units::degree_t getZRotation();
   frc::Rotation2d GetRotation2d();
+  double getRotZ();
 
   std::optional<int> GetTargetTagId();
+  std::optional<int> lGetTargetTagId();
 
   void Periodic() override;
 
@@ -35,11 +42,17 @@ class CameraSubsystem : public frc2::SubsystemBase {
   photon::PhotonPipelineResult result;
   photon::PhotonTrackedTarget bestTarget;
   frc::Transform3d transformation;
+  frc::Transform3d robotToCam;
+  frc::Pose3d robotPose;
+
+  frc::Transform3d lTransformation;
 
   frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025ReefscapeWelded);
   #define CAMERA_NAME "limelight3"
   photon::PhotonCamera limelightCamera{CAMERA_NAME};
   std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;
+
+  const std::string kLimelight4 = "limelight";
 
   subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
