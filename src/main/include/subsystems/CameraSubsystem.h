@@ -39,17 +39,18 @@ class CameraSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  photon::PhotonPipelineResult result;
+  photon::PhotonPipelineResult resultLL3;
   photon::PhotonTrackedTarget bestTarget;
-  frc::Transform3d transformation;
-  frc::Transform3d robotToCam;
-  frc::Pose3d robotPose;
+  frc::Transform3d LL3toTarget;
+  frc::Transform3d LL3ToRobot;
+  frc::Transform3d LL4ToRobot;
+  frc::Pose3d originPose;
 
   frc::Transform3d lTransformation;
 
   frc::AprilTagFieldLayout aprilTagFieldLayout = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2025ReefscapeWelded);
   #define CAMERA_NAME "limelight3"
-  photon::PhotonCamera limelightCamera{CAMERA_NAME};
+  photon::PhotonCamera limeLight3Camera{CAMERA_NAME};
   std::unique_ptr<photon::PhotonPoseEstimator> m_poseEstimator;
 
   const std::string kLimelight4 = "limelight";

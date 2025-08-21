@@ -3,76 +3,53 @@
 
 CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain) {
     m_drivetrain = drivetrain;
-    robotToCam = 
-        frc::Transform3d(frc::Translation3d(-15_in, 0_in, 0_in),
-            frc::Rotation3d(-20_deg, 0_rad, 0_rad));
-    m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+    LL3ToRobot = 
+        //LL3 Pose on Robot (x = 17_in, y = -14.5_in, YAW = 20_deg)
+        frc::Transform3d(frc::Translation3d(17_in, -14.5_in, 0_in),
+            frc::Rotation3d(0_deg, 0_deg, 20_deg));
+            frc::Rotation3d Rot3d(0_deg, 0_rad, -20_deg);
+            frc::SmartDashboard::PutNumber("Rot3d", Rot3d.Angle().value());
+        //LL4 Pose on Robot (x = 16_in, y = 12_in, YAW = -20_deg)
+    // LL4ToRobot = 
+    //     frc::Transform3d(frc::Translation3d(17_in, 12_in, 0_in),
+    //         frc::Rotation3d(0_deg, 0_rad, -20_deg));
+    m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, LL3ToRobot);
 }
 
-//updates local variables related to the limelight result
+//updates local variables related to the LL3 and LL4 results
 void CameraSubsystem::updateData() {
-    if (lVisibleTargets()) {
-        std::vector<double> lBotPose = nt::NetworkTableInstance::GetDefault().GetTable(kLimelight4)->GetNumberArray("botpose",std::vector<double>(6));
-        frc::SmartDashboard::PutNumber("lTag Dist", units::inch_t(lBotPose[9]).value());
-        frc::SmartDashboard::PutNumberArray("DIS ARRAY", lBotPose);
+    resultLL3 = limeLight3Camera.GetLatestResult();
+    if (resultLL3.HasTargets()) {
+        bestTarget = resultLL3.GetBestTarget();
+        LL3toTarget = bestTarget.GetBestCameraToTarget();
+        //robotPose = robotPose.TransformBy(rawTransformation).TransformBy(LL3ToRobot.Inverse());
+        frc::Pose3d robotInvPose = originPose.TransformBy(LL3toTarget).TransformBy(LL3ToRobot.Inverse());
+        frc::Pose3d robotPose = originPose.TransformBy(LL3toTarget).TransformBy(LL3ToRobot);
+        std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(resultLL3);
+        
+        frc::Pose3d LL3toTargetPose = originPose.TransformBy(LL3toTarget);
+        frc::Pose3d robotPosetoLL3 = originPose.TransformBy(LL3ToRobot.Inverse());
+        frc::Pose3d resultRobotPose = robotPosetoLL3.RelativeTo(LL3toTargetPose);
+        
+        frc::SmartDashboard::PutNumber("resultRobotPose X", units::inch_t(resultRobotPose.X()).value());
+        frc::SmartDashboard::PutNumber("resultRobotPose Y", units::inch_t(resultRobotPose.Y()).value());
 
-        std::vector<double> lTargetPose = LimelightHelpers::getBotpose_TargetSpace(kLimelight4);
 
-        lTransformation = frc::Transform3d(units::meter_t(lBotPose[9]),
-                                            units::meter_t(lTargetPose.at(0)),
-                                            units::meter_t(lTargetPose.at(2)),
-                                            frc::Rotation3d(units::angle::degree_t(lTargetPose.at(5)),
-                                                            units::angle::degree_t(lTargetPose.at(4)),
-                                                            units::angle::degree_t(lTargetPose.at(3))));
+        // X Distance is forwards and backwards, forwards being positive
+        // Y Distance is left and right, left being positive
+        frc::SmartDashboard::PutNumber("LL3 X Distance", units::inch_t(robotPose.X()).value());
+        frc::SmartDashboard::PutNumber("LL3 Y Distance", units::inch_t(robotPose.Y()).value());
+        frc::SmartDashboard::PutNumber("LL3 X Inverse Distance", units::inch_t(robotInvPose.X()).value());
+        frc::SmartDashboard::PutNumber("LL3 Y Inverse Distance", units::inch_t(robotInvPose.Y()).value());
+        frc::SmartDashboard::PutNumber("LL3 Raw X Distance", units::inch_t(LL3toTarget.X()).value());
+        frc::SmartDashboard::PutNumber("LL3 Raw Y Distance", units::inch_t(LL3toTarget.Y()).value());
+        //frc::SmartDashboard::PutNumber("PoseEstimate X", units::inch_t(m_poseEstimator.get()->().X()).value());
 
-        LimelightHelpers::PoseEstimate estimatedPose = LimelightHelpers::getBotPoseEstimate_wpiBlue(kLimelight4);
-        m_drivetrain->AddVisionMeasurement(estimatedPose.pose, ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose.timestampSeconds));
 
-        frc::SmartDashboard::PutNumber("lStrafe Distance", units::inch_t(lGetStrafeTransformation()).value());
-        frc::SmartDashboard::PutNumber("lForward Distance", units::inch_t(lGetForwardTransformation()).value());
-        //frc::SmartDashboard::PutNumber("lForward Distance Mega", m_drivetrain->GetPose().X().value() - units::meter_t(14.2_in).value());
-        frc::SmartDashboard::PutNumber("MegaX", m_drivetrain->GetPose().X().value());
-        frc::SmartDashboard::PutNumber("MegaY", m_drivetrain->GetPose().Y().value());
-        frc::SmartDashboard::PutNumber("LNEW DIST", ((sqrt(pow(lBotPose[9], 2)) - pow(0.305, 2)) + 0.43));
-        frc::SmartDashboard::PutNumber("IDONTLIKETHIS", (sqrt((pow(getDistance(), 2) + pow(0.50, 2)) - (2 * getDistance() * 0.50 * cosh(90 + getRotZ())))));
-        frc::SmartDashboard::PutNumber("IDONTLIKETHIS2", (sqrt((pow(lBotPose[9], 2) + pow(0.50, 2)) - (2 * lBotPose[9] * 0.50 * cosh(90 + lBotPose[6])))));
-    }
 
-    frc::SmartDashboard::PutBoolean("lHas Targets", lVisibleTargets());
-
-    result = limelightCamera.GetLatestResult();
-    if (result.HasTargets()) {
-        bestTarget = result.GetBestTarget();
-        transformation = bestTarget.GetBestCameraToTarget();
-    
-        frc::Transform3d robotToTarget = transformation + robotToCam;
-
-        frc::SmartDashboard::PutNumber("PRE OFFSET STRAFE", units::inch_t(transformation.Y()).value());
-        frc::SmartDashboard::PutNumber("PRE OFFSET FORAWRD", units::inch_t(transformation.X()).value());
-        frc::SmartDashboard::PutNumber("Offset Strafe Distance", units::inch_t(robotToTarget.Y()).value());
-        frc::SmartDashboard::PutNumber("Offset Forward Distance", units::inch_t(robotToTarget.X()).value());
-
-        frc::Translation3d robotTrans = robotToCam.Translation() + transformation.Translation();
-        frc::Rotation3d robotRot = robotToCam.Rotation() + transformation.Rotation();
-        frc::Pose3d robotPose = frc::Pose3d(robotTrans, robotRot);
-
-        std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(result);
         if (estimatedPose){
             m_drivetrain->AddVisionMeasurement(estimatedPose->estimatedPose.ToPose2d(),ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose->timestamp));
         }
-
-        
-        frc::SmartDashboard::PutBoolean("Has Targets", true);
-
-        frc::SmartDashboard::PutNumber("ZRot", units::degree_t(getRotZ()).value());
-        frc::SmartDashboard::PutNumber("Rotation", (transformation.Rotation().Z().value() / fabs((transformation.Rotation().Z()).value())) * (180 - fabs(units::degree_t(transformation.Rotation().Z()).value())));
-        frc::SmartDashboard::PutNumber("DISTANCE ANGLE", units::degree_t(bestTarget.GetYaw()).value());
-        frc::SmartDashboard::PutNumber("Strafe Distance", units::inch_t(getStrafeTransformation()).value());
-        //frc::SmartDashboard::PutNumber("Offset Strafe Distance", robotTrans[1]);  
-        frc::SmartDashboard::PutNumber("Forward Distance", units::inch_t(getForwardTransformation()).value());
-        frc::SmartDashboard::PutNumber("Dist", units::inch_t(getDistance()).value());
-        frc::SmartDashboard::PutNumber("NEW DIST", ((sqrt(pow(getDistance(), 2)) - pow(0.305, 2)) + 0.43));
-        //frc::SmartDashboard::PutNumber("NEW DIST", sqrt(pow(getDistance(), 2) - pow(.305, 2)) + 0.43);
     } else {
         frc::SmartDashboard::PutBoolean("Has Targets", false);
     }
@@ -88,9 +65,7 @@ std::optional<int> CameraSubsystem::GetTargetTagId() {
 
 double CameraSubsystem::getRotZ() {
     if (visibleTargets()) {
-        // return (transformation.Rotation().Z().value() / fabs((transformation.Rotation().Z()).value())) * 
-        // (180 - fabs(units::degree_t(transformation.Rotation().Z()).value()));
-        return transformation.Rotation().Z().value();
+        return LL3toTarget.Rotation().Z().value();
     } else {
         return 0;
     }
@@ -106,16 +81,16 @@ std::optional<int> CameraSubsystem::lGetTargetTagId() {
 
 //Returns true if targets are visible to limelight. Otherwise returns false
 bool CameraSubsystem::visibleTargets() {
-    return result.HasTargets();
+    return resultLL3.HasTargets();
 }
 
-bool CameraSubsystem::lVisibleTargets() {
-    return LimelightHelpers::getTV(kLimelight4);
-}
+// bool CameraSubsystem::lVisibleTargets() {
+//     return LimelightHelpers::getTV(kLimelight4);
+// }
 
 // meters
 double CameraSubsystem::getDistance() {
-    if (result.HasTargets()) {
+    if (resultLL3.HasTargets()) {
         return units::inch_t(sqrt(pow(getStrafeTransformation().value(), 2) + pow(getForwardTransformation().value(), 2))).value();
     } else {
         return 0;
@@ -123,20 +98,20 @@ double CameraSubsystem::getDistance() {
 }
 
 units::meter_t CameraSubsystem::getStrafeTransformation() {
-    return transformation.Y();
+    return LL3toTarget.Y();
 }
 
-units::meter_t CameraSubsystem::lGetStrafeTransformation() {
-    return lTransformation.Y();
-}
+// units::meter_t CameraSubsystem::lGetStrafeTransformation() {
+//     return lTransformation.Y();
+// }
 
 units::meter_t CameraSubsystem::getForwardTransformation() {
-    return transformation.X();
+    return LL3toTarget.X();
 }
 
-units::meter_t CameraSubsystem::lGetForwardTransformation() {
-    return lTransformation.X();
-}
+// units::meter_t CameraSubsystem::lGetForwardTransformation() {
+//     return lTransformation.X();
+// }
 
 void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
