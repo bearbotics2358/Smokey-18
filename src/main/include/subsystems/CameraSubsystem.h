@@ -46,6 +46,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   frc::Transform3d LL3ToRobot;
   frc::Transform3d LL4ToRobot;
   frc::Pose3d originPose;
+  frc::Pose3d LL3ResultRobotPose;
 
   frc::Transform3d lTransformation;
 

@@ -41,7 +41,7 @@ class AlgaeSubsystem : public frc2::SubsystemBase {
 
     rev::spark::SparkMax m_algaeMotor;
 
-    static constexpr units::turns_per_second_t kMaxVelocity = 1.5_tps;
+    static constexpr units::turns_per_second_t kMaxVelocity = 0.5_tps;
     static constexpr units::turns_per_second_squared_t kMaxAcceleration = 0.75_tr_per_s_sq;
     static constexpr double kP = 15.0;
     static constexpr double kI = 0.0;
