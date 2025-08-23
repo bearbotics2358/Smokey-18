@@ -42,6 +42,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   photon::PhotonPipelineResult resultLL3;
   photon::PhotonTrackedTarget bestTarget;
   frc::Transform3d LL3toTarget;
+  frc::Transform3d LL4toTarget;
   frc::Transform3d LL3ToRobot;
   frc::Transform3d LL4ToRobot;
   frc::Pose3d originPose;

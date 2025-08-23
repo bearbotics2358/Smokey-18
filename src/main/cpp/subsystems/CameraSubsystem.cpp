@@ -5,10 +5,8 @@ CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain
     m_drivetrain = drivetrain;
     LL3ToRobot = 
         //LL3 Pose on Robot (x = 17_in, y = -14.5_in, YAW = 20_deg)
-        frc::Transform3d(frc::Translation3d(17_in, -14.5_in, 0_in),
-            frc::Rotation3d(0_deg, 0_deg, 20_deg));
-            frc::Rotation3d Rot3d(0_deg, 0_rad, -20_deg);
-            frc::SmartDashboard::PutNumber("Rot3d", Rot3d.Angle().value());
+        frc::Transform3d(frc::Translation3d(16_in, -12_in, 0_in),
+            frc::Rotation3d(0_deg, 0_deg, 21_deg));
         //LL4 Pose on Robot (x = 16_in, y = 12_in, YAW = -20_deg)
     // LL4ToRobot = 
     //     frc::Transform3d(frc::Translation3d(17_in, 12_in, 0_in),
@@ -18,31 +16,42 @@ CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain
 
 //updates local variables related to the LL3 and LL4 results
 void CameraSubsystem::updateData() {
+    if (LimelightHelpers::getTV(kLimelight4)) {
+        std::vector<double> LL4Result = nt::NetworkTableInstance::GetDefault().GetTable(kLimelight4)->GetNumberArray("LL4Result", std::vector<double>(6));
+        std::vector<double> LL4TargetPose = LimelightHelpers::getBotpose_TargetSpace(kLimelight4);
+
+        LL4toTarget = frc::Transform3d(units::meter_t(LL4Result[6]),
+                                        units::meter_t(LL4TargetPose.at(0)),
+                                        units::meter_t(LL4TargetPose.at(2)),
+                                        frc::Rotation3d(units::angle::radian_t(LL4TargetPose.at(5)),
+                                        units::angle::radian_t(LL4TargetPose.at(4)),
+                                        units::angle::radian_t(LL4TargetPose.at(3)))
+                                    );
+
+        frc::SmartDashboard::PutNumberArray("LL4 Raw X Distance", LL4Result);
+        frc::SmartDashboard::PutNumber("LL4 Raw Y Distance", units::inch_t(LL4toTarget.Y()).value());
+    };
+
+
+
     resultLL3 = limeLight3Camera.GetLatestResult();
     if (resultLL3.HasTargets()) {
         bestTarget = resultLL3.GetBestTarget();
         LL3toTarget = bestTarget.GetBestCameraToTarget();
         //robotPose = robotPose.TransformBy(rawTransformation).TransformBy(LL3ToRobot.Inverse());
-        frc::Pose3d robotInvPose = originPose.TransformBy(LL3toTarget).TransformBy(LL3ToRobot.Inverse());
-        frc::Pose3d robotPose = originPose.TransformBy(LL3toTarget).TransformBy(LL3ToRobot);
         std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(resultLL3);
         
         frc::Pose3d LL3toTargetPose = originPose.TransformBy(LL3toTarget);
         frc::Pose3d robotPosetoLL3 = originPose.TransformBy(LL3ToRobot.Inverse());
         frc::Pose3d resultRobotPose = robotPosetoLL3.RelativeTo(LL3toTargetPose);
-        
-        frc::SmartDashboard::PutNumber("resultRobotPose X", units::inch_t(resultRobotPose.X()).value());
-        frc::SmartDashboard::PutNumber("resultRobotPose Y", units::inch_t(resultRobotPose.Y()).value());
 
 
         // X Distance is forwards and backwards, forwards being positive
         // Y Distance is left and right, left being positive
-        frc::SmartDashboard::PutNumber("LL3 X Distance", units::inch_t(robotPose.X()).value());
-        frc::SmartDashboard::PutNumber("LL3 Y Distance", units::inch_t(robotPose.Y()).value());
-        frc::SmartDashboard::PutNumber("LL3 X Inverse Distance", units::inch_t(robotInvPose.X()).value());
-        frc::SmartDashboard::PutNumber("LL3 Y Inverse Distance", units::inch_t(robotInvPose.Y()).value());
         frc::SmartDashboard::PutNumber("LL3 Raw X Distance", units::inch_t(LL3toTarget.X()).value());
         frc::SmartDashboard::PutNumber("LL3 Raw Y Distance", units::inch_t(LL3toTarget.Y()).value());
+        frc::SmartDashboard::PutNumber("resultRobotPose X", units::inch_t(resultRobotPose.X()).value());
+        frc::SmartDashboard::PutNumber("resultRobotPose Y", units::inch_t(resultRobotPose.Y()).value());
         //frc::SmartDashboard::PutNumber("PoseEstimate X", units::inch_t(m_poseEstimator.get()->().X()).value());
 
 
