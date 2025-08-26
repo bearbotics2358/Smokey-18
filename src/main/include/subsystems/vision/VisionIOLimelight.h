@@ -2,19 +2,23 @@
 
 #include "subsystems/vision/VisionIO.h"
 
+#include <functional>
 #include <networktables/DoubleArrayTopic.h>
 #include <networktables/DoubleTopic.h>
+
+typedef std::function<units::degree_t()> BotHeadingProvider;
 
 /**
  * IO implementation for real Limelight hardware
  */
 class VisionIOLimelight : public VisionIO {
 public:
-    VisionIOLimelight(std::string name /*, add a variable to get rotation in some way */);
+    VisionIOLimelight(std::string name, BotHeadingProvider getBotHeadingDegrees);
 
     void updateInputs(VisionIOInputs& inputs) override;
 
 private:
+    BotHeadingProvider m_getBotHeadingDegrees;
     nt::DoubleArrayPublisher m_orientationPublisher;
 
     nt::DoubleSubscriber m_latencySubscriber;

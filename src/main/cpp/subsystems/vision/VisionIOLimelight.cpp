@@ -4,14 +4,15 @@
 #include <frc/RobotController.h>
 #include <networktables/NetworkTableInstance.h>
 
-VisionIOLimelight::VisionIOLimelight(std::string name /*, some way to get the rotation*/) {
+VisionIOLimelight::VisionIOLimelight(std::string name, BotHeadingProvider getBotHeadingDegrees) {
     std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable(name);
 
-    // @todo rotationSupplier assignment goes here
+    m_getBotHeadingDegrees = getBotHeadingDegrees;
 
     m_orientationPublisher = table->GetDoubleArrayTopic("robot_orientation_set").Publish();
     m_latencySubscriber = table->GetDoubleTopic("tl").Subscribe(0.0);
-    m_txSubscriber = table->GetDoubleTopic("ty").Subscribe(0.0);
+    m_txSubscriber = table->GetDoubleTopic("tx").Subscribe(0.0);
+    m_tySubscriber = table->GetDoubleTopic("ty").Subscribe(0.0);
     m_megatag1Subscriber = table->GetDoubleArrayTopic("botpose_wpiblue").Subscribe(std::array<double, 0>());
     m_megatag2Subscriber = table->GetDoubleArrayTopic("botpost_orb_wpiblue").Subscribe(std::array<double, 0>());
 }
@@ -28,8 +29,7 @@ void VisionIOLimelight::updateInputs(VisionIOInputs& inputs) {
 
     // Update orientation for MegaTag 2
 
-    // @todo replace the first value with the actual orientation of the robot
-    std::array<double, 6> orientationArray{0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    std::array<double, 6> orientationArray{m_getBotHeadingDegrees().value(), 0.0, 0.0, 0.0, 0.0, 0.0};
     m_orientationPublisher.Set(orientationArray);
 
     // This increases network traffic but it is recommended by Limelight

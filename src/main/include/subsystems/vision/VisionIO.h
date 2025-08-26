@@ -7,7 +7,7 @@
 class VisionIO {
 public:
     /** Represents the angle to a simple target, not used for pose estimation. */
-    typedef struct TargetObservation {
+    struct TargetObservation {
         frc::Rotation2d tx;
         frc::Rotation2d ty;
     };
@@ -19,7 +19,7 @@ public:
     };
 
     /** Represents a robot pose sample used for pose estimation. */
-    typedef struct PoseObservation {
+    struct PoseObservation {
         units::time::second_t timestamp;
         frc::Pose3d pose;
         double ambiguity;
@@ -28,7 +28,7 @@ public:
         PoseObservationType type;
     };
 
-    typedef struct VisionIOInputs {
+    struct VisionIOInputs {
         bool connected = false;
         TargetObservation latestTargetObservation;
         std::vector<PoseObservation> poseObservations;
