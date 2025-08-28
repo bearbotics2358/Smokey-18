@@ -102,9 +102,14 @@ std::optional<int> CameraSubsystem::lGetTargetTagId() {
     }
 }
 
-//Returns true if targets are visible to limelight. Otherwise returns false
+//Returns true if targets are visible to either or both cameras. Otherwise returns false
 bool CameraSubsystem::visibleTargets() {
-    return resultLL3.HasTargets();
+    if (resultLL3.HasTargets() or LimelightHelpers::getTV )  {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 // bool CameraSubsystem::lVisibleTargets() {
@@ -113,7 +118,7 @@ bool CameraSubsystem::visibleTargets() {
 
 // meters
 double CameraSubsystem::getDistance() {
-    if (resultLL3.HasTargets()) {
+    if (visibleTargets()) {
         return units::inch_t(sqrt(pow(getStrafeTransformation().value(), 2) + pow(getForwardTransformation().value(), 2))).value();
     } else {
         return 0;
