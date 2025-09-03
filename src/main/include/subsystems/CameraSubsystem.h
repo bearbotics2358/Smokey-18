@@ -22,9 +22,7 @@ class CameraSubsystem : public frc2::SubsystemBase {
   bool visibleTargets();
   bool lVisibleTargets();
   units::meter_t getStrafeTransformation();
-  units::meter_t lGetStrafeTransformation();
   units::meter_t getForwardTransformation();
-  units::meter_t lGetForwardTransformation();
   double getDistance();
   units::degree_t getZRotation();
   frc::Rotation2d GetRotation2d();

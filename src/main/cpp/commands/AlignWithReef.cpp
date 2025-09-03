@@ -36,7 +36,7 @@ void AlignWithReef::Initialize() {
 }
 
 void AlignWithReef::Execute() {
-    if (!m_targetTagId) {
+    if (!m_targetTagId && !m_camera->lVisibleTargets()) {
         // No target exists, so don't attempt to align
         return;
     }
@@ -58,6 +58,7 @@ void AlignWithReef::Execute() {
     }
 
     units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
+    //units::degree_t currentDegrees = m_camera->getZRotation();
     double rotation = m_rotationalPID.Calculate(currentDegrees.value(), m_targetDegrees.value());
     rotation = std::clamp(rotation, -1.0, 1.0);
 
@@ -71,20 +72,20 @@ void AlignWithReef::Execute() {
 }
 
 bool AlignWithReef::IsFinished() {
-    if (!m_targetTagId) {
-        // If there is no target tag, finish the command immediately
+    if ((false == m_targetTagId) && (m_camera->lVisibleTargets() == false)) {
         return true;
     }
 
-    if (false == m_camera->visibleTargets() && m_reefSide == ReefSide::Right) {
-        // Right alignment has a tendency to lose the tag and drift to the right.
-        // When the bot loses tag visibility when doing right alignment, end the command
-        return true;
-    }
+    // if (false == m_camera->visibleTargets() || false == m_camera->lVisibleTargets() && m_reefSide == ReefSide::Right) {
+    //     // Right alignment has a tendency to lose the tag and drift to the right.
+    //     // When the bot loses tag visibility when doing right alignment, end the command
+    //     return true;
+    // }
 
     units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
     units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
     units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
+    //units::degree_t currentDegrees = m_camera->getZRotation();
     units::degree_t rotational_diff = units::math::abs(currentDegrees - m_targetDegrees);
 
     // If the bot is within tolerance for X, Y and rotational position, then we consider the command finished.

@@ -35,6 +35,7 @@ void CameraSubsystem::updateData() {
         frc::SmartDashboard::PutNumber("LL3 Y Distance", units::inch_t(robotPosetoLL3.Y()).value());
         frc::SmartDashboard::PutNumber("LL3ResultRobotPose X", units::inch_t(LL3ResultRobotPose.X()).value());
         frc::SmartDashboard::PutNumber("LL3ResultRobotPose Y", units::inch_t(LL3ResultRobotPose.Y()).value());
+        //frc::SmartDashboard::PutNumber("Megatag YAW", units::degree(LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2().pose.Rotation()).value());
         //frc::SmartDashboard::PutNumber("PoseEstimate X", units::inch_t(m_poseEstimator.get()->().X()).value());
 
 
@@ -59,9 +60,13 @@ void CameraSubsystem::updateData() {
                                         units::angle::degree_t(LL4Result.at(5)))
                                     );
 
-        frc::Pose3d LL4toTargetPose = originPose.TransformBy(LL4toTarget);
-        frc::Pose3d robotPosetoLL4 = originPose.TransformBy(LL4ToRobot.Inverse());
-        frc::Pose3d LL4ResultRobotPose = LL4toTargetPose.RelativeTo(robotPosetoLL4);
+        // frc::Pose3d LL4toTargetPose = originPose.TransformBy(LL4toTarget);
+        // frc::Pose3d robotPosetoLL4 = originPose.TransformBy(LL4ToRobot.Inverse());
+        // frc::Pose3d LL4ResultRobotPose = LL4toTargetPose.RelativeTo(robotPosetoLL4);
+
+
+        LimelightHelpers::PoseEstimate lEstimatedPose = LimelightHelpers::getBotPoseEstimate_wpiBlue(kLimelight4);
+        m_drivetrain->AddVisionMeasurement(lEstimatedPose.pose, ctre::phoenix6::utils::FPGAToCurrentTime(lEstimatedPose.timestampSeconds));
 
         // frc::SmartDashboard::PutNumberArray("LL4 Raw Distance", LL4Result);
         // frc::SmartDashboard::PutNumber("LL4 Raw YAW", units::degree_t(LL4toTarget.Rotation().X()).value());
@@ -102,9 +107,23 @@ std::optional<int> CameraSubsystem::lGetTargetTagId() {
     }
 }
 
+units::degree_t CameraSubsystem::getZRotation() {
+    if (lVisibleTargets() && visibleTargets()) {
+        LL4toTarget.Rotation().Z();
+    } else if (lVisibleTargets()) {
+        LL4toTarget.Rotation().Z();
+    } else if (visibleTargets()) {
+        LL3ResultRobotPose.Rotation().Z();
+    };
+}
+
 //Returns true if targets are visible to limelight. Otherwise returns false
 bool CameraSubsystem::visibleTargets() {
     return resultLL3.HasTargets();
+}
+
+bool CameraSubsystem::lVisibleTargets() {
+    return LimelightHelpers::getTV();
 }
 
 // bool CameraSubsystem::lVisibleTargets() {
