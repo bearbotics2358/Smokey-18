@@ -91,6 +91,14 @@ std::optional<int> CameraSubsystem::GetTargetTagId() {
     }
 }
 
+// std::optional<int> CameraSubsystem::lGetTargetTagId() {
+//     if (lVisibleTargets()) {
+//         return LimelightHelpers::getFiducialID(kLimelight4);
+//     } else {
+//         return std::nullopt;
+//     }
+// }
+
 double CameraSubsystem::getRotZ() {
     if (visibleTargets()) {
         return LL3toTarget.Rotation().Z().value();
@@ -140,7 +148,13 @@ double CameraSubsystem::getDistance() {
 }
 
 units::meter_t CameraSubsystem::getStrafeTransformation() {
-    return ((-units::inch_t(units::meter_t(LL4toTarget.Y())) + units::inch_t(LL3ResultRobotPose.Y())) / 2);
+    if (lVisibleTargets() && visibleTargets()) {
+        return ((-units::inch_t((units::meter_t(LL4toTarget.Y()) / 4) * 3) + units::inch_t((LL3ResultRobotPose.Y())/ 4)));
+    } else if (lVisibleTargets()) {
+        return -units::inch_t(units::meter_t(LL4toTarget.Y()));
+    } else if (visibleTargets()) {
+        return units::inch_t(LL3ResultRobotPose.Y());
+    };
 }
 
 // units::meter_t CameraSubsystem::lGetStrafeTransformation() {
@@ -148,7 +162,13 @@ units::meter_t CameraSubsystem::getStrafeTransformation() {
 // }
 
 units::meter_t CameraSubsystem::getForwardTransformation() {
-    return ((units::inch_t(units::meter_t(LL4toTarget.X())) + units::inch_t(LL3ResultRobotPose.X())) / 2);
+    if (lVisibleTargets() && visibleTargets()) {
+        return ((units::inch_t((units::meter_t(LL4toTarget.X()) / 4) * 3) + units::inch_t((LL3ResultRobotPose.X())/ 4)));
+    } else if (lVisibleTargets()) {
+        return units::inch_t(units::meter_t(LL4toTarget.X()));
+    } else if (visibleTargets()) {
+        return units::inch_t(LL3ResultRobotPose.X());
+    };
 }
 
 // units::meter_t CameraSubsystem::lGetForwardTransformation() {

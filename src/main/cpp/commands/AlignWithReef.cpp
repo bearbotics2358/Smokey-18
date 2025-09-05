@@ -25,13 +25,14 @@ AlignWithReef::AlignWithReef(
 }
 
 void AlignWithReef::Initialize() {
-    m_targetTagId = m_camera->GetTargetTagId();
+    m_lTargetTagId = m_camera->lGetTargetTagId();
+    //m_lTargetTagId = m_camera->lGetTargetTagId();
 
     // If a target tag exists and it is in the reef tag list, then we should attempt to align to it
-    if (m_targetTagId && kTagAngleMap.contains(m_targetTagId.value())) {
-        m_targetDegrees = kTagAngleMap.at(m_targetTagId.value());
+    if (m_lTargetTagId && kTagAngleMap.contains(m_lTargetTagId.value())) {
+        m_targetDegrees = kTagAngleMap.at(m_lTargetTagId.value());
     } else {
-        m_targetTagId = std::nullopt;
+        m_lTargetTagId = std::nullopt;
     }
 }
 
@@ -76,11 +77,11 @@ bool AlignWithReef::IsFinished() {
         return true;
     }
 
-    // if (false == m_camera->visibleTargets() || false == m_camera->lVisibleTargets() && m_reefSide == ReefSide::Right) {
-    //     // Right alignment has a tendency to lose the tag and drift to the right.
-    //     // When the bot loses tag visibility when doing right alignment, end the command
-    //     return true;
-    // }
+    if (false == m_camera->lVisibleTargets() && m_reefSide == ReefSide::Right) {
+        // Right alignment has a tendency to lose the tag and drift to the right.
+        // When the bot loses tag visibility when doing right alignment, end the command
+        return true;
+    }
 
     units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
     units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
