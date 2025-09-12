@@ -9,7 +9,7 @@ CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain
             frc::Rotation3d(0_deg, 0_deg, 21_deg));
     LL4ToRobot = 
         frc::Transform3d(frc::Translation3d(16_in, 12_in, 0_in),
-            frc::Rotation3d(0_deg, 0_rad, -21_deg));
+            frc::Rotation3d(0_deg, 0_rad, -21.5_deg));
     m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, LL3ToRobot);
 }
 
