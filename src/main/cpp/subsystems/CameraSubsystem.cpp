@@ -5,10 +5,10 @@ CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain
     m_drivetrain = drivetrain;
     LL3ToRobot = 
         //LL3 Pose on Robot (x = 17_in, y = -14.5_in, YAW = 20_deg)
-        frc::Transform3d(frc::Translation3d(16_in, -12_in, 0_in),
-            frc::Rotation3d(0_deg, 0_deg, 19.9_deg));
+        frc::Transform3d(frc::Translation3d(16_in, -12_in, 8.5_in),
+            frc::Rotation3d(0_deg, 0_deg, 21_deg));
     LL4ToRobot = 
-        frc::Transform3d(frc::Translation3d(16_in, 12_in, 0_in),
+        frc::Transform3d(frc::Translation3d(16_in, 12_in, 8.5_in),
             frc::Rotation3d(0_deg, 0_rad, -19.7_deg));
     m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, LL3ToRobot);
 }
