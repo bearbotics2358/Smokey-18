@@ -25,18 +25,19 @@ AlignWithReef::AlignWithReef(
 }
 
 void AlignWithReef::Initialize() {
-    m_targetTagId = m_camera->GetTargetTagId();
+    m_lTargetTagId = m_camera->lGetTargetTagId();
+    //m_lTargetTagId = m_camera->lGetTargetTagId();
 
     // If a target tag exists and it is in the reef tag list, then we should attempt to align to it
-    if (m_targetTagId && kTagAngleMap.contains(m_targetTagId.value())) {
-        m_targetDegrees = kTagAngleMap.at(m_targetTagId.value());
+    if (m_lTargetTagId && kTagAngleMap.contains(m_lTargetTagId.value())) {
+        m_targetDegrees = kTagAngleMap.at(m_lTargetTagId.value());
     } else {
-        m_targetTagId = std::nullopt;
+        m_lTargetTagId = std::nullopt;
     }
 }
 
 void AlignWithReef::Execute() {
-    if (!m_targetTagId) {
+    if (!m_lTargetTagId && !m_camera->lVisibleTargets()) {
         // No target exists, so don't attempt to align
         return;
     }
@@ -71,12 +72,11 @@ void AlignWithReef::Execute() {
 }
 
 bool AlignWithReef::IsFinished() {
-    if (!m_targetTagId) {
-        // If there is no target tag, finish the command immediately
+    if ((false == m_lTargetTagId) && (m_camera->lVisibleTargets() == false)) {
         return true;
     }
 
-    if (false == m_camera->visibleTargets() && m_reefSide == ReefSide::Right) {
+    if (false == m_camera->lVisibleTargets() && m_reefSide == ReefSide::Right) {
         // Right alignment has a tendency to lose the tag and drift to the right.
         // When the bot loses tag visibility when doing right alignment, end the command
         return true;

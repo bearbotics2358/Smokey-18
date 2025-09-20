@@ -44,6 +44,7 @@ private:
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
     std::optional<int> m_targetTagId;
+    std::optional<int> m_lTargetTagId;
     units::degree_t m_targetDegrees;
 
     static constexpr double kP = 1.75;
@@ -58,16 +59,16 @@ private:
     static constexpr double kRotationD = 0.001;
     frc::PIDController m_rotationalPID {kRotationP, kRotationI, kRotationD};
 
-    static constexpr units::meters_per_second_t kMaxVelocity = 1.5_mps;
-    static constexpr units::radians_per_second_t kMaxAngularVelocity = 1_rad_per_s;
+    static constexpr units::meters_per_second_t kMaxVelocity = 1.1_mps;
+    static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.5_rad_per_s;
 
-    const units::meter_t kForwardTolerance = units::meter_t(3_in);
-    const units::meter_t kStrafeTolerance = units::meter_t(0.5_in);
-    const units::degree_t kRotationTolerance = 2_deg;
+    const units::meter_t kForwardTolerance = units::meter_t(1.25_in);
+    const units::meter_t kStrafeTolerance = units::meter_t(1.25_in);
+    const units::degree_t kRotationTolerance = 1_deg;
 
-    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(32_in);
-    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(-1_in);
-    const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 15_in);
+    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(35_in);
+    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(1.5_in);
+    const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 14_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
     ReefSide m_reefSide;
 
