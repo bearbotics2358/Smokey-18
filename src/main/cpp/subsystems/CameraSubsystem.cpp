@@ -4,12 +4,8 @@
 CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain) {
     m_drivetrain = drivetrain;
     LL3ToRobot = 
-        //LL3 Pose on Robot (x = 17_in, y = -14.5_in, YAW = 20_deg)
         frc::Transform3d(frc::Translation3d(16_in, -12_in, 8.5_in),
             frc::Rotation3d(0_deg, 0_deg, 21_deg));
-    LL4ToRobot = 
-        frc::Transform3d(frc::Translation3d(16_in, 12_in, 8.5_in),
-            frc::Rotation3d(0_deg, 0_rad, -19.7_deg));
     m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, LL3ToRobot);
 }
 
@@ -33,16 +29,16 @@ void CameraSubsystem::updateData() {
 
 
     if (LimelightHelpers::getTV(kLimelight4)) {
-        std::vector<double> rawBotPoseTargetSpace = LimelightHelpers::getTargetPose_RobotSpace(kLimelight4);
+        std::vector<double> rawTargetPoseRobotSpace = LimelightHelpers::getTargetPose_RobotSpace(kLimelight4);
 
         //Limelight software outputs the forward distance as Z, strafe distance as X, and vertical distance as Y.
         // LL4toTarget converts the Limelight outputs from Z(2) to X, X(0) to Y, and Y(1) to Z
-        LL4toTarget = frc::Transform3d(units::inch_t(units::meter_t(rawBotPoseTargetSpace.at(2))), 
-                                        units::inch_t(units::meter_t(rawBotPoseTargetSpace.at(0))),
-                                        units::inch_t(units::meter_t(rawBotPoseTargetSpace.at(1))),
-                                        frc::Rotation3d(units::degree_t(rawBotPoseTargetSpace.at(3)),
-                                                        units::degree_t(rawBotPoseTargetSpace.at(4)),
-                                                        units::degree_t(rawBotPoseTargetSpace.at(5))) 
+        LL4toTarget = frc::Transform3d(units::inch_t(units::meter_t(rawTargetPoseRobotSpace.at(2))), 
+                                        units::inch_t(units::meter_t(rawTargetPoseRobotSpace.at(0))),
+                                        units::inch_t(units::meter_t(rawTargetPoseRobotSpace.at(1))),
+                                        frc::Rotation3d(units::degree_t(rawTargetPoseRobotSpace.at(3)),
+                                                        units::degree_t(rawTargetPoseRobotSpace.at(4)),
+                                                        units::degree_t(rawTargetPoseRobotSpace.at(5))) 
                                         );
 
 
