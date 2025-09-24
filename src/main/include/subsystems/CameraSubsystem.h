@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -13,6 +14,20 @@
 #include "subsystems/LimelightHelpers.h"
 
 #include "subsystems/CommandSwerveDrivetrain.h"
+
+enum Observer {
+  kPhotonVision = 0,
+  kLimelight4,
+  kMerged
+};
+
+struct TagObservation {
+  int tagId;
+  units::meter_t distanceToTarget;
+  frc::Translation3d targetToBotTranslation;
+  Observer observerType;
+};
+
 
 class CameraSubsystem : public frc2::SubsystemBase {
  public:
@@ -56,4 +71,12 @@ class CameraSubsystem : public frc2::SubsystemBase {
 
   subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
+  std::map<int, TagObservation> m_targetList;
+
+  std::map<int, TagObservation> GetRelevantTagObservationsPV(photon::PhotonPipelineResult);
+  std::map<int, TagObservation> GetRelevantTagObservationsLL4();
+  bool IsTagWeCareAboutForTargeting(int tagId);
+  void PopulateFinalTargets(std::map<int, TagObservation> &ll3Observations, std::map<int, TagObservation> &ll4Observations);
+
+  frc::Translation3d GetWeightedTranslation3d(TagObservation observation);
 };
