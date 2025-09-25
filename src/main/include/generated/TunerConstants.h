@@ -149,7 +149,7 @@ private:
     static constexpr units::inch_t kFrontLeftYPos = 14.65_in;
 
     // Front Right
-    static constexpr int kFrontRightDriveMotorModuleId = 3;
+    static constexpr int kFrontRightDriveMotorModuleId = 2;
     static constexpr int kFrontRightDriveMotorId = 2 * kFrontRightDriveMotorModuleId - 1;
     static constexpr int kFrontRightSteerMotorId = 2 * kFrontRightDriveMotorModuleId;
     static constexpr int kFrontRightEncoderId = 16 + kFrontRightDriveMotorModuleId;

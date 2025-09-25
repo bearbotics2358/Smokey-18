@@ -43,6 +43,9 @@ private:
     CameraSubsystem* m_camera;
     subsystems::CommandSwerveDrivetrain* m_drivetrain;
 
+    double forwardtrans;
+    double strafetrans;
+
     std::optional<int> m_targetTagId;
     std::optional<int> m_lTargetTagId;
     units::degree_t m_targetDegrees;
@@ -63,12 +66,12 @@ private:
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.5_rad_per_s;
 
     const units::meter_t kForwardTolerance = units::meter_t(1.25_in);
-    const units::meter_t kStrafeTolerance = units::meter_t(1.25_in);
+    const units::meter_t kStrafeTolerance = units::meter_t(1.0_in);
     const units::degree_t kRotationTolerance = 1_deg;
 
-    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(35_in);
-    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(1.5_in);
-    const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 14_in);
+    const units::meter_t kDistanceFromReefSetpoint = units::meter_t(33.5_in);
+    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(0.0_in);
+    const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13.5_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
     ReefSide m_reefSide;
 
