@@ -13,14 +13,14 @@ m_algaeDataProvider(dataProvider)
 }
 
 void AlgaeSubsystem::Periodic() {
-    GoToAngle();
+    //GoToAngle();
     frc::SmartDashboard::PutNumber("Algae Angle", CurrentAngle().value());
 }
 
 frc2::CommandPtr AlgaeSubsystem::Intake() {
     return frc2::cmd::StartEnd(
         [this] {
-            m_algaeMotor.Set(0.4);
+            m_algaeMotor.Set(0.0);
         },
         [this] {
             m_algaeMotor.Set(0.0);
@@ -36,7 +36,7 @@ frc2::CommandPtr AlgaeSubsystem::Intake() {
 frc2::CommandPtr AlgaeSubsystem::Dispense() {
     return frc2::cmd::StartEnd(
         [this] {
-            m_algaeMotor.Set(-0.4);
+            m_algaeMotor.Set(0.0);
         },
         [this] {
             m_algaeMotor.Set(0.0);

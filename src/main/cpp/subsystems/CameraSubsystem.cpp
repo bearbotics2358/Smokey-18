@@ -1,11 +1,12 @@
 
 #include <subsystems/CameraSubsystem.h>
+#include <frc/smartdashboard/Field2d.h>
 
 CameraSubsystem::CameraSubsystem(subsystems::CommandSwerveDrivetrain* drivetrain) {
     m_drivetrain = drivetrain;
     LL3ToRobot = 
         frc::Transform3d(frc::Translation3d(16_in, -12_in, 8.5_in),
-            frc::Rotation3d(0_deg, 0_deg, 21_deg));
+            frc::Rotation3d(0_deg, 0_deg, 20.5_deg));
     m_poseEstimator = std::make_unique<photon::PhotonPoseEstimator>(aprilTagFieldLayout, photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, LL3ToRobot);
 }
 
@@ -16,12 +17,21 @@ void CameraSubsystem::updateData() {
         bestTarget = resultLL3.GetBestTarget();
         LL3toTarget = bestTarget.GetBestCameraToTarget();
         std::optional<photon::EstimatedRobotPose> estimatedPose = m_poseEstimator->Update(resultLL3);
-        
+        // std::span<const photon::PhotonTrackedTarget> targets = resultLL3.GetTargets();
+        // for (photon::PhotonTrackedTarget tagID : resultLL3.GetTargets()) {
+        //     photon::PhotonTrackedTarget target = targets[tagID];
+        // };
+        frc::Field2d m_field;
         frc::Pose3d LL3toTargetPose = originPose.TransformBy(LL3toTarget);
         frc::Pose3d robotPosetoLL3 = originPose.TransformBy(LL3ToRobot.Inverse());
         LL3ResultRobotPose = robotPosetoLL3.RelativeTo(LL3toTargetPose);
+        frc::SmartDashboard::PutNumber("LL3ResultRobotPoseX", LL3ResultRobotPose.X().value());
+        frc::SmartDashboard::PutNumber("LL3ResultRobotPoseY", LL3ResultRobotPose.Y().value());
         if (estimatedPose){
-            m_drivetrain->AddVisionMeasurement(estimatedPose->estimatedPose.ToPose2d(),ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose->timestamp));
+            //m_drivetrain->AddVisionMeasurement(estimatedPose->estimatedPose.ToPose2d(),ctre::phoenix6::utils::FPGAToCurrentTime(estimatedPose->timestamp));
+            // frc::SmartDashboard::PutData("field", &m_field);
+            // m_field.SetRobotPose(estimatedPose);
+            frc::SmartDashboard::PutBoolean("Has Targets", true);
         }
     } else {
         frc::SmartDashboard::PutBoolean("Has Targets", false);
@@ -111,6 +121,13 @@ units::meter_t CameraSubsystem::getStrafeTransformation() {
     };
 }
 
+units::meter_t CameraSubsystem::lGetStrafeTransformation() {
+    return -units::inch_t(units::meter_t(LL4toTarget.Y()));
+}
+
+units::meter_t CameraSubsystem::lGetForwardTransformation() {
+    return units::inch_t(units::meter_t(LL4toTarget.X()));
+}
 
 units::meter_t CameraSubsystem::getForwardTransformation() {
     if (lVisibleTargets() && visibleTargets()) {
