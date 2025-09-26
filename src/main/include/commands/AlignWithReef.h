@@ -70,7 +70,7 @@ private:
     const units::degree_t kRotationTolerance = 1_deg;
 
     const units::meter_t kDistanceFromReefSetpoint = units::meter_t(33.5_in);
-    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(0.0_in);
+    const units::meter_t kStrafeLeftReefSetpoint = units::meter_t(0.5_in);
     const units::meter_t kStrafeRightReefSetpoint = units::meter_t(kStrafeLeftReefSetpoint + 13.5_in);
     units::meter_t m_strafeSetpoint = kStrafeLeftReefSetpoint;
     ReefSide m_reefSide;
