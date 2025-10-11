@@ -37,23 +37,31 @@ void AlignWithReef::Initialize() {
 }
 
 void AlignWithReef::Execute() {
-    if (!m_lTargetTagId && !m_camera->lVisibleTargets()) {
+    if (!m_lTargetTagId && !m_camera->visibleTargets()) {
         // No target exists, so don't attempt to align
         return;
     }
 
-    double forward = m_XAlignmentPID.Calculate(m_camera->getForwardTransformation().value(), kDistanceFromReefSetpoint.value());
+    if (m_reefSide == ReefSide::Left) {
+        forwardtrans = m_camera->getForwardTransformation().value();
+        strafetrans = m_camera->getStrafeTransformation().value();
+    } else {
+        forwardtrans = m_camera->lGetForwardTransformation().value();
+        strafetrans = m_camera->lGetStrafeTransformation().value();
+    }
+
+    double forward = m_XAlignmentPID.Calculate(forwardtrans, kDistanceFromReefSetpoint.value());
     forward = std::clamp(forward, -1.0, 1.0);
 
-    units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
+    units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - units::meter_t(forwardtrans));
     if (forward_diff < kForwardTolerance) {
         forward = 0.0;
     }
 
-    double strafe = m_YAlignmentPID.Calculate(m_camera->getStrafeTransformation().value(), m_strafeSetpoint.value());
+    double strafe = m_YAlignmentPID.Calculate(strafetrans, m_strafeSetpoint.value());
     strafe = std::clamp(strafe, -1.0, 1.0);
 
-    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
+    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - units::meter_t(strafetrans));
     if (strafe_diff < kStrafeTolerance) {
         strafe = 0.0;
     }
@@ -82,8 +90,8 @@ bool AlignWithReef::IsFinished() {
         return true;
     }
 
-    units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - m_camera->getForwardTransformation());
-    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - m_camera->getStrafeTransformation());
+    units::meter_t forward_diff = units::math::abs(kDistanceFromReefSetpoint - units::meter_t(forwardtrans));
+    units::meter_t strafe_diff = units::math::abs(m_strafeSetpoint - units::meter_t(forwardtrans));
     units::degree_t currentDegrees = m_drivetrain->GetPose().Rotation().Degrees();
     units::degree_t rotational_diff = units::math::abs(currentDegrees - m_targetDegrees);
 

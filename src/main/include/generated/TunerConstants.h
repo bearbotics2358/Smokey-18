@@ -127,7 +127,7 @@ private:
     // The encoder offsets for all the Swerve Modules
     static constexpr units::turn_t kEncoderOffsets[] = {                      
         -0.467529296875_tr,
-        -0.30443_tr,
+        -0.345201_tr,
         0.303466796875_tr,
         -0.153564453125_tr,
         -0.355224609375_tr,
@@ -149,7 +149,7 @@ private:
     static constexpr units::inch_t kFrontLeftYPos = 14.65_in;
 
     // Front Right
-    static constexpr int kFrontRightDriveMotorModuleId = 3;
+    static constexpr int kFrontRightDriveMotorModuleId = 2;
     static constexpr int kFrontRightDriveMotorId = 2 * kFrontRightDriveMotorModuleId - 1;
     static constexpr int kFrontRightSteerMotorId = 2 * kFrontRightDriveMotorModuleId;
     static constexpr int kFrontRightEncoderId = 16 + kFrontRightDriveMotorModuleId;
