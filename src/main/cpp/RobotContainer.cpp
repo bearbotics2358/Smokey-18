@@ -37,6 +37,7 @@ m_scoringSuperstructure(m_elevatorSubsystem, m_coralSubsystem, m_algaeSubsystem,
     });
 
     ConfigureBindings();
+    AddPathPlannerCommands();
 }
 
 frc2::CommandPtr RobotContainer::AddControllerRumble(frc::GenericHID::RumbleType rumbleType, double rumble) {
@@ -316,11 +317,11 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "ScoreL2",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2))
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L2).WithTimeout(1.0_s))
     );
     NamedCommands::registerCommand(
         "ScoreL3AndRemoveAlgae",
-        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral))
+        std::move(m_scoringSuperstructure.PrepareAndScoreIntoReef(ScoringSuperstructure::ScoringSelector::L3AlgaeAndCoral).WithTimeout(1.15_s))
     );
     NamedCommands::registerCommand(
         "ScoreL4",
@@ -332,14 +333,26 @@ void RobotContainer::AddPathPlannerCommands() {
     );
     NamedCommands::registerCommand(
         "AlignWithReefLeft",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(1.75_s))
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Left).ToPtr().WithTimeout(0.75_s))
     );
     NamedCommands::registerCommand(
         "AlignWithReefRight",
-        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(1.75_s))
+        std::move(AlignWithReef(&m_cameraSubsystem, &m_drivetrain, ReefSide::Right).ToPtr().WithTimeout(1.25_s))
     );
     NamedCommands::registerCommand(
         "WaitTillElevatorAtHeight",
         std::move(m_scoringSuperstructure.WaitTillElevatorAtHeight())
+    );
+    NamedCommands::registerCommand(
+        "ElevatorL2",
+        std::move(m_scoringSuperstructure.MoveElevator(2))
+    );
+    NamedCommands::registerCommand(
+        "ElevatorL3",
+        std::move(m_scoringSuperstructure.MoveElevator(3))
+    );
+    NamedCommands::registerCommand(
+        "ElevatorL4",
+        std::move(m_scoringSuperstructure.MoveElevator(4))
     );
 }

@@ -28,6 +28,8 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         frc2::CommandPtr PrepareScoring(ScoringSelector selectedScore);
         frc2::CommandPtr PrepareAndScoreIntoReef(ScoringSelector selectedScore);
 
+        frc2::CommandPtr MoveElevator(int level);
+
         frc2::CommandPtr ScoreIntoReef();
         frc2::CommandPtr RemoveAlgaeL3();
 
@@ -51,7 +53,7 @@ class ScoringSuperstructure : public frc2::SubsystemBase {
         ScoringSelector m_selectedScore = L1;
 
         static constexpr units::second_t kForwardTimeout = 0.5_s;
-        static constexpr units::second_t kBackupTimeout = 1_s;
+        static constexpr units::second_t kBackupTimeout = 0.5_s;
 
         swerve::requests::RobotCentric stopDriving = swerve::requests::RobotCentric{}
             .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)

@@ -58,6 +58,8 @@ private:
 
 public:
     subsystems::CommandSwerveDrivetrain m_drivetrain{TunerConstants::CreateDrivetrain()};
+    int selectedLevel;
+    void SelectLevel(int lvl);
 
 private:
     /* Path follower */

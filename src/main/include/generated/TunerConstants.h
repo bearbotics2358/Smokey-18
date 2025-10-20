@@ -132,7 +132,7 @@ private:
         -0.153564453125_tr,
         -0.355224609375_tr,
         0_tr,
-        0_tr,
+        0.11_tr,
         -0.18896484375_tr,
     };
 
@@ -161,7 +161,7 @@ private:
     static constexpr units::inch_t kFrontRightYPos = -14.65_in;
 
     // Back Left
-    static constexpr int kBackLeftDriveMotorModuleId = 1;
+    static constexpr int kBackLeftDriveMotorModuleId = 7;
     static constexpr int kBackLeftDriveMotorId = 2 * kBackLeftDriveMotorModuleId - 1;
     static constexpr int kBackLeftSteerMotorId = 2 * kBackLeftDriveMotorModuleId;
     static constexpr int kBackLeftEncoderId = 16 + kBackLeftDriveMotorModuleId;

@@ -37,7 +37,7 @@ void AlignWithReef::Initialize() {
 }
 
 void AlignWithReef::Execute() {
-    if (!m_lTargetTagId && !m_camera->visibleTargets()) {
+    if (!m_lTargetTagId && !m_camera->lVisibleTargets()) {
         // No target exists, so don't attempt to align
         return;
     }

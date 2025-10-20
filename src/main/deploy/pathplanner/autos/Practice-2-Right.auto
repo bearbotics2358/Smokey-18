@@ -13,13 +13,19 @@
         {
           "type": "named",
           "data": {
+            "name": "ElevatorL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AlignWithReefLeft"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "ScoreL3AndRemoveAlgae"
           }
         },
         {
@@ -43,6 +49,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ElevatorL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AlignWithReefLeft"
           }
         },
@@ -50,6 +62,78 @@
           "type": "named",
           "data": {
             "name": "ScoreL3AndRemoveAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Prac-2.4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom-Prac-2.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Prac-2.4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom-Prac-2.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignWithReefLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         }
       ]
