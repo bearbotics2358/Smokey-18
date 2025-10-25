@@ -65,8 +65,8 @@ private:
     static constexpr units::meters_per_second_t kMaxVelocity = 1.1_mps;
     static constexpr units::radians_per_second_t kMaxAngularVelocity = 1.5_rad_per_s;
 
-    const units::meter_t kForwardTolerance = units::meter_t(1.25_in);
-    const units::meter_t kStrafeTolerance = units::meter_t(1.0_in);
+    const units::meter_t kForwardTolerance = units::meter_t(2.25_in);
+    const units::meter_t kStrafeTolerance = units::meter_t(2.0_in);
     const units::degree_t kRotationTolerance = 1_deg;
 
     const units::meter_t kDistanceFromReefSetpoint = units::meter_t(33.5_in);

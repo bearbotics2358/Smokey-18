@@ -103,9 +103,21 @@ bool CameraSubsystem::lVisibleTargets() {
 
 
 // meters
-double CameraSubsystem::getDistance() {
+double CameraSubsystem::lGetDistance() {
+    if (lVisibleTargets()) {
+        double dist = units::inch_t(sqrt(pow(lGetStrafeTransformation().value(), 2) + pow(lGetForwardTransformation().value(), 2))).value();
+        frc::SmartDashboard::PutNumber("Limelight Distance", dist);
+        return dist;
+    } else {
+        return 0;
+    }
+}
+
+double CameraSubsystem::pvGetDistance() {
     if (visibleTargets()) {
-        return units::inch_t(sqrt(pow(getStrafeTransformation().value(), 2) + pow(getForwardTransformation().value(), 2))).value();
+        double dist = units::inch_t(sqrt(pow(pvGetStrafeTransformation().value(), 2) + pow(pvGetForwardTransformation().value(), 2))).value();
+        frc::SmartDashboard::PutNumber("PhotonVision Distance", dist);
+        return dist;
     } else {
         return 0;
     }
@@ -113,7 +125,10 @@ double CameraSubsystem::getDistance() {
 
 units::meter_t CameraSubsystem::getStrafeTransformation() {
     if (lVisibleTargets() && visibleTargets()) {
-        return ((-units::inch_t((units::meter_t(LL4toTarget.Y()) / 4) * 3) + units::inch_t((LL3ResultRobotPose.Y())/ 4)));
+        double totalFlux = pvFlux() + lFlux();
+        double pvFluxRatio = pvFlux()/totalFlux;
+        double lFluxRatio = lFlux()/totalFlux;
+        return (units::inch_t((-units::meter_t(LL4toTarget.Y()) * pvFluxRatio) + units::inch_t((LL3ResultRobotPose.Y()) * lFluxRatio)));
     } else if (lVisibleTargets()) {
         return -units::inch_t(units::meter_t(LL4toTarget.Y()));
     } else if (visibleTargets()) {
@@ -125,13 +140,44 @@ units::meter_t CameraSubsystem::lGetStrafeTransformation() {
     return -units::inch_t(units::meter_t(LL4toTarget.Y()));
 }
 
+units::meter_t CameraSubsystem::pvGetStrafeTransformation() {
+    return units::inch_t(units::meter_t(LL3ResultRobotPose.Y()));
+}
+
 units::meter_t CameraSubsystem::lGetForwardTransformation() {
     return units::inch_t(units::meter_t(LL4toTarget.X()));
 }
 
+units::meter_t CameraSubsystem::pvGetForwardTransformation() {
+    return units::inch_t(units::meter_t(LL3ResultRobotPose.X()));
+}
+
+double CameraSubsystem::lFlux() {
+    double alpha = 0.25;
+    lDistanceaverage = ((1-alpha) * lDistanceaverage) + (alpha * lGetDistance());
+    frc::SmartDashboard::PutNumber("lDistanceAverage", lDistanceaverage);
+    double flux = (fabs(lGetDistance() - lDistanceaverage)) / lGetDistance();
+    frc::SmartDashboard::PutNumber("lFlux", flux);
+    return flux;
+}
+
+double CameraSubsystem::pvFlux() {
+    double alpha = 0.25;
+    pvDistanceaverage = ((1-alpha) * pvDistanceaverage) + (alpha * pvGetDistance());
+    frc::SmartDashboard::PutNumber("pvDistanceAverage", pvDistanceaverage);
+    double flux = (fabs(pvGetDistance() - pvDistanceaverage)) / pvGetDistance();
+    frc::SmartDashboard::PutNumber("pvFlux", flux);
+    return flux;
+}
+
 units::meter_t CameraSubsystem::getForwardTransformation() {
     if (lVisibleTargets() && visibleTargets()) {
-        return ((units::inch_t((units::meter_t(LL4toTarget.X()) / 4) * 3) + units::inch_t((LL3ResultRobotPose.X())/ 4)));
+        double totalFlux = pvFlux() + lFlux();
+        double pvFluxRatio = pvFlux()/totalFlux;
+        double lFluxRatio = lFlux()/totalFlux;
+        frc::SmartDashboard::PutNumber("pvFluxRatio", pvFluxRatio);
+        frc::SmartDashboard::PutNumber("lFluxRatio", lFluxRatio);
+        return (units::inch_t((units::meter_t(LL4toTarget.X()) * pvFluxRatio) + units::inch_t((LL3ResultRobotPose.X()) * lFluxRatio)));
     } else if (lVisibleTargets()) {
         return units::inch_t(units::meter_t(LL4toTarget.X()));
     } else if (visibleTargets()) {
@@ -144,6 +190,12 @@ void CameraSubsystem::Periodic() {
     frc::SmartDashboard::PutString("Camera Periodic", "Running");
 
     updateData();
+    pvGetDistance();
+    lGetDistance();
+    lFlux();
+    pvFlux();
+    getForwardTransformation();
+    getStrafeTransformation();
 
     frc::SmartDashboard::PutNumber("Robot X Position", m_drivetrain->GetPose().X().value());
     frc::SmartDashboard::PutNumber("Robot Y Position", m_drivetrain->GetPose().Y().value());

@@ -25,7 +25,12 @@ class CameraSubsystem : public frc2::SubsystemBase {
   units::meter_t getForwardTransformation();
   units::meter_t lGetStrafeTransformation();
   units::meter_t lGetForwardTransformation();
-  double getDistance();
+  units::meter_t pvGetStrafeTransformation();
+  units::meter_t pvGetForwardTransformation();
+  double lGetDistance();
+  double pvGetDistance();
+  double lFlux();
+  double pvFlux();
   units::degree_t getZRotation();
   frc::Rotation2d GetRotation2d();
   double getRotZ();
@@ -34,6 +39,9 @@ class CameraSubsystem : public frc2::SubsystemBase {
   std::optional<int> lGetTargetTagId();
 
   void Periodic() override;
+
+  double lDistanceaverage;
+  double pvDistanceaverage;
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
